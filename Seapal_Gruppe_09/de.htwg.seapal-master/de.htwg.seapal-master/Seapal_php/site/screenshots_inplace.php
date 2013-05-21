@@ -21,14 +21,11 @@
 		<div id="wrapper">
 			<div id="carousel">
 				<span class="empty"></span> <!-- trick the carousel to start 1 item to the right -->
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="Lunar New Year 2012: Year of the Dragon"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="An 18 meter long dragon at Malang city park"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="Actors perform the dragon dance"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="Members of the chinese community in India celebrate the Chinese New Year"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="Woman pray at a Buddhist temple in Denpasar"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="A reveller writes the "Dragon" in traditional Chinese characters"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="Chinese living in Ukraine carry a dragon on January 22"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="Fireworks over Hoan Kiem Lake"  />
+                <img src="../img/screenshots//SeaPal-Longtouch.jpg" alt="A Longtouch brings up bearing and distance to that point from the current position." width="580" height="435">
+                <img src="../img/screenshots//SeaPal-InPlace-Tools.jpg" alt="Another touch brings up a menu for in-place tools." width="580" height="435">
+                <img src="../img/screenshots//SeaPal-Mark.jpg" alt="This allows quick creation of Marks, for example." width="580" height="435">
+                <img src="../img/screenshots//SeaPal-InPlace-Tools.jpg" alt="Marks again have a context menu." width="580" height="435">
+                <img src="../img/screenshots//SeaPal-Target.jpg" alt="Marks can be made the target, bearing and distance are displayed at the top." width="580" height="435">
 				<span class="empty"></span> <!-- trick the carousel to end 1 item to the left -->
 			</div>
 		</div>

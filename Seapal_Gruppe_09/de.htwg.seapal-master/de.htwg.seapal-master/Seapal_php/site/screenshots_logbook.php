@@ -21,14 +21,9 @@
 		<div id="wrapper">
 			<div id="carousel">
 				<span class="empty"></span> <!-- trick the carousel to start 1 item to the right -->
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="Lunar New Year 2012: Year of the Dragon"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="An 18 meter long dragon at Malang city park"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="Actors perform the dragon dance"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="Members of the chinese community in India celebrate the Chinese New Year"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="Woman pray at a Buddhist temple in Denpasar"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="A reveller writes the "Dragon" in traditional Chinese characters"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="Chinese living in Ukraine carry a dragon on January 22"  />
-				<img src="../img/screenshots//SeaPal-Gothenborg-Menu.jpg" alt="Fireworks over Hoan Kiem Lake"  />
+                <img src="../img/screenshots//SeaPal-Tracking.jpg" alt="The Tracking Tool." width="580" height="435">
+                <img src="../img/screenshots//SeaPal-Boat.jpg" alt="The Logbook view with Boat info." width="580" height="435">
+                <img src="../img/screenshots//SeaPal-Logbook.jpg" alt="The Logbook view for a Trip." width="580" height="435">
 				<span class="empty"></span> <!-- trick the carousel to end 1 item to the left -->
 			</div>
 		</div>

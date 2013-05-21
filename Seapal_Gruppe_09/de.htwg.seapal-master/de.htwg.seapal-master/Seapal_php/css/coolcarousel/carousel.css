@@ -1,0 +1,68 @@
+#wrapper {
+    width: 100%;
+    height: 790px;
+    margin-top: -395px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    overflow: hidden;
+}
+
+#carousel img {
+    background-color: #fff;
+    border: none;
+    display: block;
+    padding: 15px;
+    margin: 30px;
+    float: left;
+    
+    box-shadow: 0 0 20px #000;
+}
+#carousel .empty {
+    display: block;
+    width: 600px;
+    height: 400px;
+    float: left;
+}
+
+#bar {
+    margin-top: 90px;
+    background-color: #000#;
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#bar * {
+    color: #000;
+    line-height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+}
+#prev, #next {
+    margin-top: 0px;
+    font-size: 50px;
+    color: #000;
+    text-decoration: none;
+    display: block;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 0;
+}
+#prev:hover, #next:hover {
+    background-color: #fff;
+}
+#prev.disabled, #next.disabled {
+    background-color: transparent !important;
+    cursor: default;
+    
+    opacity: 0.1;
+}
+#prev {
+    left: 0;
+}
+#next {
+    right: 0;
+}
