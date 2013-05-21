@@ -2,122 +2,111 @@
 
 <html lang="de">
   	<head>
-		<?php
-			include('header.php');
-		?>
+		<?php include('header.php');?>
   	</head>
 	<body>
-		
 		<!-- Navigation -->
-		<div>
-			<div>
-				<div>
-					<a href="index.php">
-						<img src='../img/icons/seapal_normal.png' alt='Icon-Small-50' width='50' height='50' />
-						<h2>Seapal</h2>
-					</a>
-					<div>
-						<ul>
-							<li><a href='index.php'>Home</a></li>
-							<li><a href='app_waypoint.php'>App</a></li>
-							<li><a href='userguide.php'>User Guide</a></li>
-							<li><a href='screenshots.php'>Screenshots</a></li>
-							<li><a href='about.php'>About</a></li>
-							<li><a href='contact.php'>Contact</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
+		<?php include('navigation.php');?>	
 		
+        <div class="hero-unit">
+            <h1>Save your data</h1>
+        </div>
+        
 		<!-- Container -->
-		<div>
-					
+		<div class="container-fluid">
 			<!-- Content -->		
-			<div>
-			    <br />
-			    <h2>Wegpunkt</h2>
-			    <br />
-			    <div>
-	            	<form> 
-		            	<div>
-		            		<div>	            		
-			            		<div>
-			            			<label >Name</label>
-			            			<input  type="text" id="name"/>
-			            		</div>
-			            		<div>
-			            			<label >Time</label>
-			            			<input  type="date" id="wdate"/>
-			                    </div>
-			                    <div>
-			            			<label >Date</label>
-			            			<input  type="date" id="wtime"/>
-			                    </div>
-		            		</div>
-		            		<div>
-		            			<div>
-			            			<label >Latitude</label>
-			            			<input  type="text" id="lat"/>
-			            		</div>
-			            		<div>
-			            			<label >Longitude</label>
-			            			<input  type="text" id="lng"/>
-			                    </div>
-			                    <div>
-			            			<label >Fahrt nach</label>
-			            			<select name="fahrtziel" id="marker"></select>
-			                    </div>
-		            		</div>
-		            		<div>
-		            			<div>
-			            			<label >COG</label>
-			            			<input  type="text" id="cog"/>
-			                    </div>
-			                    <div>
-			            			<label >SOG</label>
-			            			<input  type="text" id="sog"/>
-			                    </div>
-			                    
-			                    <div>
-			                    	<label >Manoever</label>
-			            			<select name="manoever" id="manoever"></select>
-			                    </div>                   
-		            		</div>
-		            		<div>
-		            			<div>
-			            			<label >BTM</label>
-			            			<input  type="text" id="btm"/>
-			                    </div>
-			                    <div>
-			            			<label >DTM</label>
-			            			<input  type="text" id="dtm"/>
-			                    </div>
-			                    <div>
-			            			<label >Vorsegel</label>
-			            			<select name="vorsegel" id="vorsegel"></select>
-			            		</div>
-		            		</div>
-		            	</div>      	 
-	            	</div>
-	            </div>
-			    <br />
-			    <br />
-			    <div >
-			    <div>
-			        <div id="appNotes">
-			        	<h4>Notes</h4>
-			            <textarea></textarea>
-			        </div>
-			        <div id="markerMap">
-			        	<h4>Map</h4>
-			            <img src="../img/icons/marker_map.png" id="appInfoPhoto" />
-			        </div>
-			        <div id="appPhotos">
-			        	<h4>Photos</h4>
-				        <img src="../img/icons/no_image.jpg" id="appInfoPhoto" />
-				    </div>
-					<div id="weatherData">
+			<div class="span8">
+            
+                <div id="wegpunkt">
+                    <br />
+                    <h2>Wegpunkt</h2>
+                    <br />
+                    <div>
+                        <form> 
+                            <div class="row">
+                                <div class="span3">	            		
+                                    <div>
+                                        <label >Name</label>
+                                        <input  type="text" id="name"/>
+                                    </div>
+                                    <div>
+                                        <label >Time</label>
+                                        <input  type="date" id="wdate"/>
+                                    </div>
+                                    <div>
+                                        <label >Date</label>
+                                        <input  type="date" id="wtime"/>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div>
+                                        <label >Latitude</label>
+                                        <input  type="text" id="lat"/>
+                                    </div>
+                                    <div>
+                                        <label >Longitude</label>
+                                        <input  type="text" id="lng"/>
+                                    </div>
+                                    <div>
+                                        <label >Fahrt nach</label>
+                                        <select name="fahrtziel" id="marker"></select>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div>
+                                        <label >COG</label>
+                                        <input  type="text" id="cog"/>
+                                    </div>
+                                    <div>
+                                        <label >SOG</label>
+                                        <input  type="text" id="sog"/>
+                                    </div>
+                                    
+                                    <div>
+                                        <label >Manoever</label>
+                                        <select name="manoever" id="manoever"></select>
+                                    </div>                   
+                                </div>
+                                <div class="span3">
+                                    <div>
+                                        <label >BTM</label>
+                                        <input  type="text" id="btm"/>
+                                    </div>
+                                    <div>
+                                        <label >DTM</label>
+                                        <input  type="text" id="dtm"/>
+                                    </div>
+                                    <div>
+                                        <label >Vorsegel</label>
+                                        <select name="vorsegel" id="vorsegel"></select>
+                                    </div>
+                                </div>
+                            </div>      	 
+                   </div>
+                </div>
+
+                <div id="appNotes">
+                    <br />
+                    <h2>Notes</h2>
+                    <br />
+                    <textarea></textarea>
+                </div>
+			        
+                <div id="markerMap">
+                        <br />
+			        	<h2>Map</h2>
+			            <br />
+                        <img src="../img/icons/marker_map.png" id="appInfoPhoto" />
+			    </div>
+			    
+                <div id="appPhotos">
+                    <br />
+                    <h2>Photos</h2>
+                    <br />
+				    <img src="../img/icons/no_image.jpg" id="appInfoPhoto" />
+				</div>
+				
+                <div id="weatherData">
 						<h4>Weather data</h4>
 						<div>
 			            	<label >Wind strength</label>
@@ -169,11 +158,26 @@
 			            	<input  type="date" id="cdate"/>
 			            </div>
 				    </div>
-				</div>
-			    </div>
 			</div><!-- Content -->
-			
+            <div class="span4"><!-- Navigation -->
+                <ul class="nav nav-list">
+                <li class="nav-header">Seapal</li>
+                <li class="divider"></li>
+                <li class="active"><a href="#wegpunkt">Wegpunkt</a></li>
+                <li><a href="#appNotes">Notes</a></li>
+                <li><a href="#markerMap">Map</a></li>
+                <li><a href="#appPhotos">Photos</a></li>
+                <li><a href="#markerMap">Map</a></li>
+                <li><a href="#weatherData">Weather data</a></li>
+                </ul>
+            </div><!-- Navigation -->
+            
+            
 		</div><!-- Container -->
-		
+	
+        <!-- Footer -->
+		<footer>
+			<?php include('footer.php');?>
+		</footer>  
 	</body>
 </html>
