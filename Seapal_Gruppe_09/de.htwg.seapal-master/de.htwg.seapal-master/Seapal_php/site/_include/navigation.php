@@ -18,25 +18,19 @@
 			        <li <?php if ($filename == "index") echo("class='active'"); ?>><a href='index.php'>Home</a></li>
 			        <li <?php if ($filename == "app_map") echo("class='active'"); ?>><a href='app_map.php'>App</a></li>
 			        <li <?php if ($filename == "userguide") echo("class='active'"); ?>><a href='userguide.php'>User Guide</a></li>
-			        <li <?php if ($filename == "screenshots") echo("class='active'"); ?>><a href='screenshots.php'>Screenshots</a></li>
+                    <li class="dropdown active">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Screenshots</a>
+                        <ul class="dropdown-menu">
+                            <li <?php if ($filename == "screenshots_ipad") echo("class='active'"); ?>><a href='screenshots_ipad.php'>iPad</a></li>
+                            <li <?php if ($filename == "screenshots_tools") echo("class='active'"); ?>><a href='screenshots_tools.php'>SeaPal Tools</a></li>
+                            <li <?php if ($filename == "screenshots_inplace") echo("class='active'"); ?>><a href='screenshots_inplace.php'>SeaPal In-Place-Tools</a></li>
+                            <li <?php if ($filename == "screenshots_logbook") echo("class='active'"); ?>><a href='screenshots_logbook.php'>SeaPal Logbook and Tracking</a></li>
+                            <li <?php if ($filename == "screenshots_iphone") echo("class='active'"); ?>><a href='screenshots_iphone.php'>SeaPal on the iPhone</a></li>
+                        </ul>
+                    </li>
 			        <li <?php if ($filename == "about") echo("class='active'"); ?>><a href='about.php'>About</a></li>
 			        <li <?php if ($filename == "contact") echo("class='active'"); ?>><a href='contact.php'>Contact</a></li>
 
-                    <li class="dropdown active">
-                    <a class="dropdown-toggle"
-                    data-toggle="dropdown"
-                    href="#">
-                    Dropdown
-                    <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                    <li <?php if ($filename == "screenshots_ipad") echo("class='active'"); ?>><a href='screenshots_ipad.php'>iPad</a></li>
-                    <li <?php if ($filename == "screenshots_tools") echo("class='active'"); ?>><a href='screenshots_tools.php'>SeaPal Tools</a></li>
-                    <li <?php if ($filename == "screenshots_inplace") echo("class='active'"); ?>><a href='screenshots_inplace.php'>SeaPal In-Place-Tools</a></li>
-                    <li <?php if ($filename == "screenshots_logbook") echo("class='active'"); ?>><a href='screenshots_logbook.php'>SeaPal Logbook and Tracking</a></li>
-                    <li <?php if ($filename == "screenshots_iphone") echo("class='active'"); ?>><a href='screenshots_iphone.php'>SeaPal on the iPhone</a></li>
-                    </ul>
-                    </li>
 
 		        </ul>
 		    </div>

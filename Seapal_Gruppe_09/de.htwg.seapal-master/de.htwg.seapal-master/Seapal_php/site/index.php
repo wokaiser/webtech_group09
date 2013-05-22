@@ -110,8 +110,10 @@
                         </div>
 	                </div><!-- Content -->
 				</div>
-			</div>	
+	    	</div>	
 		</div><!-- Container -->
+
+
 
 		<!-- Footer -->
 		<?php include('_include/footer.php'); ?>
