@@ -61,7 +61,13 @@
 	        
 	        <!-- Map -->
 	        <div id="appWrapper">
-	            <div id="map_canvas"></div>
+	            <div id="map_canvas">
+                
+                </div>
+                
+                <div id="map_overlay">
+Weather Information
+                </div>
             </div>
  
 	        <!-- Context Menus -->

@@ -4,6 +4,15 @@ label {
     margin-left: 20px;
 }
 
+#map_overlay {
+    width:300px;
+    height:200px;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin:-100px 0 0 -150px;
+}
+
 #map_canvas {
     width: 100%;
     min-height: 800px;
@@ -17,6 +26,7 @@ label {
     border-style: solid;
     border-width: 1px;
     border-color: #DEE3E5;
+    position: relative;
 }
 
 #context-menu {

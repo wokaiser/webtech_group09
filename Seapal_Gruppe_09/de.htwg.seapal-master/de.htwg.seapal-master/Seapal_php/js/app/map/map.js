@@ -4,6 +4,14 @@
 // openseamap fehler beheben falls m�glich
 // Benutzerposition bestimmen
 
+/*var for the map overlay listener. The map overlay shows weather information*/
+var mapOverlayListener = null;
+
+/*Var with the id and the link to each individual layer.*/
+var LAYER = { SEAMARK: { id: 1, link: "http://tiles.openseamap.org/seamark/" }, 
+                  AIR: { id: 2, link: "http://www.openportguide.org/tiles/actual/air_temperature/5/" }, 
+                 WIND: { id: 3, link: "http://www.openportguide.org/tiles/actual/wind_vector/7/" } };
+
 var map = null;
 
 var overlay = new google.maps.OverlayView();
@@ -122,6 +130,13 @@ function initialize() {
         maxZoom: 18
     }));
 
+    //Initial map features
+    
+    //add action listener for mapOverlay which will be refreshed if map get refreshed
+    mapOverlayListener = google.maps.event.addListener(map, 'idle', mapOverlay);
+    //seamark layer
+    addMapLayer(LAYER.SEAMARK.id, LAYER.SEAMARK.link);
+    
     google.maps.event.addListener(currentPositionMarker, 'position_changed', function () {
         
         if (followCurrentPosition) {
@@ -381,11 +396,6 @@ function toggleFollowCurrentPosition() {
     document.getElementById('followCurrentPositionContainer').style.width = document.body.offsetWidth + "px";
 }
 
-/*Var with the id and the link to each individual layer.*/
-var LAYER = { SEAMARK: { id: 1, link: "http://tiles.openseamap.org/seamark/" }, 
-                  AIR: { id: 2, link: "http://www.openportguide.org/tiles/actual/air_temperature/5/" }, 
-                 WIND: { id: 3, link: "http://www.openportguide.org/tiles/actual/wind_vector/7/" } };
-
 /*Add a map layer with a specific id. Each individual layer should have his own static id*/
 function addMapLayer (id, link) {
     map.overlayMapTypes.setAt(id, new google.maps.ImageMapType({
@@ -435,6 +445,21 @@ $(document).ready(function() {
             } else {
                 RemoveMapLayer(LAYER.WIND.id);
             }
+        } else if ("wl_mapOverlay" == this.id){
+            if ("wl_chooser multicheck checked" == this.className){
+                //add action listener for mapOverlay which will be refreshed if map get refreshed
+                mapOverlayListener = google.maps.event.addListener(map, 'idle', mapOverlay);
+                //call mapOverlay for instant refresh
+                mapOverlay();
+            } else {
+                if (null != mapOverlayListener) {
+                    //remove action listener for mapOverlay
+                    google.maps.event.removeListener(mapOverlayListener);
+                    mapOverlayListener = null;
+                    //clear mapOverlay
+                    document.getElementById("map_overlay").innerHTML  = "";
+                }
+            }
         } else {
             console.log("Unknown layer in map.js.");
         }
@@ -443,4 +468,8 @@ $(document).ready(function() {
     });
 });
 
-  
+function mapOverlay() {
+    console.log("Update mapOverlay");
+    document.getElementById("map_overlay").innerHTML  = "Update"; 
+}
+
