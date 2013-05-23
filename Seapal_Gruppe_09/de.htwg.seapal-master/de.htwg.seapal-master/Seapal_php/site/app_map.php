@@ -65,8 +65,8 @@
                 
                 </div>
                 
-                <div id="map_overlay">
-Weather Information
+                <div id="map_overlay" style="hidden">
+
                 </div>
             </div>
  

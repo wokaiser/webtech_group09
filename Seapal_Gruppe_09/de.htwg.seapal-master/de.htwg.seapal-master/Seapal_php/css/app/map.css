@@ -5,12 +5,29 @@ label {
 }
 
 #map_overlay {
-    width:300px;
+    width:206px;
     height:200px;
     position:absolute;
-    left:50%;
-    top:50%;
-    margin:-100px 0 0 -150px;
+    left:95.2%;
+    top:18%;
+    margin:-100px 0 0 -140px;
+
+    border-color: #DEE3E5;
+    padding-left: 10px;
+    padding-top: 10px;
+    background-color: #fafafa;
+    background-repeat: repeat-x;
+    border: 1px solid #000000;
+    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    webkit-border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    
+    display: block;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333333;
 }
 
 #map_canvas {

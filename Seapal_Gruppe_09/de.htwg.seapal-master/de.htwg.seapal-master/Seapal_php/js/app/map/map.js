@@ -458,6 +458,8 @@ $(document).ready(function() {
                     mapOverlayListener = null;
                     //clear mapOverlay
                     document.getElementById("map_overlay").innerHTML  = "";
+                    //Hide mayOverlay
+                    document.getElementById("map_overlay").style.visibility="hidden";
                 }
             }
         } else {
@@ -469,7 +471,36 @@ $(document).ready(function() {
 });
 
 function mapOverlay() {
-    console.log("Update mapOverlay");
-    document.getElementById("map_overlay").innerHTML  = "Update"; 
+
+    latLng = map.getCenter();
+
+    var var1 = "http://openweathermap.org/data/2.1/find/city?lat="+latLng.lat()+"&lon="+latLng.lng()+"&cnt=1";
+    var var2 = "http://openweathermap.org/data/2.1/forecast/city?lat="+latLng.lat()+"&lon="+latLng.lng()+"&cnt=1";
+    var var3 = "http://openweathermap.org/data/2.1/history/city?lat="+latLng.lat()+"&lon="+latLng.lng()+"&cnt=1";
+    
+    var txt = "<center>";
+
+    $.ajax(var1, {
+    crossDomain:true, 
+    dataType: "jsonp", 
+    success:function(data,text,xhqr){
+        console.log("---");
+        txt = "<b>Weather Information</b>"                               + "</br>";
+        txt += data.list[0].name                                         + "</br>";
+        txt += "Weather          " + data.list[0].weather[0].description + "</br>";
+        txt += "Wind speed       " + data.list[0].wind.speed             + "</br>";
+        txt += "Humidity         " + data.list[0].main.humidity          + "</br>";
+        txt += "Pressure         " + data.list[0].main.pressure          + "</br>";
+        txt += "Temperature      " + data.list[0].main.temp              + "</br>";
+        txt += "Min Temperature  " + data.list[0].main.temp_min          + "</br>";
+        txt += "Max Temperature  " + data.list[0].main.temp_max          + "</br>";
+        txt += "</center>";
+        console.log(txt);
+        document.getElementById("map_overlay").innerHTML = txt;
+        //Visible mayOverlay
+        document.getElementById("map_overlay").style.visibility="visible";
+    }
+    }); 
+ 
 }
 
