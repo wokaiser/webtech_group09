@@ -133,18 +133,13 @@ function initialize() {
         }
     });
 
-    map.overlayMapTypes.push(new google.maps.ImageMapType({
-        getTileUrl: function (coord, zoom) {
-            return "http://tiles.openseamap.org/seamark/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
-        },
-       tileSize: new google.maps.Size(256, 256),
-        name: "OpenSeaMap",
-        maxZoom: 18
-    }));
-
     overlay.draw = function () { };
     overlay.setMap(map);
 
+    //placeholder for overlay
+    map.overlayMapTypes.push(null);        // Placeholder for Sites
+    map.overlayMapTypes.push(null);        // Placeholder for OSM TOP + 
+    
     // click on map
     google.maps.event.addListener(map, 'click', function (event) {
 
@@ -385,3 +380,67 @@ function toggleFollowCurrentPosition() {
     }
     document.getElementById('followCurrentPositionContainer').style.width = document.body.offsetWidth + "px";
 }
+
+/*Var with the id and the link to each individual layer.*/
+var LAYER = { SEAMARK: { id: 1, link: "http://tiles.openseamap.org/seamark/" }, 
+                  AIR: { id: 2, link: "http://www.openportguide.org/tiles/actual/air_temperature/5/" }, 
+                 WIND: { id: 3, link: "http://www.openportguide.org/tiles/actual/wind_vector/7/" } };
+
+/*Add a map layer with a specific id. Each individual layer should have his own static id*/
+function addMapLayer (id, link) {
+    map.overlayMapTypes.setAt(id, new google.maps.ImageMapType({
+        getTileUrl: function (coord, zoom) {
+            return link + zoom + "/" + coord.x + "/" + coord.y + ".png";
+        },
+        tileSize: new google.maps.Size(256, 256),
+        name: "OpenSeaMap",
+        maxZoom: 18
+    }));
+}
+
+/*Remove a map layer with a specific id. Each individual layer should have his own static id*/
+function RemoveMapLayer (id) {
+    map.overlayMapTypes.setAt(id, null); 
+}
+
+/*function to toggle buttons and choose weather layer*/
+$(document).ready(function() {
+    /* Multi select - allow multiple selections */
+    /* Allow click without closing menu */
+    /* Toggle checked state and icon */
+    $('.multicheck').click(function(e) {
+        $(this).toggleClass("checked");
+        $(this).find("span").toggleClass("icon-ok");
+        return false;
+    });
+        
+    /* wl_chooser, to activate the weather layer */ 
+    /* depending to the choosen weather layer    */
+    $('.wl_chooser').click(function(e) {
+        if ("wl_seamark" == this.id) {
+            if ("wl_chooser multicheck checked" == this.className){
+                addMapLayer(LAYER.SEAMARK.id, LAYER.SEAMARK.link);
+            } else {
+                RemoveMapLayer(LAYER.SEAMARK.id);
+            }
+        } else if ("wl_air" == this.id) {
+            if ("wl_chooser multicheck checked" == this.className){
+                addMapLayer(LAYER.AIR.id, LAYER.AIR.link);
+            } else {
+                RemoveMapLayer(LAYER.AIR.id);
+            }
+        } else if ("wl_wind" == this.id) {
+            if ("wl_chooser multicheck checked" == this.className){
+                addMapLayer(LAYER.WIND.id, LAYER.WIND.link);
+            } else {
+                RemoveMapLayer(LAYER.WIND.id);
+            }
+        } else {
+            console.log("Unknown layer in map.js.");
+        }
+        
+        return false;
+    });
+});
+
+  
