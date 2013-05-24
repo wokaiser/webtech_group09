@@ -7,7 +7,7 @@
 	    die('Error: ' . mysql_error());
 	}
 	
-	$sql = "SELECT * FROM ".const_mysql_boatinfo." WHERE bnr = '" . $_GET['bnr'] . "';";
+	$sql = "SELECT * FROM ".const_mysql_weatherinfo." WHERE id = '" . $_GET['id'] . "';";
 	
 	$result = mysql_query($sql, $sql_connection);
 	

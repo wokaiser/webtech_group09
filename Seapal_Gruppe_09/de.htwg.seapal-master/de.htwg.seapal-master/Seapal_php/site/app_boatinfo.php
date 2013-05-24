@@ -1,3 +1,12 @@
+<?php 
+include('_include/config.php');
+include('_include/functions.php');
+$sql_connection = mysql_connect(const_mysql_host, const_mysql_user, const_mysql_pw);
+$db_selected = mysql_select_db(const_mysql_db, $sql_connection);
+if (!$db_selected)
+    die('Can\'t select database : ' . mysql_error());    
+include('_include/load.php');
+?>
 <!DOCTYPE html>
 
 <html lang="de">
@@ -131,16 +140,13 @@
 			            			<input class="input-medium" type="text" name="grosssegelgroesse" id="grosssegelgroesse" />
 			                    </div>	      
 		            		</div>
-		            	</div>      	 
-		            	<div class="control-group">
-			            	<input type="reset" class="btn" id="delete" value="L&ouml;schen" class="button"/>
-			                <input type="submit" class="btn" id="save" name="submit" value="Speichern" class="button"/>
-			            </div>  
-	            	</div>
+                        </div>
+                        <div class="control-group">
+                            <input type="reset" class="btn" id="delete" value="L&ouml;schen" class="button"/>
+                            <input type="submit" class="btn" id="save" name="submit" value="Speichern" class="button"/>
+                        </div>  
+                    </form>
 	            </div>
-	            
-		           
-		        </form>
 	            <br />
 	            <br />
 	            <div class="appTableDiv" align="center">
@@ -161,25 +167,13 @@
 	                    </thead>
 		                <tbody id="entries">
 	
-	                        <?php
-		                        $conn = mysql_connect("localhost", "root", "root");
-		
-		                        $db_selected = mysql_select_db('seapal', $conn);
-		
-		                        if (!$db_selected) {
-		                            die('Can\'t use foo : ' . mysql_error());
-		                        }
-		
-		                        $sql = "SELECT * FROM bootinfo;";
-		
-		                        $result = mysql_query($sql, $conn);
-		
-		                        if (!$result) {
+	                        <?php                            
+		                        $sql = "SELECT * FROM ".const_mysql_boatinfo.";";
+		                        $result = mysql_query($sql, $sql_connection);
+		                        if (!$result)
 		                            die('Invalid query: ' . mysql_error());
-		                        }
 		
 		                        while ($row = mysql_fetch_array($result)) {
-		
 		                            echo("<tr class='selectable' id='" . $row['bnr'] . "'>");
 		                            echo("<td>" . $row['bootname'] . "</td>");
 		                            echo("<td>" . $row['typ'] . "</td>");
@@ -191,13 +185,126 @@
 		                            echo("<td>" . $row['tiefgang'] . "</td>");
 		                            echo("<td>" . $row['eigner'] . "</td>");
 		                            echo("<td style='width:30px; text-align:left;'><div class='btn-group'>");
-		                            echo("<a class='btn btn-small view' id='" . $row['bnr'] . "'><span><i class='icon-eye-open'></i></span></a>");
-		                            echo("<a class='btn btn-small remove' id='" . $row['bnr'] . "'><span><i class='icon-remove'></i></span></a>");
+		                            echo("<a class='btn btn-small view boat' id='" . $row['bnr'] . "'><span><i class='icon-eye-open'></i></span></a>");
+		                            echo("<a class='btn btn-small remove boat' id='" . $row['bnr'] . "'><span><i class='icon-remove'></i></span></a>");
 		                            echo("</div></td>");
 		                            echo("</tr>");
 		                        }
+	                        ?>
+	
+	                    </tbody>
+	                </table>
+	                <br /><br />
+	            </div>
+	            <br />
+	           <h2>Wetter Informationen</h2>
+	            <br />
+	            <div class="container-fluid">
+	            	<form method="POST" class="form-horizontal"> 
+                        <div class="row well" style="margin-left: 15%;">
+                            <div class="span4" align="center">	            		
+			            		<div class="control-group">
+			            			<label class="control-label">Windst&auml;rke</label>
+			            			<input class="input-medium" type="text" name="strength" id="strength" />
+			            		</div>
+			            		<div class="control-group">
+			            			<label class="control-label">Windrichtung</label>
+			            			<input class="input-medium" type="text" name="wind_direction" id="wind_direction" />
+			                    </div>
+			                    <div class="control-group">
+			            			<label class="control-label">Luftdruck</label>
+			            			<input class="input-medium" type="text" name="airpressure" id="airpressure" />
+			                    </div>
+			                    <div class="control-group">
+			            			<label class="control-label">Temperatur</label>
+			            			<input class="input-medium" type="text" name="temperature" id="temperature" />
+			                    </div> 
+			                    <div class="control-group">
+			            			<label class="control-label">Wolken</label>
+			            			<input class="input-medium" type="text" name="clouds" id="clouds" />
+			                    </div>
+			                    <div class="control-group">
+			            			<label class="control-label">Regen</label>
+			            			<input class="input-medium" type="text" name="rain" id="rain" />
+			                    </div>        
+		            		</div>
+		            		<div class="span4">
+		            			<div class="control-group">
+			            			<label class="control-label">Wellenh&ouml;he</label>
+			            			<input class="input-medium" type="text" name="waveheight" id="waveheight" />
+			            		</div>
+			            		<div class="control-group">
+			            			<label class="control-label">Wellenrichtung</label>
+			            			<input class="input-medium" type="text" name="wave_direction" id="wave_direction" />
+			                    </div>
+			                    <div class="control-group">
+			            			<label class="control-label">Uhrzeit</label>
+			            			<input class="input-medium" type="text" name="weather_time" id="weather_time" />
+			            		</div>
+			            		<div class="control-group">
+			                    	<label class="control-label">Datum</label>
+			            			<input class="input-medium" type="text" name="weather_date" id="weather_date" />
+			                    </div>
+  		            		</div>       
+		            	</div>   
+                        <div class="control-group">
+                            <input type="reset" class="btn" id="delete" value="L&ouml;schen" class="button"/>
+                            <input type="submit" class="btn" id="save_weather" name="submit_weather" value="Speichern" class="button"/>
+                        </div>  
+                    </form>
+                </div>
+	            <br />
+	            <br />
+	            <div class="appTableDiv" align="center">
+	                <table class="appTable table table-hover" cellspacing="0px" cellpadding="5px">
+	                    <thead>
+	                        <tr>
+                                <th>Datum</th>
+                                <th>Uhrzeit</th>
+	                            <th>Windst.</th>
+	                            <th>Windri.</th>
+	                            <th>Luftdruck</th>
+	                            <th>Temp.</th>
+	                            <th>Wolken</th>
+	                            <th>Regen</th>
+	                            <th>Wellenri.</th>
+	                            <th>Wellenh&ouml;he</th>
+	                            <th></th>
+	                        </tr>
+	                    </thead>
+		                <tbody id="entries">
+	
+	                        <?php
+                            
+		                        $sql = "SELECT * FROM ".const_mysql_weatherinfo.";";
+		                        $result = mysql_query($sql, $sql_connection);
+		                        if (!$result)
+		                            die('Invalid query: ' . mysql_error());
 		
-		                        mysql_close($conn);
+		                        while ($row = mysql_fetch_array($result)) {
+                                    // Convert time
+                                    $array_uhrzeit = explode(':', $row['uhrzeit']);
+                                    $row['uhrzeit'] = $array_uhrzeit[0].':'.$array_uhrzeit[1].' Uhr';
+                                    
+                                    $row['datum'] = convert_date_from_sql($row['datum']);
+                                    
+		                            echo("<tr class='selectable' id='" . $row['id'] . "'>");
+		                            echo("<td>" . $row['datum'] . "</td>");
+		                            echo("<td>" . $row['uhrzeit'] . "</td>");
+		                            echo("<td>" . $row['windstaerke'] . "</td>");
+		                            echo("<td>" . $row['windrichtung'] . "</td>");
+		                            echo("<td>" . $row['luftdruck'] . "</td>");
+		                            echo("<td>" . $row['temperatur'] . "</td>");
+		                            echo("<td>" . $row['wolken'] . "</td>");
+		                            echo("<td>" . $row['regen'] . "</td>");
+		                            echo("<td>" . $row['wellenrichtung'] . "</td>");
+                                    echo("<td>" . $row['wellenhoehe'] . "</td>");
+		                            echo("<td style='width:30px; text-align:left;'><div class='btn-group'>");
+		                            echo("<a class='btn btn-small view weather' id='" . $row['id'] . "'><span><i class='icon-eye-open'></i></span></a>");
+		                            echo("<a class='btn btn-small remove weather' id='" . $row['id'] . "'><span><i class='icon-remove'></i></span></a>");
+		                            echo("</div></td>");
+		                            echo("</tr>");
+		                        }
 	                        ?>
 	
 	                    </tbody>
@@ -230,6 +337,9 @@
 	    
 	    <!-- Additional Java-Script -->
 	    <script src="../js/app/ajax/boatinfo.js" type="text/javascript"></script>
-	    
+        <script src="../js/app/ajax/weatherinfo.js" type="text/javascript"></script>
+	   
+    <?php @mysql_close($sql_connection); ?>
+       
 	</body>
 </html>

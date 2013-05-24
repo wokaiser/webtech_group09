@@ -55,11 +55,11 @@ $(function() {
 		$('#entries').append(entry);
 	}
 
-	$('a.view').live("click", function(event) {
+	$('a.view.boat').live("click", function(event) {
 		loadEntry($(this).attr('id'));
 	});
 
-	$('a.remove').live("click", function(event) {
+	$('a.remove.boat').live("click", function(event) {
 		var buttonID = this;
 	 	var boatnr = $(this).attr('id');
 		jQuery.post("app_boatinfo_delete.php", { "bnr": boatnr }, function(data) {
