@@ -471,36 +471,64 @@ $(document).ready(function() {
 });
 
 function mapOverlay() {
-
     latLng = map.getCenter();
-
-    var var1 = "http://openweathermap.org/data/2.1/find/city?lat="+latLng.lat()+"&lon="+latLng.lng()+"&cnt=1";
-    var var2 = "http://openweathermap.org/data/2.1/forecast/city?lat="+latLng.lat()+"&lon="+latLng.lng()+"&cnt=1";
-    var var3 = "http://openweathermap.org/data/2.1/history/city?lat="+latLng.lat()+"&lon="+latLng.lng()+"&cnt=1";
-    
+    var lat = latLng.lat();
+    var lng = latLng.lng();
+    var weatherCurrent = "http://openweathermap.org/data/2.1/find/city?lat="+lat+"&lon="+lng+"&cnt=1";    
     var txt = "<center>";
 
-    $.ajax(var1, {
-    crossDomain:true, 
-    dataType: "jsonp", 
-    success:function(data,text,xhqr){
-        console.log("---");
-        txt = "<b>Weather Information</b>"                               + "</br>";
-        txt += data.list[0].name                                         + "</br>";
-        txt += "Weather          " + data.list[0].weather[0].description + "</br>";
-        txt += "Wind speed       " + data.list[0].wind.speed             + "</br>";
-        txt += "Humidity         " + data.list[0].main.humidity          + "</br>";
-        txt += "Pressure         " + data.list[0].main.pressure          + "</br>";
-        txt += "Temperature      " + data.list[0].main.temp              + "</br>";
-        txt += "Min Temperature  " + data.list[0].main.temp_min          + "</br>";
-        txt += "Max Temperature  " + data.list[0].main.temp_max          + "</br>";
-        txt += "</center>";
-        console.log(txt);
-        document.getElementById("map_overlay").innerHTML = txt;
-        //Visible mayOverlay
-        document.getElementById("map_overlay").style.visibility="visible";
-    }
+    /*---------------------------------------*/
+    /*           Current Weather             */
+    /*---------------------------------------*/
+    $.ajax(weatherCurrent, {
+        crossDomain:true, 
+        dataType: "jsonp", 
+        success:function(data,text,xhqr){
+            txt = "<b>Weather Information</b>"                               + "</br>";
+            txt += data.list[0].name                                         + "</br>";
+            txt += "Weather          " + data.list[0].weather[0].description + "</br>";
+            txt += "Wind speed       " + data.list[0].wind.speed             + "</br>";
+            txt += "Humidity         " + data.list[0].main.humidity          + "</br>";
+            txt += "Pressure         " + data.list[0].main.pressure          + "</br>";
+            txt += "Temperature      " + data.list[0].main.temp              + "</br>";
+            txt += "Min Temperature  " + data.list[0].main.temp_min          + "</br>";
+            txt += "Max Temperature  " + data.list[0].main.temp_max          + "</br>";
+            txt += "</center>";
+        
+            //build string for weather history and forecast request
+            var weatherHistory  = "http://openweathermap.org/data/2.1/history/city/?id="+data.list[0].id+"&start="+data.list[0].dt+"&cnt=1";
+            var weatherForecast = "http://openweathermap.org/data/2.1/forecast/city?lat="+lat+"&lon="+lng+"&cnt=1";
+            
+            /*---------------------------------------*/
+            /*           Weather Forecast            */
+            /*---------------------------------------*/
+            $.ajax(weatherForecast, {
+                crossDomain:true, 
+                dataType: "jsonp", 
+                success:function(data,text,xhqr){
+                    //weather forecast data
+                    
+                    
+                    /*---------------------------------------*/
+                    /*           Weather History             */
+                    /*---------------------------------------*/
+                    $.ajax(weatherHistory, {
+                        crossDomain:true, 
+                        dataType: "jsonp", 
+                        success:function(data,text,xhqr){
+                            //weather history data
+                            
+                            
+                            
+                            //all weather data retrieved, set txt to map overlay
+                            document.getElementById("map_overlay").innerHTML = txt;
+                            //Visible mayOverlay
+                            document.getElementById("map_overlay").style.visibility="visible";
+                        }
+                    });   
+                }
+            });
+        }
     }); 
- 
 }
 
