@@ -165,7 +165,7 @@ include('_include/load.php');
 	                            <th></th>
 	                        </tr>
 	                    </thead>
-		                <tbody id="entries">
+		                <tbody id="entries_boat">
 	
 	                        <?php                            
 		                        $sql = "SELECT * FROM ".const_mysql_boatinfo.";";
@@ -272,7 +272,7 @@ include('_include/load.php');
 	                            <th></th>
 	                        </tr>
 	                    </thead>
-		                <tbody id="entries">
+		                <tbody id="entries_weather">
 	
 	                        <?php
                             

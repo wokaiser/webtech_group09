@@ -21,22 +21,23 @@ $(function() {
 		var entry = ""; 
 			
 		entry += "<tr class='selectable' id='" + id + "'>";
-		entry += "<td>" + json.bootname + "</td>";
-		entry += "<td>" + json.typ + "</td>";
-        entry += "<td>" + json.konstrukteur + "</td>";
-        entry += "<td>" + json.baujahr + "</td>";
-        entry += "<td>" + json.heimathafen + "</td>";
-        entry += "<td>" + json.laenge + "</td>";
-        entry += "<td>" + json.breite + "</td>";
-        entry += "<td>" + json.tiefgang + "</td>";
-        entry += "<td>" + json.eigner + "</td>";
+		entry += "<td>" + json.weather_date + "</td>";
+		entry += "<td>" + json.weather_time + "</td>";
+        entry += "<td>" + json.strength + "</td>";
+        entry += "<td>" + json.wind_direction + "</td>";
+        entry += "<td>" + json.airpressure + "</td>";
+        entry += "<td>" + json.temperature + "</td>";
+        entry += "<td>" + json.clouds + "</td>";
+        entry += "<td>" + json.rain + "</td>";
+        entry += "<td>" + json.wave_direction + "</td>";
+        entry += "<td>" + json.waveheight + "</td>";
         entry += "<td style='width:30px; text-align:left;'><div class='btn-group'>";
-        entry += "<a class='btn btn-small view' id='" + id + "'><span><i class='icon-eye-open'></i></span></a>";
-        entry += "<a class='btn btn-small remove' id='" + id + "'><span><i class='icon-remove'></i></span></a>";
+        entry += "<a class='btn btn-small view weather' id='" + id + "'><span><i class='icon-eye-open'></i></span></a>";
+        entry += "<a class='btn btn-small remove weather' id='" + id + "'><span><i class='icon-remove'></i></span></a>";
         entry += "</div></td>";
         entry += "</tr>";
 
-		$('#entries').append(entry);
+		$('#entries_weather').append(entry);
 	}
 
 	$('a.view.weather').live("click", function(event) {

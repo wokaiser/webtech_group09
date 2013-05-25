@@ -47,12 +47,12 @@ $(function() {
         entry += "<td>" + json.tiefgang + "</td>";
         entry += "<td>" + json.eigner + "</td>";
         entry += "<td style='width:30px; text-align:left;'><div class='btn-group'>";
-        entry += "<a class='btn btn-small view' id='" + bnr + "'><span><i class='icon-eye-open'></i></span></a>";
-        entry += "<a class='btn btn-small remove' id='" + bnr + "'><span><i class='icon-remove'></i></span></a>";
+        entry += "<a class='btn btn-small view boat' id='" + bnr + "'><span><i class='icon-eye-open'></i></span></a>";
+        entry += "<a class='btn btn-small remove boat' id='" + bnr + "'><span><i class='icon-remove'></i></span></a>";
         entry += "</div></td>";
         entry += "</tr>";
 
-		$('#entries').append(entry);
+		$('#entries_boat').append(entry);
 	}
 
 	$('a.view.boat').live("click", function(event) {
