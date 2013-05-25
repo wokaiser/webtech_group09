@@ -100,7 +100,7 @@
 	                        <?php
 	                        $conn = mysql_connect("localhost", "root", "root");
 	
-	                        $db_selected = mysql_select_db('SeaPal', $conn);
+	                        $db_selected = mysql_select_db('seapal', $conn);
 	
 	                        if (!$db_selected) {
 	                            die('Can\'t use foo : ' . mysql_error());

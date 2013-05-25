@@ -12,9 +12,9 @@
                 <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Map Options<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <!--use checked in class for default checked items-->
-                        <li><a id="wl_seamark" class="wl_chooser multicheck checked" href="#">Seamark
+                        <li><a id="wl_seamark" class="wl_chooser multicheck" href="#">Seamark
                             <!--If checked is in class of wl_seamark used, use icon-ok in this span class-->
-                            <span class="pull-right icon-ok"></span>
+                            <span class="pull-right"></span>
                         </a></li>
                 
                         <li><a id="wl_air" class="wl_chooser multicheck" href="#">Air temparature
@@ -25,8 +25,8 @@
                             <span class="pull-right"></span>
                         </a></li>
                         
-                        <li><a id="wl_mapOverlay" class="wl_chooser multicheck checked" href="#">Weather Info
-                            <span class="pull-right icon-ok"></span>
+                        <li><a id="wl_mapOverlay" class="wl_chooser multicheck" href="#">Weather Info
+                            <span class="pull-right"></span>
                         </a></li>
                     </ul>
                 </li>

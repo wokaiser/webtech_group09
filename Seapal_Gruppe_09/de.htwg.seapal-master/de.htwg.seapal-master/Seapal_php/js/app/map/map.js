@@ -4,13 +4,45 @@
 // openseamap fehler beheben falls m�glich
 // Benutzerposition bestimmen
 
-/*var for the map overlay listener. The map overlay shows weather information*/
-var mapOverlayListener = null;
+//for debug of cookie-less session variable
+//Session.clear();
+
+/*define for session name*/
+const SESSION = "seapalSessionApp";
+
+/*default position of the ship*/
+const CLIENT_DEFAULT_LAT = 47.65521295468833;
+const CLIENT_DEFAULT_LNG = 9.2010498046875;
+
+/*option types for "options" in session*/
+SESSION_OPTION_TYPE = {LAYER : 0, MAP_OVERLAY : 1}
 
 /*Var with the id and the link to each individual layer.*/
 var LAYER = { SEAMARK: { id: 1, link: "http://tiles.openseamap.org/seamark/" }, 
                   AIR: { id: 2, link: "http://www.openportguide.org/tiles/actual/air_temperature/5/" }, 
                  WIND: { id: 3, link: "http://www.openportguide.org/tiles/actual/wind_vector/7/" } };
+
+/*Variable to save options, even when leaving a page or reloading a page by using Cookie-less session variable*/
+var session = Session.get(SESSION) || {
+	map         :       {lat    : 47.65521295468833,
+                         lng    : 9.2010498046875,
+                         zoom   : 14},
+	options     :       [{id      : "wl_seamark",
+                          active  : true,
+                          type    : SESSION_OPTION_TYPE.LAYER,
+                          layer   : LAYER.SEAMARK},
+                         {id      : "wl_air",
+                          active  : false,
+                          type    : SESSION_OPTION_TYPE.LAYER,
+                          layer   : LAYER.AIR},
+                         {id      : "wl_wind",
+                          type    : SESSION_OPTION_TYPE.LAYER,
+                          layer   : LAYER.WIND,
+                          active  : false},
+                         {id      : "wl_mapOverlay",
+                          type    : SESSION_OPTION_TYPE.MAP_OVERLAY,
+                          active  : true}]
+};
 
 var map = null;
 
@@ -84,8 +116,8 @@ function initialize() {
 
     // set map Options
     var mapOptions = {
-        center: new google.maps.LatLng(47.65521295468833, 9.2010498046875),
-        zoom: 14,
+        center: new google.maps.LatLng(session.map.lat, session.map.lng),
+        zoom: session.map.zoom,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapTypeControlOptions: {
             mapTypeIds: mapTypeIds
@@ -108,7 +140,7 @@ function initialize() {
     map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
     
     // set client position
-    currentPosition = new google.maps.LatLng(47.65521295468833, 9.2010498046875)
+    currentPosition = new google.maps.LatLng(CLIENT_DEFAULT_LAT, CLIENT_DEFAULT_LNG)
 
     var currentMarkerOptions = {
         position: currentPosition,
@@ -132,10 +164,15 @@ function initialize() {
 
     //Initial map features
     
+    
+    //init map options
+    for (var i in session.options) {
+        InitialiseMapOtionsDropdown(session.options[i])
+    }
+    
+
     //add action listener for mapOverlay which will be refreshed if map get refreshed
-    mapOverlayListener = google.maps.event.addListener(map, 'idle', mapOverlay);
-    //seamark layer
-    addMapLayer(LAYER.SEAMARK.id, LAYER.SEAMARK.link);
+    google.maps.event.addListener(map, 'idle', mapOverlay);
     
     google.maps.event.addListener(currentPositionMarker, 'position_changed', function () {
         
@@ -413,6 +450,53 @@ function RemoveMapLayer (id) {
     map.overlayMapTypes.setAt(id, null); 
 }
 
+/*function to initialise the option buttons*/
+function InitialiseMapOtionsDropdown (option) {
+    if (option.active) {
+        $("#"+option.id).hasClass ("checked");
+        $("#"+option.id).find("span").toggleClass("icon-ok");
+    }
+    loadSessionOption(option);
+}
+
+function toggleSessionOption(option) {
+    option.active = (option.active) ? false : true;
+}
+
+/*function to save information about the given id in the session variable*/
+function getSessionOption(optionId) {
+    for (var i in session.options) {
+        if (optionId == session.options[i].id) {
+            return session.options[i];
+        }
+    }
+    return null;
+}
+
+function loadSessionOption(option) {
+    //check if a layer should be added
+    if (option.type == SESSION_OPTION_TYPE.LAYER) {
+        //check if the layer should be added
+        if (option.active) {
+            //add layer
+            addMapLayer(option.layer.id, option.layer.link);
+        } else {
+            RemoveMapLayer(option.layer.id);
+        }
+    } else if (option.type == SESSION_OPTION_TYPE.MAP_OVERLAY) {
+        //check if the mapOverlay should be displayed
+        if (option.active) {
+            //Visible mayOverlay
+            document.getElementById("map_overlay").style.visibility="visible";
+            //call mapOverlay for instant refresh
+            mapOverlay();
+        } else {
+            //Hide mayOverlay
+            document.getElementById("map_overlay").style.visibility="hidden";
+        }
+    }
+}
+
 /*function to toggle buttons and choose weather layer*/
 $(document).ready(function() {
     /* Multi select - allow multiple selections */
@@ -427,80 +511,83 @@ $(document).ready(function() {
     /* wl_chooser, to activate the weather layer */ 
     /* depending to the choosen weather layer    */
     $('.wl_chooser').click(function(e) {
-        if ("wl_seamark" == this.id) {
-            if ("wl_chooser multicheck checked" == this.className){
-                addMapLayer(LAYER.SEAMARK.id, LAYER.SEAMARK.link);
-            } else {
-                RemoveMapLayer(LAYER.SEAMARK.id);
-            }
-        } else if ("wl_air" == this.id) {
-            if ("wl_chooser multicheck checked" == this.className){
-                addMapLayer(LAYER.AIR.id, LAYER.AIR.link);
-            } else {
-                RemoveMapLayer(LAYER.AIR.id);
-            }
-        } else if ("wl_wind" == this.id) {
-            if ("wl_chooser multicheck checked" == this.className){
-                addMapLayer(LAYER.WIND.id, LAYER.WIND.link);
-            } else {
-                RemoveMapLayer(LAYER.WIND.id);
-            }
-        } else if ("wl_mapOverlay" == this.id){
-            if ("wl_chooser multicheck checked" == this.className){
-                //add action listener for mapOverlay which will be refreshed if map get refreshed
-                mapOverlayListener = google.maps.event.addListener(map, 'idle', mapOverlay);
-                //call mapOverlay for instant refresh
-                mapOverlay();
-            } else {
-                if (null != mapOverlayListener) {
-                    //remove action listener for mapOverlay
-                    google.maps.event.removeListener(mapOverlayListener);
-                    mapOverlayListener = null;
-                    //clear mapOverlay
-                    document.getElementById("map_overlay").innerHTML  = "";
-                    //Hide mayOverlay
-                    document.getElementById("map_overlay").style.visibility="hidden";
-                }
-            }
-        } else {
-            console.log("Unknown layer in map.js.");
-        }
-        
+        opt = getSessionOption(this.id);
+        toggleSessionOption(opt);
+        loadSessionOption(opt);
+        /*store session*/
+        Session.set(SESSION, session);
         return false;
     });
 });
 
 function mapOverlay() {
-
     latLng = map.getCenter();
-
-    var var1 = "http://openweathermap.org/data/2.1/find/city?lat="+latLng.lat()+"&lon="+latLng.lng()+"&cnt=1";
-    var var2 = "http://openweathermap.org/data/2.1/forecast/city?lat="+latLng.lat()+"&lon="+latLng.lng()+"&cnt=1";
-    var var3 = "http://openweathermap.org/data/2.1/history/city?lat="+latLng.lat()+"&lon="+latLng.lng()+"&cnt=1";
-    
+    var lat = latLng.lat();
+    var lng = latLng.lng();
+    var weatherCurrent = "http://openweathermap.org/data/2.1/find/city?lat="+lat+"&lon="+lng+"&cnt=1";    
     var txt = "<center>";
-
-    $.ajax(var1, {
-    crossDomain:true, 
-    dataType: "jsonp", 
-    success:function(data,text,xhqr){
-        console.log("---");
-        txt = "<b>Weather Information</b>"                               + "</br>";
-        txt += data.list[0].name                                         + "</br>";
-        txt += "Weather          " + data.list[0].weather[0].description + "</br>";
-        txt += "Wind speed       " + data.list[0].wind.speed             + "</br>";
-        txt += "Humidity         " + data.list[0].main.humidity          + "</br>";
-        txt += "Pressure         " + data.list[0].main.pressure          + "</br>";
-        txt += "Temperature      " + data.list[0].main.temp              + "</br>";
-        txt += "Min Temperature  " + data.list[0].main.temp_min          + "</br>";
-        txt += "Max Temperature  " + data.list[0].main.temp_max          + "</br>";
-        txt += "</center>";
-        console.log(txt);
-        document.getElementById("map_overlay").innerHTML = txt;
-        //Visible mayOverlay
-        document.getElementById("map_overlay").style.visibility="visible";
-    }
+    
+    //save actual displayed position of the map in the cookie-less session
+    session.map.lat = lat;
+    session.map.lng = lng;
+    session.map.zoom = map.getZoom();
+    /*store session*/
+    Session.set(SESSION, session);
+    
+    //return if mapOverlay is inactive
+    if (!getSessionOption("wl_mapOverlay").active) return;
+    
+    
+    /*---------------------------------------*/
+    /*           Current Weather             */
+    /*---------------------------------------*/
+    $.ajax(weatherCurrent, {
+        crossDomain:true, 
+        dataType: "jsonp", 
+        success:function(data,text,xhqr){
+            txt = "<b>Weather Information</b>"                               + "</br>";
+            txt += data.list[0].name                                         + "</br>";
+            txt += "Weather          " + data.list[0].weather[0].description + "</br>";
+            txt += "Wind speed       " + data.list[0].wind.speed             + "</br>";
+            txt += "Humidity         " + data.list[0].main.humidity          + "</br>";
+            txt += "Pressure         " + data.list[0].main.pressure          + "</br>";
+            txt += "Temperature      " + data.list[0].main.temp              + "</br>";
+            txt += "Min Temperature  " + data.list[0].main.temp_min          + "</br>";
+            txt += "Max Temperature  " + data.list[0].main.temp_max          + "</br>";
+            txt += "</center>";
+        
+            //build string for weather history and forecast request
+            var weatherHistory  = "http://openweathermap.org/data/2.1/history/city/?id="+data.list[0].id+"&start="+data.list[0].dt+"&cnt=1";
+            var weatherForecast = "http://openweathermap.org/data/2.1/forecast/city?lat="+lat+"&lon="+lng+"&cnt=1";
+            
+            /*---------------------------------------*/
+            /*           Weather Forecast            */
+            /*---------------------------------------*/
+            $.ajax(weatherForecast, {
+                crossDomain:true, 
+                dataType: "jsonp", 
+                success:function(data,text,xhqr){
+                    //weather forecast data
+                    
+                    
+                    /*---------------------------------------*/
+                    /*           Weather History             */
+                    /*---------------------------------------*/
+                    $.ajax(weatherHistory, {
+                        crossDomain:true, 
+                        dataType: "jsonp", 
+                        success:function(data,text,xhqr){
+                            //weather history data
+                            
+                            
+                            
+                            //all weather data retrieved, set txt to map overlay
+                            document.getElementById("map_overlay").innerHTML = txt;
+                        }
+                    });   
+                }
+            });
+        }
     }); 
- 
 }
 

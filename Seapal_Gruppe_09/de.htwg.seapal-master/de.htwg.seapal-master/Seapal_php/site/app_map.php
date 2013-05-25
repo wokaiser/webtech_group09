@@ -90,6 +90,8 @@
 	    <script src="../js/bootstrap/bootstrap-affix.js"></script>
 	    
 	    <!-- Additional Java-Script -->
+        <script src="../js/js-session/json-serialization.js" type="text/javascript"></script>
+	    <script src="../js/js-session/session.js" type="text/javascript"></script>
 	    <script src="../js/app/map/fancywebsocket.js" type="text/javascript" ></script>
 	    <script src="../js/app/map/chat.js" type="text/javascript" ></script>
 	    <script src="../js/app/map/labels.js" type="text/javascript"></script>
@@ -98,6 +100,5 @@
 	    <script src="../js/app/map/validation.js" type="text/javascript"></script>
 	    <script src="../js/app/map/contextMenu.js" type="text/javascript"></script>
 	    <script src="../js/app/map/TxtOverlay.js" type="text/javascript"></script>
-
 	</body>
 </html>
