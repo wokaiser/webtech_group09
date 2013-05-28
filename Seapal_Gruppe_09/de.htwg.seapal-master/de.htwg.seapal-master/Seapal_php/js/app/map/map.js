@@ -9,6 +9,7 @@
 
 /*define for session name*/
 const SESSION = "seapalSessionApp";
+const SESSION_VERSION = "1.0"
 
 /*default position of the ship*/
 const CLIENT_DEFAULT_LAT = 47.65521295468833;
@@ -23,26 +24,38 @@ var LAYER = { SEAMARK: { id: 1, link: "http://tiles.openseamap.org/seamark/" },
                  WIND: { id: 3, link: "http://www.openportguide.org/tiles/actual/wind_vector/7/" } };
 
 /*Variable to save options, even when leaving a page or reloading a page by using Cookie-less session variable*/
-var session = Session.get(SESSION) || {
-	map         :       {lat    : 47.65521295468833,
-                         lng    : 9.2010498046875,
-                         zoom   : 14},
-	options     :       [{id      : "wl_seamark",
-                          active  : true,
-                          type    : SESSION_OPTION_TYPE.LAYER,
-                          layer   : LAYER.SEAMARK},
-                         {id      : "wl_air",
-                          active  : false,
-                          type    : SESSION_OPTION_TYPE.LAYER,
-                          layer   : LAYER.AIR},
-                         {id      : "wl_wind",
-                          type    : SESSION_OPTION_TYPE.LAYER,
-                          layer   : LAYER.WIND,
-                          active  : false},
-                         {id      : "wl_mapOverlay",
-                          type    : SESSION_OPTION_TYPE.MAP_OVERLAY,
-                          active  : true}]
-};
+var session = Session.get(SESSION) 
+
+if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
+    session = 
+    {
+        version     :       SESSION_VERSION,
+        map         :       {lat               : 47.65521295468833,
+                             lng               : 9.2010498046875,
+                             zoom              : 14,
+                             mapTypeId         : google.maps.MapTypeId.ROADMAP,
+                             temporaryMarker   : null,
+                             fixedMarker       : [],
+                             routes            : []},
+        options     :       [{id      : "wl_seamark",
+                              active  : false,
+                              type    : SESSION_OPTION_TYPE.LAYER,
+                              layer   : LAYER.SEAMARK},
+                             {id      : "wl_air",
+                              active  : false,
+                              type    : SESSION_OPTION_TYPE.LAYER,
+                              layer   : LAYER.AIR},
+                             {id      : "wl_wind",
+                              type    : SESSION_OPTION_TYPE.LAYER,
+                              layer   : LAYER.WIND,
+                              active  : false},
+                             {id      : "wl_mapOverlay",
+                              type    : SESSION_OPTION_TYPE.MAP_OVERLAY,
+                              active  : false}]
+    };
+}
+
+var onInitialize;
 
 var map = null;
 
@@ -110,7 +123,8 @@ function MarkerWithInfobox(marker, infobox, counter) {
 
 // initialize map and all event listeners
 function initialize() {
-
+    //set variable to know that initialization will be done
+    onInitialize = true;
     // set different map types
     var mapTypeIds = ["roadmap", "satellite", "OSM"];
 
@@ -118,7 +132,7 @@ function initialize() {
     var mapOptions = {
         center: new google.maps.LatLng(session.map.lat, session.map.lng),
         zoom: session.map.zoom,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeId: session.map.mapTypeId,
         mapTypeControlOptions: {
             mapTypeIds: mapTypeIds
         },
@@ -170,6 +184,32 @@ function initialize() {
         InitialiseMapOtionsDropdown(session.options[i])
     }
     
+    //set fixed markers, if there are some available
+    for (var i = 0; i < session.map.fixedMarker.length; i++) {
+        fixedMarkerCount = session.map.fixedMarker[i].fixedMarkerCount - 1;
+        setTemporaryMarker(new google.maps.LatLng(session.map.fixedMarker[i].lat, session.map.fixedMarker[i].lng));
+        setFixedMarker(new google.maps.LatLng(session.map.fixedMarker[i].lat, session.map.fixedMarker[i].lng));
+    }
+    
+    //set temporary marker, if one is stored
+    if (null != session.map.temporaryMarker) {
+        setTemporaryMarker(new google.maps.LatLng(session.map.temporaryMarker.lat, session.map.temporaryMarker.lng));
+    }
+    
+    //set routes
+    for (i = 0; i < session.map.routes.length; i++) {
+        activeRouteInSession = i;
+        startNewRoute(new google.maps.LatLng(session.map.routes[i][0].lat, session.map.routes[i][0].lng));
+        for (j = 1; j < session.map.routes[i].length; j++) {
+            addRouteMarker(new google.maps.LatLng(session.map.routes[i][j].lat, session.map.routes[i][j].lng));
+        }
+        stopRouteMode();
+    }
+    
+    //add action listener for change of map type
+    google.maps.event.addListener( map, 'maptypeid_changed', function() { 
+        session.map.mapTypeId = map.getMapTypeId();
+    } );
 
     //add action listener for mapOverlay which will be refreshed if map get refreshed
     google.maps.event.addListener(map, 'idle', mapOverlay);
@@ -210,6 +250,8 @@ function initialize() {
             noToggleOfFollowCurrentPositionButton = false;
         }
     });
+    //set variable to know that initialization is done
+    onInitialize = false;
 }
 
 // temporary marker context menu ----------------------------------------- //
@@ -268,6 +310,8 @@ $(function () {
                 selectedMarker.reference.setMap(null);
                 selectedMarker.infobox.setMap(null);
                 fixedMarkerArray.splice(fixedMarkerArray.indexOf(selectedMarker), 1);
+                //remove marker from session
+                session.map.fixedMarker.splice(getFixedMarkerIndexByCounter(selectedMarker.counter), 1);
             }
         },
         items: {
@@ -286,6 +330,7 @@ function startTimeout() {
     temporaryMarkerTimeout = setTimeout(function () {
         temporaryMarker.setMap(null);
         temporaryMarkerInfobox.setMap(null);
+        session.map.temporaryMarker = null;
     }, 5000);
 }
 
@@ -324,6 +369,11 @@ function getMarkerWithInfobox(event) {
 }
 
 function setTemporaryMarker(position) {
+    //check if not in initialization
+    if (!onInitialize) {
+        //save temporary marker to cookie-less session
+        session.map.temporaryMarker = {lat : position.lat(), lng : position.lng()};
+    }
 
     var temporaryMarkerOptions = {
         position: position,
@@ -363,6 +413,7 @@ function setTemporaryMarker(position) {
 
     // marker drag end
     google.maps.event.addListener(temporaryMarker, 'dragend', function (event) {
+        session.map.temporaryMarker = {lat : event.latLng.lat(), lng : event.latLng.lng()};
         startTimeout();
     });
 
@@ -370,8 +421,16 @@ function setTemporaryMarker(position) {
     temporaryMarkerInfobox = drawTemporaryMarkerInfobox(position);
 }
 
-function setFixedMarker(position) {
+/*helper function to get a fixed marker from the less-cookie session by the fixedMarkerCount*/
+function getFixedMarkerIndexByCounter(count) {
+    for (x in session.map.fixedMarker) {
+        if (session.map.fixedMarker[x].fixedMarkerCount == count) {
+            return x;
+        }
+    }
+}
 
+function setFixedMarker(position) {
     temporaryMarker.setMap(null);
     temporaryMarkerInfobox.setMap(null);
     stopTimeout();
@@ -387,6 +446,11 @@ function setFixedMarker(position) {
 
     fixedMarker = new google.maps.Marker(fixedMarkerOptions);
 
+    //check if not in initialization
+    if (!onInitialize) {
+        session.map.fixedMarker.push({fixedMarkerCount : fixedMarkerCount, lat : position.lat(), lng : position.lng()});
+    }
+    
     // click on fixed marker
     google.maps.event.addListener(fixedMarker, 'click', function (event) {
         selectedMarker = getMarkerWithInfobox(event);
@@ -399,9 +463,13 @@ function setFixedMarker(position) {
 
     // marker is dragged
     google.maps.event.addListener(fixedMarker, 'drag', function (event) {
+        
         selectedMarker = getMarkerWithInfobox(event);
         selectedMarker.infobox.setMap(null);
         selectedMarker.infobox = drawFixedMarkerInfobox(event.latLng, selectedMarker.counter);
+        var index = getFixedMarkerIndexByCounter(selectedMarker.counter);
+        session.map.fixedMarker[index].lat = event.latLng.lat();
+        session.map.fixedMarker[index].lng = event.latLng.lng(); 
     });
 
     fixedMarker.setMap(map);

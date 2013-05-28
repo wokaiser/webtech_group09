@@ -1,4 +1,3 @@
-
 var routeCount = 0;
 var routeArray = new Array();
 var currentRoute = null;
@@ -6,6 +5,9 @@ var destinationRoute = null;
 var destinationMarker = null;
 var draggedMarkerIndex = null;
 var selectedRouteMarker = null;
+//variable to set the actual active route and marker in the session
+var activeRouteInSession;
+var activeRouteMarkerInSession;
 
 var activePathOptions = {
     strokeColor: "#427F94",
@@ -88,7 +90,6 @@ $(function () {
 });
 
 function addRouteMarker(position, index) {
-
     var path = currentRoute.route.getPath();
 
     var marker;
@@ -134,6 +135,8 @@ function addRouteMarker(position, index) {
         var path = currentRoute.route.getPath();
         path.removeAt(draggedMarkerIndex);
         path.insertAt(draggedMarkerIndex, selectedRouteMarker.position);
+        session.map.routes[activeRouteInSession][activeRouteMarkerInSession].lat = selectedRouteMarker.position.lat();
+        session.map.routes[activeRouteInSession][activeRouteMarkerInSession].lng = selectedRouteMarker.position.lng();
         updateRouteDistance();
         
         if (currentRoute.markerArray.indexOf(selectedRouteMarker) == 0) {
@@ -151,6 +154,10 @@ function addRouteMarker(position, index) {
     if (index == null) {
         path.push(position);
         currentRoute.markerArray.push(marker);
+        //add marker to session if not on initialization and route mode is on
+        if (!onInitialize && MODE.ROUTE == currentMode) {
+            session.map.routes[activeRouteInSession].push({lat : position.lat(), lng : position.lng()});
+        }
     } else {
         if (index == currentRoute.markerArray.length) {
             index--;
@@ -169,6 +176,10 @@ function addRouteMarker(position, index) {
         path.insertAt(index, newPosition);
         marker.setPosition(newPosition);
         currentRoute.markerArray.splice(index, 0, marker);
+        //add marker to session if not on initialization and route mode is on
+        if (!onInitialize && MODE.ROUTE == currentMode) {
+            session.map.routes[activeRouteInSession].splice(index, 0, {lat : newPosition.lat(), lng : newPosition.lng()});
+        }
     }
 
     updateRouteDistance();
@@ -177,7 +188,11 @@ function addRouteMarker(position, index) {
 
 // removes selected route marker
 function deleteRouteMarker() {
-
+    //delete the marker from the session
+    session.map.routes[activeRouteInSession].splice(activeRouteMarkerInSession, 1);
+    if (0 == session.map.routes[activeRouteInSession].length) {
+        session.map.routes.splice(activeRouteInSession, 1);
+    }
     selectedRouteMarker.setMap(null);
     
     var index = currentRoute.markerArray.indexOf(selectedRouteMarker);
@@ -251,20 +266,26 @@ function drawDistanceInfobox(latLng) {
 }
 
 function startNewRoute(position, isDistanceToolRoute) {
-
     var route;
-
+    
     if (isDistanceToolRoute) {
         route = new google.maps.Polyline(distanceToolOptions);
-        document.getElementById('distanceToolContainer').style.display = "block";
+        if (!onInitialize) {document.getElementById('distanceToolContainer').style.display = "block";}
         currentMode = MODE.DISTANCE;
     } else {
         route = new google.maps.Polyline(activePathOptions);
-        document.getElementById('routeMenuContainer').style.display = "block";
+        if (!onInitialize) {document.getElementById('routeMenuContainer').style.display = "block";}
         currentMode = MODE.ROUTE;
-        
     }
-
+    
+    //check if not in initialization
+    if (!onInitialize && MODE.ROUTE == currentMode) {
+        //add a new route to the session
+        session.map.routes.push([]);
+        //set the active route for the session access
+        activeRouteInSession = session.map.routes.length - 1;
+    }
+    
     // delete temp marker & infobox
     if (temporaryMarker != null) { temporaryMarker.setMap(null); }
     if (temporaryMarkerInfobox != null) { temporaryMarkerInfobox.setMap(null); }
@@ -384,7 +405,8 @@ function stopDistanceToolMode() {
 }
 
 function deleteRoute() {
-
+    //delete the route from the session
+    session.map.routes.splice(activeRouteInSession, 1);
     currentRoute.route.setMap(null);
     currentRoute.markerInfobox.setMap(null);
 
@@ -411,6 +433,7 @@ function getRouteMarker(latLng) {
     for (var i = 0; i < routeArray.length; i++) {
         for (var j = 0; j < routeArray[i].markerArray.length; j++) {
             if (routeArray[i].markerArray[j].position == latLng) {
+                activeRouteMarkerInSession = j;
                 return routeArray[i].markerArray[j];
             }
         }
@@ -423,6 +446,7 @@ function getRouteByMarker(marker) {
     for (var i = 0; i < routeArray.length; i++) {
         for (var j = 0; j < routeArray[i].markerArray.length; j++) {
             if (routeArray[i].markerArray[j] == marker) {
+                activeRouteInSession = i;
                 return routeArray[i];
             }
         }
