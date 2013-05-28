@@ -38,7 +38,7 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
                              fixedMarker       : [],
                              routes            : []},
         options     :       [{id      : "wl_seamark",
-                              active  : false,
+                              active  : true,
                               type    : SESSION_OPTION_TYPE.LAYER,
                               layer   : LAYER.SEAMARK},
                              {id      : "wl_air",
@@ -51,7 +51,7 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
                               active  : false},
                              {id      : "wl_mapOverlay",
                               type    : SESSION_OPTION_TYPE.MAP_OVERLAY,
-                              active  : false}]
+                              active  : true}]
     };
 }
 
@@ -191,11 +191,6 @@ function initialize() {
         setFixedMarker(new google.maps.LatLng(session.map.fixedMarker[i].lat, session.map.fixedMarker[i].lng));
     }
     
-    //set temporary marker, if one is stored
-    if (null != session.map.temporaryMarker) {
-        setTemporaryMarker(new google.maps.LatLng(session.map.temporaryMarker.lat, session.map.temporaryMarker.lng));
-    }
-    
     //set routes
     for (i = 0; i < session.map.routes.length; i++) {
         activeRouteInSession = i;
@@ -204,6 +199,11 @@ function initialize() {
             addRouteMarker(new google.maps.LatLng(session.map.routes[i][j].lat, session.map.routes[i][j].lng));
         }
         stopRouteMode();
+    }
+    
+    //set temporary marker, if one is stored
+    if (null != session.map.temporaryMarker) {
+        setTemporaryMarker(new google.maps.LatLng(session.map.temporaryMarker.lat, session.map.temporaryMarker.lng));
     }
     
     //add action listener for change of map type
