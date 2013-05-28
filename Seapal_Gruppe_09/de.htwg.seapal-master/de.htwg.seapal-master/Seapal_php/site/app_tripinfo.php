@@ -120,7 +120,7 @@ if (!$db_selected)
 	                        if ($_GET['tnr'])
 	                            $tnr = urldecode($_GET['tnr']);
 	
-	                        $sql = "SELECT * FROM ".const_mysql_waypoints.";";
+	                        $sql = "SELECT * FROM ".const_mysql_waypoints." WHERE tnr =" . $tnr . ";";
 		                        $result = mysql_query($sql, $sql_connection);
 		                        if (!$result)
 		                            die('Invalid query: ' . mysql_error());
