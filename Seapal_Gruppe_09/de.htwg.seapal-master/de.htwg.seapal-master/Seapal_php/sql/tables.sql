@@ -1,22 +1,5 @@
 CREATE DATABASE seapal;
 
-/* table for weather */
-CREATE TABLE IF NOT EXISTS `wetter` (
-  `id` int(15) NOT NULL AUTO_INCREMENT,
-  `datum` date NOT NULL,
-  `uhrzeit` time NOT NULL,
-  `windstaerke` int(2) NOT NULL,
-  `windrichtung` tinytext NOT NULL,
-  `luftdruck` int(11) NOT NULL,
-  `temperatur` int(11) NOT NULL,
-  `wolken` tinytext NOT NULL,
-  `regen` tinytext NOT NULL,
-  `wellenhoehe` int(11) NOT NULL,
-  `wellenrichtung` tinytext NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
-
 /* table for users */
 CREATE TABLE seapal.benutzer (
 	bnr INT NOT NULL AUTO_INCREMENT,
@@ -96,3 +79,20 @@ CREATE TABLE seapal.wegpunkte (
 	PRIMARY KEY (wnr),
 	FOREIGN KEY (tnr) REFERENCES tripinfo (tnr) ON DELETE CASCADE
 );
+
+/* table for weather */
+CREATE TABLE seapal.wetter (
+  `id` int(15) NOT NULL AUTO_INCREMENT,
+  `datum` date NOT NULL,
+  `uhrzeit` time NOT NULL,
+  `windstaerke` int(2) NOT NULL,
+  `windrichtung` tinytext NOT NULL,
+  `luftdruck` int(11) NOT NULL,
+  `temperatur` int(11) NOT NULL,
+  `wolken` tinytext NOT NULL,
+  `regen` tinytext NOT NULL,
+  `wellenhoehe` int(11) NOT NULL,
+  `wellenrichtung` tinytext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;

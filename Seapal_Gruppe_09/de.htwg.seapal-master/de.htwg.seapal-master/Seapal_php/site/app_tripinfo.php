@@ -1,3 +1,12 @@
+<?php 
+require_once('_include/config.php');
+include('_include/functions.php');
+$sql_connection = mysql_connect(const_mysql_host, const_mysql_user, const_mysql_pw);
+$db_selected = mysql_select_db(const_mysql_db, $sql_connection);
+if (!$db_selected)
+    die('Can\'t select database : ' . mysql_error());    
+
+?>
 <!DOCTYPE html>
 
 <html lang="de">
@@ -111,21 +120,10 @@
 	                        if ($_GET['tnr'])
 	                            $tnr = urldecode($_GET['tnr']);
 	
-	                        $conn = mysql_connect("localhost", "root", "root");
-	
-	                        $db_selected = mysql_select_db('SeaPal', $conn);
-	
-	                        if (!$db_selected) {
-	                            die('Can\'t use foo : ' . mysql_error());
-	                        }
-	
-	                        $sql = "SELECT * FROM wegpunkte WHERE tnr =" . $tnr . ";";
-	
-	                        $result = mysql_query($sql, $conn);
-	
-	                        if (!$result) {
-	                            die('Invalid query: ' . mysql_error());
-	                        }
+	                        $sql = "SELECT * FROM ".const_mysql_waypoints.";";
+		                        $result = mysql_query($sql, $sql_connection);
+		                        if (!$result)
+		                            die('Invalid query: ' . mysql_error());
 	
 	                        while ($row = mysql_fetch_array($result)) {
 	
@@ -143,8 +141,6 @@
 		                        echo("</div></td>");
 	                            echo("</tr>");
 	                        }
-	
-	                        mysql_close($conn);
 	                        ?>
 	                    </tbody>
 	                </table>
