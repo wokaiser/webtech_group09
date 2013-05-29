@@ -9,8 +9,8 @@ function showTitle( item ) {
 }
 $(function() {
     $('#carousel').carouFredSel({
-        width: null, // automatic calculation
-        height: null, // automatic calculation
+        width: 1000000,     //	should be wide enough
+        height: 1000000,    //	should be wide enough
         align: "center",
         circular: false,
         infinite: false,
