@@ -5889,13 +5889,3 @@ a.badge:hover {
 .affix {
   position: fixed;
 }
-
-/*!
- * New Commands start here...
- */
-
-ul.nav li.dropdown:hover ul.dropdown-menu{
-    display: block;
-    margin-top:0px
-}
-

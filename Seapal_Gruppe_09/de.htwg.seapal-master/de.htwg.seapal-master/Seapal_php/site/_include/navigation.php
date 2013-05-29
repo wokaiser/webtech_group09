@@ -15,7 +15,7 @@
             	<img src='../img/icons/seapal_normal.png' alt='Icon-Small-50' width='50' height='50' style="float: left; padding-top: 5px; padding-left: 20px"/>
             	<h2 style="float: left; padding-left:10px; margin-right:100px; font-weight: normal;">Seapal</h2>
             </a>
-            <div class="nav-collapse">
+            <div class="nav-collapse collapse">
             	<ul class="nav nav-pills" style="padding-left:0px; padding-top: 24px; font-size: 18px;">
 			        <li <?php if ($filename == "index") echo("class='active'"); ?>><a href='index.php'>Home</a></li>
 			        <li <?php if ($filename == "app_map") echo("class='active'"); ?>><a href='app_map.php'>App</a></li>
@@ -32,31 +32,32 @@
                     </li>
 			        <li <?php if ($filename == "about") echo("class='active'"); ?>><a href='about.php'>About</a></li>
 			        <li <?php if ($filename == "contact") echo("class='active'"); ?>><a href='contact.php'>Contact</a></li>
-              	</ul>      
-                <ul class="nav nav-pills pull-right" style="padding-top: 24px; font-size: 18px;">
-                  <?php if ($logged_in == true):
-                  echo("
-                  <li>
-                    <a class='btn-logout' href='#'>Sign out</a>
-                  </li>
-                  "); 
-                  else:
-                    echo("
-                  <li class='dropdown pull-right'>
-                    <a class='dropdown-toggle btn-login' href='#' data-toggle='dropdown'>Sign In <strong class='caret'></strong></a>
-                    <div class='dropdown-menu' style='padding: 15px; padding-bottom: 0px; color:#fff;'>
-                        <form action='[YOUR ACTION]' method='post' accept-charset='UTF-8'>
-                          <input id='user_username' style='margin-bottom: 15px;' type='text' name='user[username]' placeholder='username' size='30' />
-                          <input id='user_password' style='margin-bottom: 15px;' type='password' name='user[password]' placeholder='password' size='30' />
-                          <input id='user_remember_me' style='float: left; margin-right: 10px;' type='checkbox' name='user[remember_me]' value='1' />
-                          <label class='string optional' for='user_remember_me'> Remember me</label>
-                          <input class='btn btn-login' style='clear: left; width: 100%; height: 32px; font-size: 13px;' type='submit' name='commit' value='Sign In' />
-                        </form>
-                    </div>
-                  </li>
-                  ");
-                  endif;?>
-              	</ul>
+   
+
+                      <?php if ($logged_in == true):
+                      echo("
+                      <li>
+                        <a class='btn-logout' href='#'>Sign out</a>
+                      </li>
+                      "); 
+                      else:
+                        echo("
+                      <li class='dropdown'>
+                        <a class='dropdown-toggle btn-login' href='#' data-toggle='dropdown'>Sign In <strong class='caret'></strong></a>
+                        <div class='dropdown-menu' style='padding: 15px; padding-bottom: 0px; color:#fff;'>
+                            <form action='[YOUR ACTION]' method='post' accept-charset='UTF-8'>
+                              <input id='user_username' style='margin-bottom: 15px;' type='text' name='user[username]' placeholder='username' size='30' />
+                              <input id='user_password' style='margin-bottom: 15px;' type='password' name='user[password]' placeholder='password' size='30' />
+                              <input id='user_remember_me' style='float: left; margin-right: 10px;' type='checkbox' name='user[remember_me]' value='1' />
+                              <label class='string optional' for='user_remember_me'> Remember me</label>
+                              <input class='btn btn-login' style='clear: left; width: 100%; height: 32px; font-size: 13px;' type='submit' name='commit' value='Sign In' />
+                            </form>
+                        </div>
+                      </li>
+                      ");
+                      endif;?>
+
+                </ul>   
 		    </div>
         </div>
     </div>
