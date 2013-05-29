@@ -1,0 +1,10 @@
+/*!
+ * Custom defintions for some buttons, etc..
+ * Not saved to the bootstrap css, to avoid changing default settings..
+ */
+
+.btn-login { 
+ background-color: hsl(207, 84%, 25%) !important; background-repeat: repeat-x; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#359aed", endColorstr="#0a4575"); background-image: -khtml-gradient(linear, left top, left bottom, from(#359aed), to(#0a4575)); background-image: -moz-linear-gradient(top, #359aed, #0a4575); background-image: -ms-linear-gradient(top, #359aed, #0a4575); background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #359aed), color-stop(100%, #0a4575)); background-image: -webkit-linear-gradient(top, #359aed, #0a4575); background-image: -o-linear-gradient(top, #359aed, #0a4575); background-image: linear-gradient(#359aed, #0a4575); border-color: #0a4575 #0a4575 hsl(207, 84%, 17%); color: #fff !important; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.52); -webkit-font-smoothing: antialiased;
+}
+
+.btn-logout { background-color: hsl(4, 84%, 25%) !important; background-repeat: repeat-x; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ed4135", endColorstr="#75110a"); background-image: -khtml-gradient(linear, left top, left bottom, from(#ed4135), to(#75110a)); background-image: -moz-linear-gradient(top, #ed4135, #75110a); background-image: -ms-linear-gradient(top, #ed4135, #75110a); background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ed4135), color-stop(100%, #75110a)); background-image: -webkit-linear-gradient(top, #ed4135, #75110a); background-image: -o-linear-gradient(top, #ed4135, #75110a); background-image: linear-gradient(#ed4135, #75110a); border-color: #75110a #75110a hsl(4, 84%, 17%); color: #fff !important; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.52); -webkit-font-smoothing: antialiased; }

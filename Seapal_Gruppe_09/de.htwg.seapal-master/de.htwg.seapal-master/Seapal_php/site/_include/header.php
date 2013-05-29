@@ -18,6 +18,7 @@
     <link href="../css/bootstrap/bootstrap.css" rel="stylesheet">
     <link href="../css/bootstrap/layout.css" rel="stylesheet">
     <link href="../css/bootstrap/bootstrap-responsive.css" rel="stylesheet">
+    <link href="../css/custom/custom.css" rel="stylesheet">
     
     <!-- Java-Script -->
     <script src="../js/jquery/jquery.js" type="text/javascript"></script>
