@@ -1,3 +1,12 @@
+<?php 
+require_once('_include/config.php');
+include('_include/functions.php');
+$sql_connection = mysql_connect(const_mysql_host, const_mysql_user, const_mysql_pw);
+$db_selected = mysql_select_db(const_mysql_db, $sql_connection);
+if (!$db_selected)
+    die('Can\'t select database : ' . mysql_error());    
+
+?>
 <!DOCTYPE html>
 
 <html lang="de">
@@ -98,40 +107,27 @@
 	                    </thead>
 	                    <tbody id="entries">
 	                        <?php
-	                        $conn = mysql_connect("localhost", "root", "root");
+	                        	$sql = "SELECT * FROM ".const_mysql_trip.";";
+		                        $result = mysql_query($sql, $sql_connection);
+		                        if (!$result)
+		                            die('Invalid query: ' . mysql_error());
 	
-	                        $db_selected = mysql_select_db('seapal', $conn);
-	
-	                        if (!$db_selected) {
-	                            die('Can\'t use foo : ' . mysql_error());
-	                        }
-	
-	                        $sql = "SELECT * FROM tripinfo;";
-	
-	                        $result = mysql_query($sql, $conn);
-	
-	                        if (!$result) {
-	                            die('Invalid query: ' . mysql_error());
-	                        }
-	
-	                        while ($row = mysql_fetch_array($result)) {
-	
-	                            echo("<tr class='selectable'>");
-	                            echo("<td>" . $row['titel'] . "</td>");
-	                            echo("<td>" . $row['skipper'] . "</td>");
-	                            echo("<td>" . $row['tstart'] . "</td>");
-	                            echo("<td>" . $row['tende'] . "</td>");
-	                            echo("<td>" . $row['tdauer'] . "</td>");
-	                            echo("<td>" . $row['motor'] . "</td>");
-	                            echo("<td style='width:30px; text-align:right;'><div class='btn-group'>");
-		                        echo("<a class='btn btn-small view' id='" . $row['tnr'] . "'><span><i class='icon-eye-open'></i></span></a>");
-		                        echo("<a class='btn btn-small remove' id='" . $row['tnr'] . "'><span><i class='icon-remove'></i></span></a>");
-		                        echo("<a href='app_tripinfo.php?tnr=" . $row['tnr'] . "' class='btn btn-small redirect' id='" . $row['tnr'] . "'><span><i class='icon-chevron-right'></i></span></a>");
-		                        echo("</div></td>");
-	                            echo("</tr>");
-	                        }
-	
-	                        mysql_close($conn);
+		                        while ($row = mysql_fetch_array($result)) {
+		
+		                            echo("<tr class='selectable'>");
+		                            echo("<td>" . $row['titel'] . "</td>");
+		                            echo("<td>" . $row['skipper'] . "</td>");
+		                            echo("<td>" . $row['tstart'] . "</td>");
+		                            echo("<td>" . $row['tende'] . "</td>");
+		                            echo("<td>" . $row['tdauer'] . "</td>");
+		                            echo("<td>" . $row['motor'] . "</td>");
+		                            echo("<td style='width:30px; text-align:right;'><div class='btn-group'>");
+			                        echo("<a class='btn btn-small view' id='" . $row['tnr'] . "'><span><i class='icon-eye-open'></i></span></a>");
+			                        echo("<a class='btn btn-small remove' id='" . $row['tnr'] . "'><span><i class='icon-remove'></i></span></a>");
+			                        echo("<a href='app_tripinfo.php?tnr=" . $row['tnr'] . "' class='btn btn-small redirect' id='" . $row['tnr'] . "'><span><i class='icon-chevron-right'></i></span></a>");
+			                        echo("</div></td>");
+		                            echo("</tr>");
+		                        }
 	                        ?>
 	                    </tbody>
 	                </table>

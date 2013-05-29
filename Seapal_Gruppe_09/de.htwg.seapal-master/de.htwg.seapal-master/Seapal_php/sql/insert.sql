@@ -22,8 +22,4 @@ INSERT INTO seapal.wegpunkte (tnr, name, btm, dtm, lat, lng, sog, cog, manoever,
 INSERT INTO seapal.wegpunkte (tnr, name, btm, dtm, lat, lng, sog, cog, manoever, vorsegel, wdate, wtime, marker) VALUES (1, "Marker 10", "btm", "dtm", "lat", "lng", "sog", "cog", "manoever", "vorsegel", "Date", "Time", "Ziel");
 
 /* insert weather */
-
-INSERT INTO `wetter` (`id`, `datum`, `uhrzeit`, `windstaerke`, `windrichtung`, `luftdruck`, `temperatur`, `wolken`, `regen`, `wellenhoehe`, `wellenrichtung`) VALUES
-(1, '2013-05-25', '16:43:00', 12, 'NO', 200, 23, 'nein', 'ja', 1, 'SW'),
-(2, '2013-05-25', '16:43:00', 12, 'NO', 200, 23, 'nein', 'ja', 1, 'SW'),
-(7, '2013-05-24', '17:30:00', 4, 'SW', 300, 12, 'ja', 'nein', 2, 'NO');
+INSERT INTO seapal.wetter (`id`, `datum`, `uhrzeit`, `windstaerke`, `windrichtung`, `luftdruck`, `temperatur`, `wolken`, `regen`, `wellenhoehe`, `wellenrichtung`) VALUES (1, '2013-05-25', '16:43:00', 12, 'NO', 200, 23, 'nein', 'ja', 1, 'SW'), (2, '2013-05-25', '16:43:00', 12, 'NO', 200, 23, 'nein', 'ja', 1, 'SW'), (7, '2013-05-24', '17:30:00', 4, 'SW', 300, 12, 'ja', 'nein', 2, 'NO');
