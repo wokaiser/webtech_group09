@@ -9,11 +9,12 @@ function showTitle( item ) {
 }
 $(function() {
     $('#carousel').carouFredSel({
-        width: 10000,	//	should be wide enough ;)
-        height: 790,
-        align: false,
+        width: null, // automatic calculation
+        height: null, // automatic calculation
+        align: "center",
         circular: false,
         infinite: false,
+        responsive: true,
         items: 3,
         prev: '#prev',
         next: '#next',
