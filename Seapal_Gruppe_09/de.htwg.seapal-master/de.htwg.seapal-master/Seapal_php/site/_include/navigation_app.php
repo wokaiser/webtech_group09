@@ -9,7 +9,7 @@
 				<li <?php if ($filename == "app_boatinfo") echo("class='active'"); ?>><a href="app_boatinfo.php">Logbuch</a></li>
 				<li <?php if ($filename == "app_trip" || $filename == "app_tripinfo" || $filename == "app_waypoint" ) echo("class='active'"); ?>><a href="app_trip.php">Routen</a></li>
                 <!--Drop down for weather layer selection-->
-                <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Map Options<b class="caret"></b></a>
+                <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" <?php if ($filename != "app_map") echo("style='display: none;'>"); ?>>Map Options<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <!--use checked in class for default checked items-->
                         <li><a id="wl_seamark" class="wl_chooser multicheck" href="#">Seamark
@@ -37,3 +37,6 @@
 		</div>
 	</div>
 </div>
+
+<!-- Java-Script -->
+<script src="../js/bootstrap/bootstrap-dropdown.js"></script>
