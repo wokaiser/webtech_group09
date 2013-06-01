@@ -1,5 +1,5 @@
 <?php $filename = str_replace(".php", "", basename($_SERVER["SCRIPT_NAME"])); ?>
-<?php $logged_in = false;?>
+<?php $logged_in = true;?>
 
 
 <!-- Navigation -->
@@ -17,9 +17,12 @@
             </a>
             <div class="nav-collapse collapse">
             	<ul class="nav nav-pills" style="padding-left:0px; padding-top: 24px; font-size: 18px;">
-			        <li <?php if ($filename == "index") echo("class='active'"); ?>><a href='index.php'>Home</a></li>
-			        <li <?php if ($filename == "app_map") echo("class='active'"); ?>><a href='app_map.php'>App</a></li>
-			        <li <?php if ($filename == "userguide") echo("class='active'"); ?>><a href='userguide.php'>User Guide</a></li>
+              <?php if ($logged_in == true):
+                echo("
+  			           <li <?php if ($filename == 'app_map') echo('class='active''); ?><a href='app_map.php'>App</a></li>
+                   <li <?php if ($filename == 'userguide') echo('class='active''); ?><a href='userguide.php'>User Guide</a></li>
+                ");
+                endif;?>			        
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Screenshots</a>
                         <ul class="dropdown-menu">
