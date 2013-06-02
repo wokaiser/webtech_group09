@@ -9,10 +9,22 @@
             	<span class="icon-bar"></span>
             	<span class="icon-bar"></span>
             </a>
-            <a class="brand" href="index.php">
-            	<img src='../img/icons/seapal_normal.png' alt='Icon-Small-50' width='50' height='50' style="float: left; padding-top: 5px; padding-left: 20px"/>
-            	<h2 style="float: left; padding-left:10px; margin-right:100px; font-weight: normal;">Seapal</h2>
-            </a>
+            <?php if ($logged_in == true):
+             echo("
+               <a class='brand' href='index.php'>
+                <img src='../img/icons/seapal_normal.png' alt='Icon-Small-50' width='50' height='50' style='float: left; padding-top: 5px; padding-left: 20px'/>
+                <h2 style='float: left; padding-left:10px; margin-right:100px; font-weight: normal;''>Seapal</h2>
+               </a>
+              ");
+            else:
+              echo("
+                <a class='brand' href='welcome.php'>
+                  <img src='../img/icons/seapal_normal.png' alt='Icon-Small-50' width='50' height='50' style='float: left; padding-top: 5px; padding-left: 20px'/>
+                  <h2 style='float: left; padding-left:10px; margin-right:100px; font-weight: normal;''>Seapal</h2>
+                </a>
+              ");
+            endif;?>
+
             <div class="nav-collapse collapse">
             	<ul class="nav nav-pills" style="padding-left:0px; padding-top: 24px; font-size: 18px;">
 			        <li <?php if ($filename == "index") echo("class='active'"); ?>><a href='index.php'>Home</a></li>
