@@ -27,13 +27,17 @@ var distanceToolOptions = {
     strokeWeight: 3
 }
 
-function Route(route) {
+function Route(route, routeName) {
     this.route = route;
     this.markerArray = new Array();
     this.length = 0;
     
     routeCount++;
-    this.name = "Route " + routeCount;
+    if (routeName == null) {
+        this.name = "Route " + routeCount;
+    } else {
+        this.name = routeName;
+    }
     this.markerInfobox = null;
 }
 
@@ -265,7 +269,7 @@ function drawDistanceInfobox(latLng) {
     return new TxtOverlay(latLng, customTxt, "coordinate_info_box", map, 40, -29);
 }
 
-function startNewRoute(position, isDistanceToolRoute) {
+function startNewRoute(position, isDistanceToolRoute, routeName) {
     var route;
     
     if (isDistanceToolRoute) {
@@ -289,9 +293,9 @@ function startNewRoute(position, isDistanceToolRoute) {
     // delete temp marker & infobox
     if (temporaryMarker != null) { temporaryMarker.setMap(null); }
     if (temporaryMarkerInfobox != null) { temporaryMarkerInfobox.setMap(null); }
-
+    
     // initialize new route
-    currentRoute = new Route(route);
+    currentRoute = new Route(route, routeName);
     route.setMap(map);
     
     if (!isDistanceToolRoute) {

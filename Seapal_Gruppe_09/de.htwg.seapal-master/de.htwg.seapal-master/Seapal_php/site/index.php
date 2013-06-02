@@ -27,20 +27,12 @@
 		                        <li class="sidebar"><a href="#" class="warning">Warning</a></li>
 					        </ul>
 					    </div>
-					</div><!-- Sidebar -->                    
+					</div><!-- Sidebar -->
+
+                    
                     
 					<!-- Content -->
-					<div class="span9">						
-						<?php if ($logged_in == false):
-                      		echo("
-                      			<h2>Sign up to SeaPal for free today!</h2>
-                      			<form action='[YOUR ACTION]' method='post' accept-charset='UTF-8'>
-                              		<dd><input autofocus='autofocus' id='user_username' style='margin-bottom: 15px;' type='text' name='user[username]' placeholder='Pick a username' size='30' /></dd>
-                              		<dd><input id='user_password' style='margin-bottom: 15px;' type='password' name='user[password]' placeholder='Create a password' size='30' /></dd>
-                              		<dd><input class='btn btn-login' style='clear: left; height: 32px; font-size: 13px;' type='submit' name='sign_up_submit' value='Sign up for free' /></dd>
-                            	</form>
-                      		");
-                      	endif;?>
+					<div class="span9">  
 						<div class="post" id="welcome">
 							<h2>Welcome to SeaPal</h2>
 	                    	<div class="entry">

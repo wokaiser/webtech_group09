@@ -159,6 +159,9 @@ if (!$db_selected)
 	    <script src="../js/bootstrap/bootstrap-affix.js"></script>
 	    
 	    <!-- Additional Java-Script -->
+        <script src="../js/js-session/json-serialization.js" type="text/javascript"></script>
+	    <script src="../js/js-session/session.js" type="text/javascript"></script>
+	    <script src="../js/js-session/mySession.js" type="text/javascript"></script>
 	    <script src="../js/app/ajax/trip.js" type="text/javascript"></script>
 	    
 	</body>

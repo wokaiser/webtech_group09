@@ -39,9 +39,66 @@ $(function() {
 		$('#entries').append(entry);
 	}
 
+    zustand = 1;
 	$('a.view').live("click", function(event) {
+
+        //get the tripinfo json object
+        $.getJSON(
+            "json_app_tripinfo.php",
+            { tnr: $(this).attr('id') }, 
+            function(route){
+                //add the route only to the cookie-less session if the route not already exist
+                if (!rootAlreadyInMap(route)) {
+                    session.map.routes.push(route);
+                    newRouteNotification();
+                }
+            }
+        );
+    
 		loadEntry($(this).attr('id'));
 	});
+    
+    //call a function "callback" every "delay" ms and x "repetitions"
+    function setIntervalX(callback, delay, repetitions) {
+        var x = 0;
+        var intervalID = window.setInterval(function () {
+
+           callback();
+
+           if (++x === repetitions) {
+               window.clearInterval(intervalID);
+           }
+        }, delay);
+    }
+    
+    //check if a route is already in the cookie-less session (where all routes are stored)
+    function rootAlreadyInMap(route) {
+        for (var i in session.map.routes){
+            if (session.map.routes[i].length != route.length) {
+                continue;
+            }
+            for (var j in session.map.routes[i]) {
+                if ((session.map.routes[i][j].lat != route[j].lat)
+                  ||(session.map.routes[i][j].lng != route[j].lng)) {
+                    break;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //notify that a new route was insert to the map app.
+    function newRouteNotification()
+    {
+        newRouteNotification.state = 0
+        setIntervalX(function() {
+            newRouteNotification.state++;
+            if((newRouteNotification.state = newRouteNotification.state % 2) != 0) document.getElementById("button_app_map").style.background="red";
+            else document.getElementById("button_app_map").style.background=null;
+        }, 1000, 10);
+        document.getElementById("button_app_map").style.background=null;
+    }
 	
 	$('a.remove').live("click", function(event) {
 		var buttonID = this;

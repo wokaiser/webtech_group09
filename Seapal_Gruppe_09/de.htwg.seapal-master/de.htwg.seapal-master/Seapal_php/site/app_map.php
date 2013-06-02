@@ -92,6 +92,7 @@
 	    <!-- Additional Java-Script -->
         <script src="../js/js-session/json-serialization.js" type="text/javascript"></script>
 	    <script src="../js/js-session/session.js" type="text/javascript"></script>
+	    <script src="../js/js-session/mySession.js" type="text/javascript"></script>
 	    <script src="../js/app/map/fancywebsocket.js" type="text/javascript" ></script>
 	    <script src="../js/app/map/chat.js" type="text/javascript" ></script>
 	    <script src="../js/app/map/labels.js" type="text/javascript"></script>

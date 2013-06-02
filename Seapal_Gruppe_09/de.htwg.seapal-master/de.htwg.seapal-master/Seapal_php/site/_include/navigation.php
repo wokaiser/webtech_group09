@@ -1,5 +1,5 @@
 <?php $filename = str_replace(".php", "", basename($_SERVER["SCRIPT_NAME"])); ?>
-<?php $logged_in = true;?>
+<?php $logged_in = false;?>
 
 
 <!-- Navigation -->
@@ -17,12 +17,9 @@
             </a>
             <div class="nav-collapse collapse">
             	<ul class="nav nav-pills" style="padding-left:0px; padding-top: 24px; font-size: 18px;">
-              <?php if ($logged_in == true):
-                echo("
-  			           <li <?php if ($filename == 'app_map') echo('class='active''); ?><a href='app_map.php'>App</a></li>
-                   <li <?php if ($filename == 'userguide') echo('class='active''); ?><a href='userguide.php'>User Guide</a></li>
-                ");
-                endif;?>			        
+			        <li <?php if ($filename == "index") echo("class='active'"); ?>><a href='index.php'>Home</a></li>
+			        <li <?php if ($filename == "app_map") echo("class='active'"); ?>><a href='app_map.php'>App</a></li>
+			        <li <?php if ($filename == "userguide") echo("class='active'"); ?>><a href='userguide.php'>User Guide</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Screenshots</a>
                         <ul class="dropdown-menu">
@@ -51,8 +48,6 @@
                             <form action='[YOUR ACTION]' method='post' accept-charset='UTF-8'>
                               <input id='user_username' style='margin-bottom: 15px;' type='text' name='user[username]' placeholder='username' size='30' />
                               <input id='user_password' style='margin-bottom: 15px;' type='password' name='user[password]' placeholder='password' size='30' />
-                              <input id='user_remember_me' style='float: left; margin-right: 10px;' type='checkbox' name='user[remember_me]' value='1' />
-                              <label class='string optional' for='user_remember_me'> Remember me</label>
                               <input class='btn btn-login' style='clear: left; width: 100%; height: 32px; font-size: 13px;' type='submit' name='commit' value='Sign In' />
                             </form>
                         </div>
