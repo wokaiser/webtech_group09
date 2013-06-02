@@ -1,4 +1,5 @@
 <?php 
+require_once('_include/session.php');
 require_once('_include/config.php');
 include('_include/functions.php');
 $sql_connection = mysql_connect(const_mysql_host, const_mysql_user, const_mysql_pw);
