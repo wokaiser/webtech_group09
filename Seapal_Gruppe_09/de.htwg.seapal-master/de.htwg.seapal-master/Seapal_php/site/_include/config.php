@@ -11,5 +11,6 @@ define('const_mysql_boatinfo', 'bootinfo');
 define('const_mysql_weatherinfo', 'wetter');
 define('const_mysql_trip', 'tripinfo');
 define('const_mysql_waypoints', 'wegpunkte');
+define('const_mysql_users', 'benutzer');
 
 // define('', '');
