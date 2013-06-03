@@ -12,6 +12,7 @@ $(function() {
         
             if(data)
                 {
+                js_loggedin = true;
                 $("#login").hide(300);
                 $("#logout").show(200);
                 }
@@ -31,12 +32,14 @@ $(function() {
         
             if(data)
                 {
+                js_loggedin = false;
                 $("#logout").hide(300);
                 $("#login").show(200);
+                document.location.href='../site/index.php';
                 }
         
 		}, "json");
-	
+		
 	});
     
 });

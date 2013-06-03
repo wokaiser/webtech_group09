@@ -23,7 +23,12 @@
     <!-- Java-Script -->
     <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
     <script src="../js/jquery/jquery.js" type="text/javascript"></script>
-    <script src="../js/site/scroll.js" type="text/javascript"></script>   
+    <script src="../js/site/scroll.js" type="text/javascript"></script>
+    <script type="text/javascript">
+		var js_loggedin = "<?php echo $logged_in; ?>";
+	</script>
     <script src="../js/site/user.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../js/site/loggedin.js"></script>
+
     <script src="../js/bootstrap/bootstrap-carousel.js" type="text/javascript"></script>
     

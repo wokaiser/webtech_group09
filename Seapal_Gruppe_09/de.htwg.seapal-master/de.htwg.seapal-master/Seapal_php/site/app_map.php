@@ -81,6 +81,20 @@
 			</div>
 		
 		</div><!-- Container -->
+
+		<!-- Menu Modal -->
+		<div class="modal hide fade" id="messageBox">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 id="dialogTitle"></h3>
+			</div>
+			<div class="modal-body">
+				<p id="dialogMessage"></p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn" data-dismiss="modal"><i class="icon-ok"></i> ok</a>
+			</div>
+		</div>
 	    
 	    <!-- Java-Script -->
 	    <script src="../js/bootstrap/bootstrap-dropdown.js"></script>
