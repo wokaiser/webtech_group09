@@ -1,8 +1,8 @@
 <?php
-
-	$conn = mysql_connect("localhost", "root", "root");
-	
-	$db_selected = mysql_select_db('seapal', $conn);
+	require_once('_include/session.php');
+	include('_include/config.php');
+    $sql_connection = mysql_connect(const_mysql_host, const_mysql_user, const_mysql_pw);
+    $db_selected = mysql_select_db(const_mysql_db, $sql_connection);
 	
 	if (!$db_selected) {
 	    $err = array( "tnr" => 'Error: ' . mysql_error() );
@@ -10,8 +10,8 @@
 	    exit;
 	}
 	
-	$sql = "INSERT INTO seapal.tripinfo (bnr, titel, von, nach, skipper, crew, tstart, tende, tdauer, motor, tank) VALUES (
-				" . $_POST['bnr'] . ",
+	$sql = "INSERT INTO ".const_mysql_trip." (bnr, titel, von, nach, skipper, crew, tstart, tende, tdauer, motor, tank) VALUES (
+				" . $_SESSION['bnr'] . ",
 				'" . $_POST['titel'] . "',
 				'" . $_POST['von'] . "',
 				'" . $_POST['nach'] . "',
@@ -23,7 +23,7 @@
 				'" . $_POST['motor'] . "',
 				" . $_POST['tank'] . ");";
 	
-	$result = mysql_query($sql, $conn);
+	$result = mysql_query($sql, $sql_connection);
 	
 	if (!$result) {
 	    $err = array( "tnr" => 'Error: ' . mysql_error() );
@@ -49,6 +49,6 @@
 	
 	mysql_free_result($result);
 	
-	mysql_close($conn);
+	mysql_close($sql_connection);
 
 ?>
