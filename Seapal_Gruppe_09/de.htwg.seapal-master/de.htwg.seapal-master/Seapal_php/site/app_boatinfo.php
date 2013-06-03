@@ -168,8 +168,14 @@ if (!$db_selected)
 	                    </thead>
 		                <tbody id="entries_boat">
 	
-	                        <?php                            
-		                        $sql = "SELECT * FROM ".const_mysql_boatinfo.";";
+	                        <?php
+	                        	$bnr = $_SESSION['bnr'];
+	
+	                        	if (array_key_exists ('bnr' , $_GET))
+	                            	$bnr = urldecode($_GET['bnr']);
+
+
+		                        $sql = "SELECT * FROM ".const_mysql_boatinfo." WHERE unr =" . $bnr . ";";
 		                        $result = mysql_query($sql, $sql_connection);
 		                        if (!$result)
 		                            die('Invalid query: ' . mysql_error());
@@ -276,8 +282,12 @@ if (!$db_selected)
 		                <tbody id="entries_weather">
 	
 	                        <?php
+	                        	$bnr = $_SESSION['bnr'];
+	
+	                        	if (array_key_exists ('bnr' , $_GET))
+	                            	$bnr = urldecode($_GET['bnr']);
                             
-		                        $sql = "SELECT * FROM ".const_mysql_weatherinfo.";";
+		                        $sql = "SELECT * FROM ".const_mysql_weatherinfo." WHERE bnr =" . $bnr . ";";
 		                        $result = mysql_query($sql, $sql_connection);
 		                        if (!$result)
 		                            die('Invalid query: ' . mysql_error());

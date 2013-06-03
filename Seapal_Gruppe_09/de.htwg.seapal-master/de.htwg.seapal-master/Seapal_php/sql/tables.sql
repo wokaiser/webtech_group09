@@ -16,6 +16,7 @@ CREATE TABLE seapal.benutzer (
 
 /* table for bootinformations */
 CREATE TABLE seapal.bootinfo (
+	unr INT NOT NULL,
 	bnr INT NOT NULL AUTO_INCREMENT,
 	bootname VARCHAR(30) NOT NULL,
 	registernummer INT NOT NULL,
@@ -41,7 +42,8 @@ CREATE TABLE seapal.bootinfo (
 	grosssegelgroesse FLOAT DEFAULT NULL,
 	genuagroesse FLOAT DEFAULT NULL,
 	spigroesse FLOAT DEFAULT NULL,
-	PRIMARY KEY (bnr)
+	PRIMARY KEY (bnr),
+	FOREIGN KEY (unr) REFERENCES benutzer (bnr) ON DELETE CASCADE
 );
 
 /* table for tripinformations */
@@ -85,6 +87,7 @@ CREATE TABLE seapal.wegpunkte (
 
 /* table for weather */
 CREATE TABLE seapal.wetter (
+  bnr INT NOT NULL,
   `id` int(15) NOT NULL AUTO_INCREMENT,
   `datum` date NOT NULL,
   `uhrzeit` time NOT NULL,
@@ -97,5 +100,6 @@ CREATE TABLE seapal.wetter (
   `wellenhoehe` int(11) NOT NULL,
   `wellenrichtung` tinytext NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
+  UNIQUE KEY `id` (`id`),
+  FOREIGN KEY (bnr) REFERENCES benutzer (bnr) ON DELETE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
