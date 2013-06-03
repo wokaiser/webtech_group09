@@ -1,16 +1,15 @@
 <?php
-
-	$conn = mysql_connect("localhost", "root", "root");
-	
-	$db_selected = mysql_select_db('seapal', $conn);
+	include('_include/config.php');
+    $sql_connection = mysql_connect(const_mysql_host, const_mysql_user, const_mysql_pw);
+    $db_selected = mysql_select_db(const_mysql_db, $sql_connection);
 	
 	if (!$db_selected) {
 	    die('Error: ' . mysql_error());
 	}
 	
-	$sql = "SELECT * FROM seapal.wegpunkte WHERE wnr = " . $_GET['wnr'] . ";";
+	$sql = "SELECT * FROM ".const_mysql_waypoints." WHERE wnr = " . $_GET['wnr'] . ";";
 	
-	$result = mysql_query($sql, $conn);
+	$result = mysql_query($sql, $sql_connection);
 	
 	if (!$result) {
 	    die('Error: ' . mysql_error());
@@ -22,6 +21,6 @@
 	
 	mysql_free_result($result);
 			
-	mysql_close($conn);
+	mysql_close($sql_connection);
 		
 ?>
