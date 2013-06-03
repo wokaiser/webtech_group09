@@ -108,7 +108,13 @@ if (!$db_selected)
 	                    </thead>
 	                    <tbody id="entries">
 	                        <?php
-	                        	$sql = "SELECT * FROM ".const_mysql_trip.";";
+
+	                        	$bnr = $_SESSION['bnr'];
+	
+	                        	if (array_key_exists ('bnr' , $_GET))
+	                            	$bnr = urldecode($_GET['bnr']);
+
+	                        	$sql = "SELECT * FROM ".const_mysql_trip." WHERE bnr =" . $bnr . ";";
 		                        $result = mysql_query($sql, $sql_connection);
 		                        if (!$result)
 		                            die('Invalid query: ' . mysql_error());

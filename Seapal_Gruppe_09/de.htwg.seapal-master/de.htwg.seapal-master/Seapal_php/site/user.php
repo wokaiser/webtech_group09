@@ -27,7 +27,7 @@
         if(!empty($username) && !empty($pw))
             {
             
-            $sql = "SELECT vorname, nachname, mail, passwort
+            $sql = "SELECT bnr, vorname, nachname, mail, passwort
                     FROM ".const_mysql_users."
                     WHERE benutzername = '" . mysql_real_escape_string($username) . "';";
                     
@@ -45,8 +45,9 @@
                         {
                         $_SESSION['user'] = $username;
                         $_SESSION['timestamp'] = time();
+                        $_SESSION['bnr'] = $row['bnr'];
                         }
-                        
+                                            
                     // Create auto-login cookie
                     if(!empty($remember))
                         {

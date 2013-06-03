@@ -10,7 +10,8 @@
 	    exit;
 	}
 	
-	$sql = "INSERT INTO seapal.tripinfo (titel, von, nach, skipper, crew, tstart, tende, tdauer, motor, tank) VALUES (
+	$sql = "INSERT INTO seapal.tripinfo (bnr, titel, von, nach, skipper, crew, tstart, tende, tdauer, motor, tank) VALUES (
+				" . $_POST['bnr'] . ",
 				'" . $_POST['titel'] . "',
 				'" . $_POST['von'] . "',
 				'" . $_POST['nach'] . "',
