@@ -3,7 +3,7 @@ const SESSION = "seapalSessionApp";
 const SESSION_VERSION = "1.0"
 
 /*option types for "options" in session*/
-SESSION_OPTION_TYPE = {LAYER : 0, MAP_OVERLAY : 1}
+SESSION_OPTION_TYPE = {LAYER : 0, MAP_OVERLAY : 1, FOLLOW_CURRENT_POSITION : 2}
 
 /*Var with the id and the link to each individual layer.*/
 var LAYER = { SEAMARK: { id: 1, link: "http://tiles.openseamap.org/seamark/" }, 
@@ -38,7 +38,10 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
                               active  : false},
                              {id      : "wl_mapOverlay",
                               type    : SESSION_OPTION_TYPE.MAP_OVERLAY,
-                              active  : true}]
+                              active  : true},
+                             {id      : "wl_followPosition",
+                              type    : SESSION_OPTION_TYPE.FOLLOW_CURRENT_POSITION,
+                              active  : false}]
     };
 }
 
