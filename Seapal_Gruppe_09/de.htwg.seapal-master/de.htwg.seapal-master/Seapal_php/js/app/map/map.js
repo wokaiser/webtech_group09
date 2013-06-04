@@ -22,6 +22,7 @@ var currentMode = MODE.DEFAULT;
 
 var currentPositionMarker = null;
 var followCurrentPosition = false;
+var noToggleOfFollowCurrentPositionButton = false;
 
 var temporaryMarker = null;
 var temporaryMarkerInfobox = null;
@@ -96,6 +97,7 @@ function initialize() {
     };
 
     //set route menu position
+    document.getElementById('followCurrentPositionContainer').style.width = document.body.offsetWidth + "px";
     document.getElementById('routeMenuContainer').style.width = document.body.offsetWidth + "px";
     document.getElementById('routeMenuContainer').style.display = "none";
     document.getElementById('distanceToolContainer').style.width = document.body.offsetWidth + "px";
@@ -198,10 +200,10 @@ function initialize() {
     });
 
     google.maps.event.addListener(map, 'center_changed', function () {
-        if (followCurrentPosition && !getSessionOption("wl_followPosition").active) {
+        if (followCurrentPosition && !noToggleOfFollowCurrentPositionButton) {
             toggleFollowCurrentPosition();
         } else {
-            getSessionOption("wl_followPosition").active = false;
+            noToggleOfFollowCurrentPositionButton = false;
         }
     });
     //set variable to know that initialization is done
@@ -443,6 +445,18 @@ function fromLatLngToPixel(latLng) {
     return pixel;
 }
 
+function toggleFollowCurrentPosition() {
+    followCurrentPosition = !followCurrentPosition;
+    if (followCurrentPosition) {
+        document.getElementById("followCurrentPositionbutton").value = "Eigener Position nicht mehr folgen";
+        noToggleOfFollowCurrentPositionButton = true;
+        map.setCenter(currentPositionMarker.getPosition());
+    } else {
+        document.getElementById("followCurrentPositionbutton").value = "Eigener Position folgen";
+    }
+    document.getElementById('followCurrentPositionContainer').style.width = document.body.offsetWidth + "px";
+}
+
 /*Add a map layer with a specific id. Each individual layer should have his own static id*/
 function addMapLayer (id, link) {
     map.overlayMapTypes.setAt(id, new google.maps.ImageMapType({
@@ -473,7 +487,7 @@ function toggleSessionOption(option) {
     option.active = (option.active) ? false : true;
 }
 
-/*function get a specified session option by it's id*/
+/*function to save information about the given id in the session variable*/
 function getSessionOption(optionId) {
     for (var i in session.options) {
         if (optionId == session.options[i].id) {
@@ -504,20 +518,7 @@ function loadSessionOption(option) {
             //Hide mayOverlay
             document.getElementById("map_overlay").style.visibility="hidden";
         }
-    } else if (option.type == SESSION_OPTION_TYPE.FOLLOW_CURRENT_POSITION) {
-        if (option.active) {
-            followCurrentPosition = true;
-            map.setCenter(currentPositionMarker.getPosition());
-        }
     }
-}
-
-function toggleFollowCurrentPosition() {
-    followCurrentPosition = !followCurrentPosition;
-    //TODO remove magic number
-    getSessionOption("wl_followPosition").active = !getSessionOption("wl_followPosition").active;
-    $("#wl_followPosition").hasClass ("checked");
-    $("#wl_followPosition").find("span").toggleClass("icon-ok");
 }
 
 /*function to toggle buttons and choose weather layer*/
@@ -542,6 +543,10 @@ $(document).ready(function() {
         return false;
     });
 });
+
+function convertToCelcius(kelvin) {
+    return (Math.round((kelvin - 273) * 100) / 100);
+}
 
 function mapOverlay() {
     latLng = map.getCenter();
@@ -571,12 +576,12 @@ function mapOverlay() {
             txt = "<b>Weather Information</b>"                               + "</br>";
             txt += data.list[0].name                                         + "</br>";
             txt += "Weather          " + data.list[0].weather[0].description + "</br>";
-            txt += "Wind speed       " + data.list[0].wind.speed             + "</br>";
-            txt += "Humidity         " + data.list[0].main.humidity          + "</br>";
-            txt += "Pressure         " + data.list[0].main.pressure          + "</br>";
-            txt += "Temperature      " + data.list[0].main.temp              + "</br>";
-            txt += "Min Temperature  " + data.list[0].main.temp_min          + "</br>";
-            txt += "Max Temperature  " + data.list[0].main.temp_max          + "</br>";
+            txt += "Wind speed       " + data.list[0].wind.speed             + " m/s" + "</br>";
+            txt += "Humidity         " + data.list[0].main.humidity          + " %" + "</br>";
+            txt += "Pressure         " + data.list[0].main.pressure          + " hPa" + "</br>";
+            txt += "Temperature      " + convertToCelcius(data.list[0].main.temp) + " °C" + "</br>";
+            txt += "Min Temperature  " + convertToCelcius(data.list[0].main.temp_min) + " °C" + "</br>";
+            txt += "Max Temperature  " + convertToCelcius(data.list[0].main.temp_max) + " °C" + "</br>";
             txt += "</center>";
         
             //build string for weather history and forecast request
