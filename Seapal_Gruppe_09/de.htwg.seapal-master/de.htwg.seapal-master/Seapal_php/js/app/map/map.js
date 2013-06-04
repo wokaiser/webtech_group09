@@ -97,7 +97,7 @@ function initialize() {
     };
 
     //set route menu position
-    document.getElementById('followCurrentPositionContainer').style.width = document.body.offsetWidth + "px";
+    //document.getElementById('followCurrentPositionContainer').style.width = document.body.offsetWidth + "px";
     document.getElementById('routeMenuContainer').style.width = document.body.offsetWidth + "px";
     document.getElementById('routeMenuContainer').style.display = "none";
     document.getElementById('distanceToolContainer').style.width = document.body.offsetWidth + "px";
@@ -206,10 +206,11 @@ function initialize() {
         } else {
             noToggleOfFollowCurrentPositionButton = false;
 
-        if (!followCurrentPosition && getSessionOption("wl_followPosition").active) {
-            toggleFollowCurrentPosition();
-        } else {
-            followCurrentPosition = !followCurrentPosition;
+            if (!followCurrentPosition && getSessionOption("wl_followPosition").active) {
+                toggleFollowCurrentPosition();
+            } else {
+                followCurrentPosition = !followCurrentPosition;
+            }
         }
     });
     //set variable to know that initialization is done
