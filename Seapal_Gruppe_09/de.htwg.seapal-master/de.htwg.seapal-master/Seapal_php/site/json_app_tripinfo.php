@@ -20,8 +20,18 @@ $sql = "SELECT * FROM ".const_mysql_waypoints." WHERE tnr =" . $tnr . ";";
 
 while ($row = mysql_fetch_array($result)) {
     array_push($data, array(
-    'lat'    =>  floatval($row['lat']),
-    'lng'    =>  floatval($row['lng'])
+        'name'     => $row['name'],
+        'lat'      => floatval($row['lat']),
+        'lng'      => floatval($row['lng']),
+        'btm'      => $row['btm'],
+        'dtm'      => $row['dtm'],
+        'sog'      => $row['sog'],
+        'cog'      => $row['cog'],
+        'manoever' => $row['manoever'],
+        'vorsegel' => $row['vorsegel'],
+        'marker'   => $row['marker'],
+        'wdate'    => $row['wdate'],
+        'wtime'    => $row['wtime']
 ));
 }
 // Send the data.

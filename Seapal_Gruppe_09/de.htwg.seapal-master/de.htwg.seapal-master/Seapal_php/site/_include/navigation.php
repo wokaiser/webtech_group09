@@ -42,35 +42,35 @@
                     </li>
 			        <li <?php if ($filename == "about") echo("class='active'"); ?>><a href='about.php'>About</a></li>
 			        <li <?php if ($filename == "contact") echo("class='active'"); ?>><a href='contact.php'>Contact</a></li>
-              <?php echo("
-                <li id='logout' style='display:".($logged_in?'block':'none').";'>
-                  <a id='signout' class='btn-logout' href=''>Sign out</a>
-                </li>
-                <li id='login' class='dropdown' style='display:".($logged_in?'none':'block').";'>
-                  <a class='dropdown-toggle btn-login' href='#' data-toggle='dropdown'>Sign In <strong class='caret'></strong></a>
-                  <div class='dropdown-menu' style='padding: 15px; padding-bottom: 0px; color:#fff;'>
-                      <form method='post' accept-charset='UTF-8'>
-                        <input id='user_username' style='margin-bottom: 15px;' type='text' name='user[username]' placeholder='username' size='30' />
-                        <input id='user_password' style='margin-bottom: 15px;' type='password' name='user[password]' placeholder='password' size='30' />
-                        <input id='user_remember_me' style='float: left; margin-right: 10px;' type='checkbox' name='remember_me' value='1' />
-                        <label class='string optional' style='color: #808080' for='user_remember_me'>Remember me</label>
-                        <input id='signin' class='btn btn-login' style='clear: left; width: 100%; height: 32px; font-size: 13px;' type='submit' name='commit' value='Sign In' />
-                      </form>
-                  </div>
-                </li>
-              "); ?>
-              <li><a id='loginname'><?php if($logged_in == true) echo $_SESSION['user'];?></a></li>
-            </ul>   
+   
+
+                      <?php
+                      echo("
+                      <li id='logout' style='display:".($logged_in?'block':'none').";'>
+                        <a id='signout' class='btn-logout' href=''>Sign out</a>
+                      </li>
+                      <li id='login' class='dropdown' style='display:".($logged_in?'none':'block').";'>
+                        <a class='dropdown-toggle btn-login' href='#' data-toggle='dropdown'>Sign In <strong class='caret'></strong></a>
+                        <div class='dropdown-menu' style='padding: 15px; padding-bottom: 0px; color:#fff;'>
+                            <form method='post' accept-charset='UTF-8'>
+                              <input id='user_username' style='margin-bottom: 15px;' type='text' name='user[username]' placeholder='username' size='30' />
+                              <input id='user_password' style='margin-bottom: 15px;' type='password' name='user[password]' placeholder='password' size='30' />
+                              <input id='user_remember_me' style='float: left; margin-right: 10px;' type='checkbox' name='remember_me' value='1' />
+                              <label id='login_message'class='string' style='color: #808080'></label>
+                              <input id='signin' class='btn btn-login' style='clear: left; width: 100%; height: 32px; font-size: 13px;' type='submit' name='commit' value='Sign In' />
+                            </form>
+                        </div>
+                      </li>
+                      ");
+                      ?>
+
+                </ul>   
 		    </div>
         </div>
     </div>
 </div>
 
+
+
 <!-- Java-Script -->
 <script src="../js/bootstrap/bootstrap-dropdown.js"></script>
-
-<!-- Login user style -->
-<style type="text/css">
-  #loginname:hover{color:white;}
-  #loginname{color:white;}
-</style>

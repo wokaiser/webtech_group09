@@ -8,8 +8,8 @@ label {
     width:206px;
     height:200px;
     position:absolute;
-    left:95.2%;
-    top:18%;
+    right:86.1%;
+    top:20%;
     margin:-100px 0 0 -140px;
 
     border-color: #DEE3E5;
@@ -73,6 +73,10 @@ label {
     text-align: center;
 }
 
+.routeInfoInput {
+    width:180px;
+}
+
 #route_distance, #distanceTool_distance, #navigation_distance {
     font-weight: bolder;
 }
@@ -105,10 +109,24 @@ label {
 }
         
 #routeMenu, #distanceToolMenu, #navigationMenu {
-    width: 201px;
+    width: 208px;
     padding: 5px 5px 5px 5px;
-    margin-left: 88.6%;
+    margin-left: 86.5%;
     margin-top: 40px;
+    
+
+    background-color: #fafafa;
+    background-repeat: repeat-x;
+    border: 1px solid #000000;
+    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    webkit-border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    
+    display: block;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #333333;
 }
         
 .routeButton {
@@ -120,4 +138,6 @@ label {
     margin-top: 7px;
     margin-left: 7px;
 }
+
+
 

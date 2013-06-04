@@ -1,4 +1,13 @@
-<?php require_once('_include/session.php'); ?>
+<?php 
+require_once('_include/session.php');
+require_once('_include/config.php');
+include('_include/functions.php');
+$sql_connection = mysql_connect(const_mysql_host, const_mysql_user, const_mysql_pw);
+$db_selected = mysql_select_db(const_mysql_db, $sql_connection);
+if (!$db_selected)
+    die('Can\'t select database : ' . mysql_error());    
+
+?>
 <!DOCTYPE html>
 
 <html lang="de">
@@ -24,9 +33,19 @@
             	<div id="routeMenu" class="well">
             		<h4>Routen Menü</h4>
 	            	<div class="btn-group btn-group-vertical">
-	                    <input type="button" class="btn" value="l&ouml;schen" id="deleteRouteButton" class="routeButton" onclick="javascript: deleteRoute()" />
-	                    <input type="button" class="btn" value="speichern" id="saveRouteButton" class="routeButton" onclick="javascript: saveRoute()" />
-	                    <input type="button" class="btn" value="beenden" id="stopRouteButton" class="routeButton" onclick="javascript: stopRouteMode()" />
+                        <input type='text'   class="routeInfoInput" id='titel'   placeholder='Titel' size='30' size='10'/><br/>
+                        <input type='text'   class="routeInfoInput" id='von'     placeholder='Von' size='30' size='10'/><br/>
+                        <input type='text'   class="routeInfoInput" id='nach'    placeholder='Nach' size='30' size='10'/><br/>
+                        <input type='text'   class="routeInfoInput" id='tstart'  placeholder='Start' size='30' size='10'/><br/>
+                        <input type='text'   class="routeInfoInput" id='tende'   placeholder='Ende' size='30' size='10'/><br/>
+                        <input type='text'   class="routeInfoInput" id='tdauer'  placeholder='Dauer' size='30' size='10'/><br/>
+                        <input type='text'   class="routeInfoInput" id='skipper' placeholder='Skipper' size='30' size='10'/><br/>
+                        <input type='text'   class="routeInfoInput" id='crew'    placeholder='Crew' size='30' size='10'/><br/>
+                        <input type='text'   class="routeInfoInput" id='motor'   placeholder='Motor' size='30' size='10'/><br/>
+                        <input type='text'   class="routeInfoInput" id='tank'    placeholder='Tank gefüllt' size='30' size='10'/><br/>
+	                    <input type="button" class="routeInfoInput btn" value="l&ouml;schen" id="deleteRouteButton" class="routeButton" onclick="javascript: deleteRoute()" />
+	                    <input type="button" class="routeInfoInput btn" value="speichern" id="saveRouteButton" class="routeButton" onclick="javascript: saveRoute()" />
+	                    <input type="button" class="routeInfoInput btn" value="beenden" id="stopRouteButton" class="routeButton" onclick="javascript: stopRouteMode()" />
 	                </div>
 	            	<br><br>
 	                <div id="route_distance">Routen-L&auml;nge: <span id="route_distance_number"></span> m</div>
@@ -56,7 +75,7 @@
 	        <!-- Current Position -->
 	        <div id="followCurrentPositionContainer">
 	            <div id="followCurrentPosition_button" class="well">
-	                <input type="button" class="btn" value="Eigener Position folgen" id="followCurrentPositionbutton" onclick="javascript: toggleFollowCurrentPosition()" />
+	                <input type="button" class="" value="Eigener Position folgen" id="followCurrentPositionbutton" onclick="javascript: toggleFollowCurrentPosition()" />
 	            </div>
 	        </div>
 	        
@@ -81,7 +100,7 @@
 			</div>
 		
 		</div><!-- Container -->
-
+        
 		<!-- Menu Modal -->
 		<div class="modal hide fade" id="messageBox">
 			<div class="modal-header">

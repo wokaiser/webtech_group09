@@ -1,23 +1,7 @@
 $(function() {
-
-	function loadEntry(routenr) { 
-			        	
-	    jQuery.get("app_trip_load.php", {'tnr': routenr}, function(data) {
-		
-	        $('#titel').val(data['titel']);
-	        $('#von').val(data['von']);
-	        $('#nach').val(data['nach']);
-	        $('#tstart').val(data['tstart']);
-	        $('#tende').val(data['tende']);
-	        $('#tdauer').val(data['tdauer']);
-	        $('#skipper').val(data['skipper']);
-	        $('#crew').val(data['crew']);
-	        $('#motor').val(data['motor']);
-	        $('#tank').val(data['tank']);
-	
-	    }, "json");
-	}
-	
+    var routeLoad = null;
+	var tnrValue = null;
+    
 	function addEntry(tnr, json) {
 		
 		var entry = "";
@@ -39,23 +23,45 @@ $(function() {
 		$('#entries').append(entry);
 	}
 
-    zustand = 1;
 	$('a.view').live("click", function(event) {
-
+        routeLoad = null;
+        tnrValue = $(this).attr('id');
         //get the tripinfo json object
         $.getJSON(
             "json_app_tripinfo.php",
-            { tnr: $(this).attr('id') }, 
-            function(route){
-                //add the route only to the cookie-less session if the route not already exist
-                if (!rootAlreadyInMap(route)) {
-                    session.map.routes.push(route);
-                    newRouteNotification();
-                }
+            { tnr: tnrValue}, function(route){
+                routeLoad = route;
+                jQuery.get("app_trip_load.php", {'tnr': tnrValue}, function(data) {
+                    $('#titel').val(data['titel']);
+                    $('#von').val(data['von']);
+                    $('#nach').val(data['nach']);
+                    $('#tstart').val(data['tstart']);
+                    $('#tende').val(data['tende']);
+                    $('#tdauer').val(data['tdauer']);
+                    $('#skipper').val(data['skipper']);
+                    $('#crew').val(data['crew']);
+                    $('#motor').val(data['motor']);
+                    $('#tank').attr('checked', data['tank']);
+            
+                    //add the route only to the cookie-less session if the route not already exist
+                    if (!rootAlreadyInMap(routeLoad)) {
+                        //create a new route
+                        newRoute = getNewRoute();
+                        //set the marker to the route
+                        newRoute.marker = routeLoad;
+                        //add the other components to the route
+                        //load the trip info from to the session.
+                        for (var i in TRIP_INFO) {
+                            newRoute[TRIP_INFO[i]] = data[TRIP_INFO[i]];
+                        }
+                        //push the new Route to the routes array
+                        session.map.routes.push(newRoute);
+                        newRouteNotification();
+                    }
+            
+                }, "json");
             }
         );
-    
-		loadEntry($(this).attr('id'));
 	});
     
     //call a function "callback" every "delay" ms and x "repetitions"
@@ -74,12 +80,12 @@ $(function() {
     //check if a route is already in the cookie-less session (where all routes are stored)
     function rootAlreadyInMap(route) {
         for (var i in session.map.routes){
-            if (session.map.routes[i].length != route.length) {
+            if (session.map.routes[i].marker.length != route.length) {
                 continue;
             }
-            for (var j in session.map.routes[i]) {
-                if ((session.map.routes[i][j].lat != route[j].lat)
-                  ||(session.map.routes[i][j].lng != route[j].lng)) {
+            for (var j in session.map.routes[i].marker) {
+                if ((session.map.routes[i].marker[j].lat != route[j].lat)
+                  ||(session.map.routes[i].marker[j].lng != route[j].lng)) {
                     break;
                 }
                 return true;
@@ -138,6 +144,8 @@ $(function() {
 	        "motor": $('#motor').val(),
 	        "tank": $('#tank').val()        
 	    };
+        
+        console.log(json);
 	
 	    jQuery.post("app_trip_insert.php", json, function(data) { 
 	    

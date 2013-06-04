@@ -12,10 +12,14 @@ $(function() {
         
             if(data)
                 {
+                console.log("logged_in");
+                //clear cookie-less session
+                Session.clear();
+                //set the actual session
+                Session.set(SESSION, session);
                 js_loggedin = true;
                 $("#login").hide(300);
                 $("#logout").show(200);
-                $("#loginname").text($('#user_username').val());
                 }
         
 		}, "json");
@@ -33,10 +37,11 @@ $(function() {
         
             if(data)
                 {
+                //clear cookie-less session
+                Session.clear();
                 js_loggedin = false;
                 $("#logout").hide(300);
                 $("#login").show(200);
-                $("#loginname").text('');
                 document.location.href='../site/index.php';
                 }
         

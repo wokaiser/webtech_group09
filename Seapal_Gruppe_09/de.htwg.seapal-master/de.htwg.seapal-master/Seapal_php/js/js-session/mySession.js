@@ -41,3 +41,46 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
                               active  : true}]
     };
 }
+
+const TRIP_INFO = ["titel", "von", "nach", "tstart", "tende", "tdauer", "skipper", "crew", "motor", "tank"];
+
+/*possible status of a map, which will be displayed in the map layer.*/
+ROUTE_STATUS = {UNSAVED : "Route not saved to database.", MAP_OVERLAY : 1}
+
+function getNewRoute()
+{
+    return(
+    {
+        titel       : "",
+        von         : "",
+        nach        : "",
+        tstart      : "",
+        tende       : "",
+        tdauer      : "",
+        skipper     : "",
+        crew        : "",
+        motor       : "",
+        tank        : "",
+        marker      : [],
+        lastZoom    : 5
+    });
+}
+
+function getNewRouteMarker() 
+{   
+    return(
+    {
+        name     : null,
+        lat      : null,
+        lng      : null,
+        btm      : "BTM",
+        dtm      : "DTM",
+        sog      : "SOG",
+        cog      : "COG",
+        manoever : "manoever",
+        vorsegel : "vorsegel",
+        marker   : "marker",
+        wdate    : "wdate",
+        wtime    : "wtime"
+    });
+}
