@@ -74,3 +74,6 @@
 
 <!-- Java-Script -->
 <script src="../js/bootstrap/bootstrap-dropdown.js"></script>
+<script src="../js/js-session/json-serialization.js" type="text/javascript"></script>
+<script src="../js/js-session/session.js" type="text/javascript"></script>
+<script src="../js/js-session/mySession.js" type="text/javascript"></script>

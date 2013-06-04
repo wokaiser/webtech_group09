@@ -12,7 +12,6 @@ $(function() {
         
             if(data)
                 {
-                console.log("logged_in");
                 //clear cookie-less session
                 Session.clear();
                 //set the actual session
