@@ -19,6 +19,7 @@ $(function() {
                 js_loggedin = true;
                 $("#login").hide(300);
                 $("#logout").show(200);
+                $("#loginname").text($('#user_username').val());
                 }
         
 		}, "json");
@@ -41,6 +42,7 @@ $(function() {
                 js_loggedin = false;
                 $("#logout").hide(300);
                 $("#login").show(200);
+                $("#loginname").text('');
                 document.location.href='../site/index.php';
                 }
         
