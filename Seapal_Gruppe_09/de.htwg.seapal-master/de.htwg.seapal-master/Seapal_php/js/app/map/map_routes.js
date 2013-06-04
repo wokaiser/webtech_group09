@@ -507,8 +507,14 @@ function saveRouteInfoToSession() {
 function saveRoute() {
     saveRouteInfoToSession();
     var route_name = $('#route_name').val();
+    
+    if (js_loggedin != true) {
+        $('#dialogTitle').text('Access denied');
+        $('#dialogMessage').text("To use this functionality you have to be signed in.");
+        $('#messageBox').modal('show');
+    } 
     //Check if a route name was insert
-    if ("" == route_name) {
+    else if ("" == route_name) {
         $('#dialogTitle').text('Error');
         $('#dialogMessage').text("Geben Sie den Namen der Route an.");
         $('#messageBox').modal('show');
