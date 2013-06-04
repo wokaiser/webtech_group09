@@ -198,10 +198,10 @@ function initialize() {
     });
 
     google.maps.event.addListener(map, 'center_changed', function () {
-        if (followCurrentPosition && !getSessionOption("wl_followPosition").active) {
+        if (!followCurrentPosition && getSessionOption("wl_followPosition").active) {
             toggleFollowCurrentPosition();
         } else {
-            getSessionOption("wl_followPosition").active = false;
+            followCurrentPosition = !followCurrentPosition;
         }
     });
     //set variable to know that initialization is done
@@ -514,7 +514,6 @@ function loadSessionOption(option) {
 
 function toggleFollowCurrentPosition() {
     followCurrentPosition = !followCurrentPosition;
-    //TODO remove magic number
     getSessionOption("wl_followPosition").active = !getSessionOption("wl_followPosition").active;
     $("#wl_followPosition").hasClass ("checked");
     $("#wl_followPosition").find("span").toggleClass("icon-ok");
