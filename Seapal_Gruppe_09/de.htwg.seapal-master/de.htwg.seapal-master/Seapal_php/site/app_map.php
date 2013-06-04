@@ -72,13 +72,6 @@ if (!$db_selected)
 	            </div>
 	        </div>
 	        
-	        <!-- Current Position -->
-	        <div id="followCurrentPositionContainer">
-	            <div id="followCurrentPosition_button" class="well">
-	                <input type="button" class="" value="Eigener Position folgen" id="followCurrentPositionbutton" onclick="javascript: toggleFollowCurrentPosition()" />
-	            </div>
-	        </div>
-	        
 	        <!-- Map -->
 	        <div id="appWrapper">
 	            <div id="map_canvas">

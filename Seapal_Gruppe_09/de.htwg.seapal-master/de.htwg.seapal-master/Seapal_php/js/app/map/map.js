@@ -22,7 +22,6 @@ var currentMode = MODE.DEFAULT;
 
 var currentPositionMarker = null;
 var followCurrentPosition = false;
-var noToggleOfFollowCurrentPositionButton = false;
 
 var temporaryMarker = null;
 var temporaryMarkerInfobox = null;
@@ -97,7 +96,6 @@ function initialize() {
     };
 
     //set route menu position
-    document.getElementById('followCurrentPositionContainer').style.width = document.body.offsetWidth + "px";
     document.getElementById('routeMenuContainer').style.width = document.body.offsetWidth + "px";
     document.getElementById('routeMenuContainer').style.display = "none";
     document.getElementById('distanceToolContainer').style.width = document.body.offsetWidth + "px";
@@ -200,10 +198,10 @@ function initialize() {
     });
 
     google.maps.event.addListener(map, 'center_changed', function () {
-        if (followCurrentPosition && !noToggleOfFollowCurrentPositionButton) {
+        if (followCurrentPosition && !getSessionOption("wl_followPosition").active) {
             toggleFollowCurrentPosition();
         } else {
-            noToggleOfFollowCurrentPositionButton = false;
+            getSessionOption("wl_followPosition").active = false;
         }
     });
     //set variable to know that initialization is done
@@ -445,18 +443,6 @@ function fromLatLngToPixel(latLng) {
     return pixel;
 }
 
-function toggleFollowCurrentPosition() {
-    followCurrentPosition = !followCurrentPosition;
-    if (followCurrentPosition) {
-        document.getElementById("followCurrentPositionbutton").value = "Eigener Position nicht mehr folgen";
-        noToggleOfFollowCurrentPositionButton = true;
-        map.setCenter(currentPositionMarker.getPosition());
-    } else {
-        document.getElementById("followCurrentPositionbutton").value = "Eigener Position folgen";
-    }
-    document.getElementById('followCurrentPositionContainer').style.width = document.body.offsetWidth + "px";
-}
-
 /*Add a map layer with a specific id. Each individual layer should have his own static id*/
 function addMapLayer (id, link) {
     map.overlayMapTypes.setAt(id, new google.maps.ImageMapType({
@@ -487,7 +473,7 @@ function toggleSessionOption(option) {
     option.active = (option.active) ? false : true;
 }
 
-/*function to save information about the given id in the session variable*/
+/*function get a specified session option by it's id*/
 function getSessionOption(optionId) {
     for (var i in session.options) {
         if (optionId == session.options[i].id) {
@@ -518,7 +504,20 @@ function loadSessionOption(option) {
             //Hide mayOverlay
             document.getElementById("map_overlay").style.visibility="hidden";
         }
+    } else if (option.type == SESSION_OPTION_TYPE.FOLLOW_CURRENT_POSITION) {
+        if (option.active) {
+            followCurrentPosition = true;
+            map.setCenter(currentPositionMarker.getPosition());
+        }
     }
+}
+
+function toggleFollowCurrentPosition() {
+    followCurrentPosition = !followCurrentPosition;
+    //TODO remove magic number
+    getSessionOption("wl_followPosition").active = !getSessionOption("wl_followPosition").active;
+    $("#wl_followPosition").hasClass ("checked");
+    $("#wl_followPosition").find("span").toggleClass("icon-ok");
 }
 
 /*function to toggle buttons and choose weather layer*/

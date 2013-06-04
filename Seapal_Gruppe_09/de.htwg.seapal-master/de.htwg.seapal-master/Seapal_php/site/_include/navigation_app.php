@@ -28,6 +28,10 @@
                         <li><a id="wl_mapOverlay" class="wl_chooser multicheck" href="#">Weather Info
                             <span class="pull-right"></span>
                         </a></li>
+                        
+                        <li><a id="wl_followPosition" class="wl_chooser multicheck" href="#">Follow position
+                            <span class="pull-right"></span>
+                        </a></li>
                     </ul>
                 </li>
 			</ul>
