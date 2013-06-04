@@ -200,10 +200,16 @@ function initialize() {
     });
 
     google.maps.event.addListener(map, 'center_changed', function () {
+
         if (followCurrentPosition && !noToggleOfFollowCurrentPositionButton) {
             toggleFollowCurrentPosition();
         } else {
             noToggleOfFollowCurrentPositionButton = false;
+
+        if (!followCurrentPosition && getSessionOption("wl_followPosition").active) {
+            toggleFollowCurrentPosition();
+        } else {
+            followCurrentPosition = !followCurrentPosition;
         }
     });
     //set variable to know that initialization is done
@@ -519,6 +525,13 @@ function loadSessionOption(option) {
             document.getElementById("map_overlay").style.visibility="hidden";
         }
     }
+}
+
+function toggleFollowCurrentPosition() {
+    followCurrentPosition = !followCurrentPosition;
+    getSessionOption("wl_followPosition").active = !getSessionOption("wl_followPosition").active;
+    $("#wl_followPosition").hasClass ("checked");
+    $("#wl_followPosition").find("span").toggleClass("icon-ok");
 }
 
 /*function to toggle buttons and choose weather layer*/
