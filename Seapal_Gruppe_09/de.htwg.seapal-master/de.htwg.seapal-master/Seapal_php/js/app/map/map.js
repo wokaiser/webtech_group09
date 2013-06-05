@@ -148,7 +148,7 @@ function initialize() {
     //set routes
     for (i = 0; i < session.map.routes.length; i++) {
         activeRouteInSession = i;
-        startNewRoute(new google.maps.LatLng(session.map.routes[i].marker[0].lat, session.map.routes[i].marker[0].lng), null);
+        startNewRoute(new google.maps.LatLng(session.map.routes[i].marker[0].lat, session.map.routes[i].marker[0].lng), false, session.map.routes[i].titel);
         for (j = 1; j < session.map.routes[i].marker.length; j++) {
             addRouteMarker(new google.maps.LatLng(session.map.routes[i].marker[j].lat, session.map.routes[i].marker[j].lng));
         }

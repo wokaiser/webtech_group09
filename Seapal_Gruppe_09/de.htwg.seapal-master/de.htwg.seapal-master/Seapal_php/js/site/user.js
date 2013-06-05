@@ -20,6 +20,8 @@ $(function() {
                 $("#login").hide(300);
                 $("#logout").show(200);
                 $("#loginname").text($('#user_username').val());
+                } else {
+                    console.log("login fail");
                 }
         
 		}, "json");

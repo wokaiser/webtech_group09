@@ -1,4 +1,3 @@
-var routeCount = 0;
 var routeArray = new Array();
 var currentRoute = null;
 var destinationRoute = null;
@@ -32,10 +31,9 @@ function Route(route, routeName) {
     this.route = route;
     this.markerArray = new Array();
     this.length = 0;
-    
-    routeCount++;
-    if (routeName == null) {
-        this.name = "Route " + routeCount;
+
+    if (routeName == null || routeName == "") {
+        this.name = "Untitled route";
     } else {
         this.name = routeName;
     }
@@ -626,7 +624,13 @@ function getRouteByMarker(marker) {
 $(document).ready(function() {
     /* Check for on change event for one of the trip info input boxes*/
     $('.routeInfoInput').change(function(e) {
-        console.log("hier");
+        //if the titel was changed, a new route info box should be drawn.
+        if ("titel" == this.id) {
+            //remove the old marker info box and draw a new at the coordinates of the first route marker
+            currentRoute.markerInfobox.setMap(null);
+            currentRoute.name = this.value;
+            currentRoute.markerInfobox = drawRouteInfobox(new google.maps.LatLng(session.map.routes[activeRouteInSession].marker[0].lat, session.map.routes[activeRouteInSession].marker[0].lng), currentRoute.name);
+        }
         session.map.routes[activeRouteInSession][this.id] = this.value;
         return false;
     });
