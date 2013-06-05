@@ -17,7 +17,7 @@
     padding:0;
     
     /* Anpassungen */
-    width: 186px;
+    width: 140px;
     
     /*
     min-width: 140px;
@@ -46,7 +46,7 @@
     padding: 2px 2px 2px 24px;
    
     /* Anpassungen */
-    width: 160px;
+    width: 140px;
 
     background-color: #EEE;
     position: relative;
@@ -133,9 +133,9 @@
 .context-menu-input > label > input[type="text"],
 .context-menu-input > label > textarea,
 .context-menu-input > label > select {
+    margin-left: 0px;
     display: block;
     width: 100%;
-
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
@@ -159,4 +159,17 @@
 
 .context-menu-accesskey {
     text-decoration: underline;
+}
+
+
+.routeMarkerInfoInput {
+    position:relative;
+    width:120px;
+    /*TODO: why does height not work in css, but directly in the html tag it work.*/
+    /*height:10px;*/
+}
+
+.routeMarkerInfoInput:hover { 
+cursor: pointer;
+background-color: #FFF;
 }

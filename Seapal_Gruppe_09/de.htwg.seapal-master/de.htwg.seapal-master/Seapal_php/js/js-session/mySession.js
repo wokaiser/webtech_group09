@@ -47,6 +47,8 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
 
 const TRIP_INFO = ["titel", "von", "nach", "tstart", "tende", "tdauer", "skipper", "crew", "motor", "tank"];
 
+const ROUTE_MARKER = ["name", "btm", "dtm", "sog", "cog", "manoever", "vorsegel", "wdate", "wtime"]
+
 /*possible status of a map, which will be displayed in the map layer.*/
 ROUTE_STATUS = {UNSAVED : "Route not saved to database.", MAP_OVERLAY : 1}
 
@@ -73,7 +75,7 @@ function getNewRouteMarker()
 {   
     return(
     {
-        name     : null,
+        name     : "Marker",
         lat      : null,
         lng      : null,
         btm      : "BTM",

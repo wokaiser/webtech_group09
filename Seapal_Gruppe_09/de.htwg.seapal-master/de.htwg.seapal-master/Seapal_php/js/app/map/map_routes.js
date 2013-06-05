@@ -8,6 +8,8 @@ var geocoder = new google.maps.Geocoder();;
 //variable to set the actual active route and marker in the session
 var activeRouteInSession;
 var activeRouteMarkerInSession;
+//define for default state of active route marker
+const INACTIVE = -1;
 
 var activePathOptions = {
     strokeColor: "#427F94",
@@ -43,29 +45,84 @@ function Route(route, routeName) {
 
 // route context menu ------------------------------------------------ //
 $(function () {
+    $.contextMenu.types.name = function(item, opt, root) {
+        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='name' class='routeMarkerInfoInput' placeholder='name' size='30' maxlength='30'/>").appendTo(this);
+    };
+    $.contextMenu.types.btm = function(item, opt, root) {
+        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='btm' class='routeMarkerInfoInput' placeholder='btm' size='30' maxlength='30'/>").appendTo(this);
+    }; 
+    $.contextMenu.types.dtm = function(item, opt, root) {
+        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='dtm' class='routeMarkerInfoInput' placeholder='dtm' size='30' maxlength='30'/>").appendTo(this);
+    };
+    $.contextMenu.types.sog = function(item, opt, root) {
+        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='sog' class='routeMarkerInfoInput' placeholder='sog' size='30' maxlength='30'/>").appendTo(this);
+    };
+    $.contextMenu.types.cog = function(item, opt, root) {
+        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='cog' class='routeMarkerInfoInput' placeholder='cog' size='30' maxlength='30'/>").appendTo(this);
+    };
+    $.contextMenu.types.manoever = function(item, opt, root) {
+        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='manoever' class='routeMarkerInfoInput' placeholder='manoever' size='30' maxlength='30'/>").appendTo(this);
+    };
+    $.contextMenu.types.vorsegel = function(item, opt, root) {
+        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='vorsegel' class='routeMarkerInfoInput' placeholder='vorsegel' size='30' maxlength='30'/>").appendTo(this);
+    };
+    $.contextMenu.types.wdate = function(item, opt, root) {
+        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='wdate' class='routeMarkerInfoInput' placeholder='wdate' size='30' maxlength='30'/>").appendTo(this);
+    };
+    $.contextMenu.types.wtime = function(item, opt, root) {
+        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='wtime' class='routeMarkerInfoInput' placeholder='wtime' size='30' maxlength='30'/>").appendTo(this);
+    };
+
+    function deleteMarkerCallback (key) {
+        deleteRouteMarker();
+    }
+    
+    function addMarkerCallback (key) {
+        var position = selectedRouteMarker.position;
+        var index;
+        for (var i = currentRoute.markerArray.length; i > 0; i--) {
+            if (currentRoute.markerArray[i - 1].position == position) {
+                index = i;
+                break;
+            }
+        }
+        addRouteMarker(position, index);
+    }
+    
     $.contextMenu({
         selector: '#routeContextMenu_active',
-        callback: function (key) {
-            if (key == "deleteMarker") {
-                deleteRouteMarker();
-            } else if (key == "addMarker") {
-                var position = selectedRouteMarker.position;
-                var index;
-                for (var i = currentRoute.markerArray.length; i > 0; i--) {
-                    if (currentRoute.markerArray[i - 1].position == position) {
-                        index = i;
-                        break;
-                    }
-                }
-                addRouteMarker(position, index);
-            }
-        },
         items: {
-            "deleteMarker": { name: "Wegpunkt l&ouml;schen", icon: "deleteMarker" },
-            "addMarker": { name: "Wegpunkt hinzuf&uuml;gen", icon: "addMarker" }
+            "deleteMarker" : { name : "Wegpunkt l&ouml;schen", icon: "deleteMarker", callback: deleteMarkerCallback},
+            "addMarker" : { name : "Wegpunkt hinzuf&uuml;gen", icon: "addMarker", callback: addMarkerCallback},
+            separator1: "-----",
+            name     : {type: "name"},
+            btm      : {type: "btm"},
+            dtm      : {type: "dtm"},
+            sog      : {type: "sog"},
+            cog      : {type: "cog"},
+            manoever : {type: "manoever"},
+            vorsegel : {type: "vorsegel"},
+            wdate    : {type: "wdate"},
+            wtime    : {type: "wtime"}
+        },
+        events: {
+            show: function(opt) {                
+                //load the trip info from the session to the input boxes.
+                for (var i in ROUTE_MARKER) {
+                    document.getElementById(ROUTE_MARKER[i]).value = session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession][ROUTE_MARKER[i]];
+                }
+            }, 
+            hide: function(opt) {
+                if (INACTIVE == activeRouteMarkerInSession) return;
+                //store the trip info to the session from the input boxes.
+                for (var i in ROUTE_MARKER) {
+                    session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession][ROUTE_MARKER[i]] = document.getElementById(ROUTE_MARKER[i]).value;
+                }
+            }
         }
     });
 });
+
 
 $(function () {
     $.contextMenu({
@@ -199,9 +256,13 @@ function addRouteMarker(position, index) {
         currentRoute.markerArray.splice(index, 0, marker);
         //add marker to session if not on initialization and route mode is on
         if (!onInitialize && MODE.ROUTE == currentMode) {
-            newMarker = getNewRouteMarker();
-            newMarker.lat = newPosition.lat();
-            newMarker.lng = newPosition.lng();
+            var newDate = new Date();
+            newMarker = getNewRouteMarker()
+            newMarker.name = "Marker "+(session.map.routes[activeRouteInSession].marker.length+1)
+            newMarker.lat = position.lat();
+            newMarker.lng = position.lng();
+            newMarker.wdate = newDate.today();
+            newMarker.wtime = newDate.timeNow();
             session.map.routes[activeRouteInSession].marker.splice(index, 0, newMarker);
         }
     }
@@ -211,7 +272,7 @@ function addRouteMarker(position, index) {
 
 //For todays date;
 Date.prototype.today = function(){ 
-    return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear() 
+    return ((this.getDate() < 10)?"0":"") + this.getDate() +"."+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"."+ this.getFullYear() 
 };
 //For the time now
 Date.prototype.timeNow = function(){
@@ -222,6 +283,8 @@ Date.prototype.timeNow = function(){
 function deleteRouteMarker() {
     //delete the marker from the session
     session.map.routes[activeRouteInSession].marker.splice(activeRouteMarkerInSession, 1);
+    //set the active route marker to inactive
+    activeRouteMarkerInSession = INACTIVE;
     if (0 == session.map.routes[activeRouteInSession].marker.length) {
         session.map.routes.splice(activeRouteInSession, 1);
     }
@@ -481,6 +544,8 @@ function stopDistanceToolMode() {
 function deleteRoute() {
     //delete the route from the session
     session.map.routes.splice(activeRouteInSession, 1);
+    //set the active route to inactive
+    activeRouteInSession = INACTIVE;
     currentRoute.route.setMap(null);
     currentRoute.markerInfobox.setMap(null);
 
@@ -494,7 +559,7 @@ function deleteRoute() {
 //save the route info from the route-menu to the cookie-less session.
 function saveRouteInfoToSession() {
     //save only if not in initialise mode
-    if (!onInitialize && session.map.routes.length > 0) {
+    if (!onInitialize && session.map.routes.length > 0 && INACTIVE != activeRouteInSession) {
         //store the trip info to the session from the input boxes.
         for (var i in TRIP_INFO) {
             session.map.routes[activeRouteInSession][TRIP_INFO[i]] = document.getElementById(TRIP_INFO[i]).value;
