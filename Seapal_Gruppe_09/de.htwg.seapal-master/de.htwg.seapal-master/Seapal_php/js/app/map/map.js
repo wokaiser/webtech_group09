@@ -497,12 +497,12 @@ function loadSessionOption(option) {
         //check if the mapOverlay should be displayed
         if (option.active) {
             //Visible mayOverlay
-            document.getElementById("map_overlay").style.visibility="visible";
+            document.getElementById("map_overlay").style.display="block";
             //call mapOverlay for instant refresh
             mapOverlay();
         } else {
             //Hide mayOverlay
-            document.getElementById("map_overlay").style.visibility="hidden";
+            document.getElementById("map_overlay").style.display="none";
         }
     } else if (option.type == SESSION_OPTION_TYPE.FOLLOW_CURRENT_POSITION) {
         if (option.active) {

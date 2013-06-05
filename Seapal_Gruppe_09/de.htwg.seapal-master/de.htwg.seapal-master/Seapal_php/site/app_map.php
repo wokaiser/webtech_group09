@@ -29,7 +29,7 @@ if (!$db_selected)
     		<?php include('_include/navigation_app.php'); ?>
     		
     		<!-- Route Menu -->
-    		<div id="routeMenuContainer">
+    		<div id="routeMenuContainer" style="display: none;">
             	<div id="routeMenu" class="well">
             		<h4>Routen Menü</h4>
 	            	<div class="btn-group btn-group-vertical">
@@ -53,7 +53,7 @@ if (!$db_selected)
 	        </div>
 	        
 	        <!-- Distance Menu -->
-	        <div id="distanceToolContainer">
+	        <div id="distanceToolContainer" style="display: none;">
 	            <div id="distanceToolMenu" class="well">
 	            	<h4>Distanztool</h4>
 	            	<input type="button" class="btn" value="beenden" id="stopDistanceToolButton" class="distanceToolbutton" onclick="javascript: stopDistanceToolMode()" />
@@ -63,7 +63,7 @@ if (!$db_selected)
 	        </div>
 	        
 	         <!-- Navigation Menu -->
-	        <div id="navigationContainer">
+	        <div id="navigationContainer" style="display: none;">
 	            <div id="navigationMenu" class="well">
 	            	<h4>Navigation</h4>
 	            	<input type="button" class="btn" value="beenden" id="stopNavigationButton" class="distanceToolbutton" onclick="javascript: stopNavigationMode()" />
@@ -78,7 +78,7 @@ if (!$db_selected)
                 
                 </div>
                 
-                <div id="map_overlay" style="hidden">
+                <div id="map_overlay" style="display: none;">
 
                 </div>
             </div>

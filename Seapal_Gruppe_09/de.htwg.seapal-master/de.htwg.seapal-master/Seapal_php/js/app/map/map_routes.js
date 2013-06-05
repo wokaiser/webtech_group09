@@ -77,6 +77,7 @@ $(function () {
                     currentRoute.route.setOptions(inactivePathOptions);
                 }
                 if (currentMode == MODE.DISTANCE) {
+                    document.getElementById('distanceToolContainer').style.display = "block";
                     stopDistanceToolMode();
                 }
                 currentRoute = getRouteByMarker(selectedRouteMarker);
