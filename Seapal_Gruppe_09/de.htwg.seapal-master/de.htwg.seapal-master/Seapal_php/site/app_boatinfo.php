@@ -266,8 +266,6 @@ if (!$db_selected)
 	                <table class="appTable table table-hover" cellspacing="0px" cellpadding="5px">
 	                    <thead>
 	                        <tr>
-                                <th>Datum</th>
-                                <th>Uhrzeit</th>
 	                            <th>Windst.</th>
 	                            <th>Windri.</th>
 	                            <th>Luftdruck</th>
@@ -281,27 +279,14 @@ if (!$db_selected)
 	                    </thead>
 		                <tbody id="entries_weather">
 	
-	                        <?php
-	                        	$bnr = $_SESSION['bnr'];
-	
-	                        	if (array_key_exists ('bnr' , $_GET))
-	                            	$bnr = urldecode($_GET['bnr']);
-                            
-		                        $sql = "SELECT * FROM ".const_mysql_weatherinfo." WHERE bnr =" . $bnr . ";";
+	                        <?php                            
+		                        $sql = "SELECT * FROM ".const_mysql_trackingPoints.";";
 		                        $result = mysql_query($sql, $sql_connection);
 		                        if (!$result)
 		                            die('Invalid query: ' . mysql_error());
 		
 		                        while ($row = mysql_fetch_array($result)) {
-                                    // Convert time
-                                    $array_uhrzeit = explode(':', $row['uhrzeit']);
-                                    $row['uhrzeit'] = $array_uhrzeit[0].':'.$array_uhrzeit[1].' Uhr';
-                                    
-                                    $row['datum'] = convert_date_from_sql($row['datum']);
-                                    
-		                            echo("<tr class='selectable' id='" . $row['id'] . "'>");
-		                            echo("<td>" . $row['datum'] . "</td>");
-		                            echo("<td>" . $row['uhrzeit'] . "</td>");
+		                        	echo("<tr class='selectable' id='" . $row['trackpointnr'] . "'>");
 		                            echo("<td>" . $row['windstaerke'] . "</td>");
 		                            echo("<td>" . $row['windrichtung'] . "</td>");
 		                            echo("<td>" . $row['luftdruck'] . "</td>");
@@ -311,8 +296,8 @@ if (!$db_selected)
 		                            echo("<td>" . $row['wellenrichtung'] . "</td>");
                                     echo("<td>" . $row['wellenhoehe'] . "</td>");
 		                            echo("<td style='width:30px; text-align:left;'><div class='btn-group'>");
-		                            echo("<a class='btn btn-small view weather' id='" . $row['id'] . "'><span><i class='icon-eye-open'></i></span></a>");
-		                            echo("<a class='btn btn-small remove weather' id='" . $row['id'] . "'><span><i class='icon-remove'></i></span></a>");
+		                            echo("<a class='btn btn-small view weather' id='" . $row['trackpointnr'] . "'><span><i class='icon-eye-open'></i></span></a>");
+		                            echo("<a class='btn btn-small remove weather' id='" . $row['trackpointnr'] . "'><span><i class='icon-remove'></i></span></a>");
 		                            echo("</div></td>");
 		                            echo("</tr>");
 		                        }

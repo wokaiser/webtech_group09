@@ -5,25 +5,25 @@
     $db_selected = mysql_select_db(const_mysql_db, $sql_connection);
 	
 	if (!$db_selected) {
-	    $err = array( "id" => 'Error: ' . mysql_error() );
+	    $err = array( "trackpointnr" => 'Error: ' . mysql_error() );
 	    echo json_encode($err);
 	    exit;
 	}
 	
-    $id = intval($_POST['id']);
-	$sql = "DELETE FROM ".const_mysql_weatherinfo." WHERE id = " . $id . ";";
+    $trackpointnr = intval($_POST['trackpointnr']);
+	$sql = "DELETE FROM ".const_mysql_trackingPoints." WHERE trackpointnr = " . $trackpointnr . ";";
 	
 	$result = mysql_query($sql, $sql_connection);
 	
 	if (!$result) {
-	    $err = array( "id" => 'Error: ' . mysql_error() );
+	    $err = array( "trackpointnr" => 'Error: ' . mysql_error() );
 	    echo json_encode($err);
 	    exit;
 	}
 	
-	$id = array( "id" => 'ok');
+	$trackpointnr = array( "trackpointnr" => 'ok');
 	
-	echo json_encode($id);
+	echo json_encode($trackpointnr);
 	
 	mysql_close($sql_connection);
 

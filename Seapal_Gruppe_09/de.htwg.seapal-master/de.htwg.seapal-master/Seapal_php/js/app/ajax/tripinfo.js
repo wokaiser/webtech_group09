@@ -7,15 +7,6 @@ $(function() {
 	        $('#name').val(data['name']);
 	        $('#lat').val(data['lat']);
 	        $('#lng').val(data['lng']);
-	        $('#btm').val(data['btm']);
-	        $('#dtm').val(data['dtm']);
-	        $('#sog').val(data['sog']);
-	        $('#cog').val(data['cog']);
-	        $('#manoever').append("<option>" + data['manoever'] + '</option>');
-	        $('#vorsegel').append('<option>' + data['vorsegel'] + '</option>');
-	        $('#marker').append('<option>' + data['marker'] + '</option>');
-	        $('#wdate').val(data['wdate']);
-	        $('#wtime').val(data['wtime']);
 	        
 	    }, "json");
 	}
@@ -28,9 +19,6 @@ $(function() {
 	    entry += "<td><span class='wnr' style='display: none;'>" + wnr + "</span>" + json.name + "</td>";
 	    entry += "<td>" + json.lat + "</td>";
 	    entry += "<td>" + json.lng + "</td>";
-	    entry += "<td>" + json.btm + "</td>";
-	    entry += "<td>" + json.dtm + "</td>";
-	    entry += "<td>" + json.manoever + "</td>";
 	    entry += "<td style='width:30px; text-align:right;'><div class='btn-group'>";
 	    entry += "<a class='btn btn-small view' id='" + wnr + "'><span><i class='icon-eye-open'></i></span></a>";
 		entry += "<a class='btn btn-small remove' id='" + wnr + "'><span><i class='icon-remove'></i></span></a>";
@@ -80,16 +68,7 @@ $(function() {
 			"tnr": tripnr,
             "name": $('#name').val(),
             "lat": $('#lat').val(),
-            "lng": $('#lng').val(),
-	        "btm": $('#btm').val(),
-	        "dtm": $('#dtm').val(),
-	        "sog": $('#sog').val(),
-	        "cog": $('#cog').val(),
-	        "manoever": $("#manoever :selected").text(),
-	        "vorsegel": $("#vorsegel :selected").text(),
-	        "marker": $("#marker :selected").text(),
-	        "wdate": $('#wdate').val(),
-	        "wtime": $('#wtime').val()         
+            "lng": $('#lng').val()        
 	    };
 	
 	    jQuery.post("app_tripinfo_insert.php", json, function(data) { 

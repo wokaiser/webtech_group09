@@ -2,7 +2,7 @@ $(function() {
 	
 	function loadEntry(id) { 
 			        	
-	    jQuery.get("app_weatherinfo_load.php", {'id': id}, function(data) {
+	    jQuery.get("app_weatherinfo_load.php", {'trackpointnr': id}, function(data) {
 	        $('#strength').val(data['windstaerke']);
 	        $('#wind_direction').val(data['windrichtung']);
 	        $('#airpressure').val(data['luftdruck']);
@@ -11,18 +11,14 @@ $(function() {
 	        $('#rain').val(data['regen']);
 	        $('#waveheight').val(data['wellenhoehe']);
 	        $('#wave_direction').val(data['wellenrichtung']);
-	        $('#weather_time').val(data['uhrzeit']);
-	        $('#weather_date').val(data['datum']);
 	    } , "json");
 	}
 	
-	function addEntry(id, json) {
+	function addEntry(trackpointnr, json) {
 		
 		var entry = ""; 
 			
-		entry += "<tr class='selectable' id='" + id + "'>";
-		entry += "<td>" + json.weather_date + "</td>";
-		entry += "<td>" + json.weather_time + "</td>";
+		entry += "<tr class='selectable' id='" + trackpointnr + "'>";
         entry += "<td>" + json.strength + "</td>";
         entry += "<td>" + json.wind_direction + "</td>";
         entry += "<td>" + json.airpressure + "</td>";
@@ -32,8 +28,8 @@ $(function() {
         entry += "<td>" + json.wave_direction + "</td>";
         entry += "<td>" + json.waveheight + "</td>";
         entry += "<td style='width:30px; text-align:left;'><div class='btn-group'>";
-        entry += "<a class='btn btn-small view weather' id='" + id + "'><span><i class='icon-eye-open'></i></span></a>";
-        entry += "<a class='btn btn-small remove weather' id='" + id + "'><span><i class='icon-remove'></i></span></a>";
+        entry += "<a class='btn btn-small view weather' id='" + trackpointnr + "'><span><i class='icon-eye-open'></i></span></a>";
+        entry += "<a class='btn btn-small remove weather' id='" + trackpointnr + "'><span><i class='icon-remove'></i></span></a>";
         entry += "</div></td>";
         entry += "</tr>";
 
@@ -47,12 +43,12 @@ $(function() {
 	$('a.remove.weather').live("click", function(event) {
 		var buttonID = this;
 	 	var id = $(this).attr('id');
-		jQuery.post("app_weatherinfo_delete.php", { "id": id }, function(data) {
+		jQuery.post("app_weatherinfo_delete.php", { "trackpointnr": id }, function(data) {
 		 
-		 	if (data['id'].match(/Error/)) {
+		 	if (data['trackpointnr'].match(/Error/)) {
 		    	
 		    	$('#dialogTitle').text('Error');
-		    	$('#dialogMessage').text(data['id'].replace(/Error: /, ""));
+		    	$('#dialogMessage').text(data['trackpointnr'].replace(/Error: /, ""));
 		    	
 	    	} else {
 		    	
@@ -72,28 +68,26 @@ $(function() {
 		
 		var json = {
 
-	          "strength": $('#strength').val(),
-	          "wind_direction": $('#wind_direction').val(),
-	          "airpressure": $('#airpressure').val(),
+	          	"strength": $('#strength').val(),
+	          	"wind_direction": $('#wind_direction').val(),
+	         	"airpressure": $('#airpressure').val(),
 		        "temperature": $('#temperature').val(),
 		        "clouds": $('#clouds').val(),
 		        "rain": $('#rain').val(),
 		        "waveheight": $('#waveheight').val(),
 		        "wave_direction": $('#wave_direction').val(),
-		        "weather_time": $('#weather_time').val(),
-		        "weather_date": $('#weather_date').val(),
 	    };
 		
 		jQuery.post("app_weatherinfo_insert.php", json, function(data) { 
 			
-			if (data['id'].match(/Error/)) {
+			if (data['trackpointnr'].match(/Error/)) {
 		    	
 		    	$('#dialogTitle').text('Error');
-		    	$('#dialogMessage').text(data['id'].replace(/Error: /, ""));
+		    	$('#dialogMessage').text(data['trackpointnr'].replace(/Error: /, ""));
 		    	
 	    	} else {
 		    	
-		    	addEntry( data['id'], json ); 
+		    	addEntry( data['trackpointnr'], json ); 
 	    
 		    	$('#dialogTitle').text('Success');
 		    	$('#dialogMessage').text("Eintrag wurde erfolgreich gespeichert.");

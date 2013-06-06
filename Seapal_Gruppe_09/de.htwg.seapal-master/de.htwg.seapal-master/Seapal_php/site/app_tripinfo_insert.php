@@ -9,20 +9,11 @@
 	    exit;
 	}
 	
-	$sql = "INSERT INTO ".const_mysql_waypoints." (tnr, name, btm, dtm, lat, lng, sog, cog, manoever, vorsegel, wdate, wtime, marker) VALUES (
+	$sql = "INSERT INTO ".const_mysql_waypoints." (tnr, name, lat, lng) VALUES (
 				" . $_POST['tnr'] . ", 
 				'" . $_POST['name'] . "',
-				'" . $_POST['btm'] . "', 
-				'" . $_POST['dtm'] . "',
 				'" .$_POST['lat'] . "', 
-				'" . $_POST['lng'] . "',
-				'" . $_POST['sog'] . "', 
-				'" . $_POST['cog'] . "', 
-				'" . $_POST['manoever'] . "', 
-				'" . $_POST['vorsegel'] . "', 
-				'" . $_POST['wdate'] . "', 
-				'" . $_POST['wtime'] . "', 
-				'" . $_POST['marker'] . "');";
+				'" . $_POST['lng'] . "');";
 	
 	$result = mysql_query($sql, $sql_connection);
 	

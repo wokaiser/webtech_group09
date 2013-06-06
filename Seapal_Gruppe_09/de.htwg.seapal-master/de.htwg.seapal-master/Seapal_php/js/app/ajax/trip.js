@@ -8,11 +8,8 @@ $(function() {
 		
 		entry += "<tr class='selectable'>";
 	    entry += "<td>" + json.titel + "</td>";
-	    entry += "<td>" + json.skipper + "</td>";
-	    entry += "<td>" + json.tstart + "</td>";
-	    entry += "<td>" + json.tende + "</td>";
-	    entry += "<td>" + json.tdauer + "</td>";
-	    entry += "<td>" + json.motor + "</td>";
+	    entry += "<td>" + json.von + "</td>";
+	    entry += "<td>" + json.nach + "</td>";
 	    entry += "<td style='width:30px; text-align:right;'><div class='btn-group'>";
 		entry += "<a class='btn btn-small view' id='" + tnr + "'><span><i class='icon-eye-open'></i></span></a>";
 		entry += "<a class='btn btn-small remove' id='" + tnr + "'><span><i class='icon-remove'></i></span></a>";
@@ -35,13 +32,6 @@ $(function() {
                     $('#titel').val(data['titel']);
                     $('#von').val(data['von']);
                     $('#nach').val(data['nach']);
-                    $('#tstart').val(data['tstart']);
-                    $('#tende').val(data['tende']);
-                    $('#tdauer').val(data['tdauer']);
-                    $('#skipper').val(data['skipper']);
-                    $('#crew').val(data['crew']);
-                    $('#motor').val(data['motor']);
-                    $('#tank').attr('checked', data['tank']);
             
                     //add the route only to the cookie-less session if the route not already exist
                     if (!rootAlreadyInMap(routeLoad)) {

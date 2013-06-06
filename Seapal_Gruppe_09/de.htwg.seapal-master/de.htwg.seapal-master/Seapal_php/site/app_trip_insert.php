@@ -14,14 +14,7 @@
 				" . $_SESSION['bnr'] . ",
 				'" . $_POST['titel'] . "',
 				'" . $_POST['von'] . "',
-				'" . $_POST['nach'] . "',
-				'" . $_POST['skipper'] . "',
-				'" . $_POST['crew'] . "',
-				'" . $_POST['tstart'] . "',
-				'" . $_POST['tende'] . "',
-				'" . $_POST['tdauer'] . "',
-				'" . $_POST['motor'] . "',
-				" . $_POST['tank'] . ");";
+				" . $_POST['nach'] . ");";
 	
 	$result = mysql_query($sql, $sql_connection);
 	

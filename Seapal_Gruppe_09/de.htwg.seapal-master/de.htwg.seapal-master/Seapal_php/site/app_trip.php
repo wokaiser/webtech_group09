@@ -35,11 +35,8 @@ if (!$db_selected)
 	                    <thead>
 	                        <tr>
 	                            <th>Titel</th>
-	                            <th>Skipper</th>
-	                            <th>Start</th>
-	                            <th>Ende</th>
-	                            <th>Dauer</th>
-	                            <th>Motor</th>     
+	                            <th>Von</th>
+	                            <th>Nach</th>   
 	                            <th></th>
 	                        </tr>
 	                    </thead>
@@ -60,11 +57,8 @@ if (!$db_selected)
 		
 		                            echo("<tr class='selectable'>");
 		                            echo("<td>" . $row['titel'] . "</td>");
-		                            echo("<td>" . $row['skipper'] . "</td>");
-		                            echo("<td>" . $row['tstart'] . "</td>");
-		                            echo("<td>" . $row['tende'] . "</td>");
-		                            echo("<td>" . $row['tdauer'] . "</td>");
-		                            echo("<td>" . $row['motor'] . "</td>");
+		                            echo("<td>" . $row['von'] . "</td>");
+		                            echo("<td>" . $row['nach'] . "</td>");
 		                            echo("<td style='width:30px; text-align:right;'><div class='btn-group'>");
 			                        echo("<a class='btn btn-small view' id='" . $row['tnr'] . "'><span><i class='icon-eye-open'></i></span></a>");
 			                        echo("<a class='btn btn-small remove' id='" . $row['tnr'] . "'><span><i class='icon-remove'></i></span></a>");

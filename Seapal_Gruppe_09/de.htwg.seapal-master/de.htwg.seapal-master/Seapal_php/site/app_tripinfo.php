@@ -42,57 +42,19 @@ if (!$db_selected)
 			            		<div class="control-group">
 			            			<label class="control-label">Name</label>
 			            			<input class="input-medium" type="text" id="name"/>
-			            		</div>
-			            		<div class="control-group">
-			            			<label class="control-label">Time</label>
-			            			<input class="input-medium" type="date" id="wdate"/>
-			                    </div>
-			                    <div class="control-group">
-			            			<label class="control-label">Date</label>
-			            			<input class="input-medium" type="date" id="wtime"/>
-			                    </div>
+			            		</div>			            		
 		            		</div>
 		            		<div class="span4">
 		            			<div class="control-group">
 			            			<label class="control-label">Latitude</label>
 			            			<input class="input-medium" type="text" id="lat"/>
 			            		</div>
+		            		</div>
+		            		<div class="span4">
 			            		<div class="control-group">
 			            			<label class="control-label">Longitude</label>
 			            			<input class="input-medium" type="text" id="lng"/>
-			                    </div>
-			                    <div class="control-group">
-			            			<label class="control-label">Fahrt nach</label>
-			            			<select name="fahrtziel" id="marker" style="width: 165px;"></select>
-			                    </div>
-		            		</div>
-		            		<div class="span4">
-		            			<div class="control-group">
-			            			<label class="control-label">COG</label>
-			            			<input class="input-medium" type="text" id="cog"/>
-			                    </div>
-			                    <div class="control-group">
-			            			<label class="control-label">SOG</label>
-			            			<input class="input-medium" type="text" id="sog"/>
-			                    </div>  
-			                    <div class="control-group">
-			                    	<label class="control-label">Manoever</label>
-			            			<select name="manoever" id="manoever" style="width: 165px;"></select>
-			                    </div>                 
-		            		</div>
-		            		<div class="span4">
-		            			<div class="control-group">
-			            			<label class="control-label">BTM</label>
-			            			<input class="input-medium" type="text" id="btm"/>
-			                    </div>
-			                    <div class="control-group">
-			            			<label class="control-label">DTM</label>
-			            			<input class="input-medium" type="text" id="dtm"/>
-			                    </div>
-			                    <div class="control-group">
-			            			<label class="control-label">Vorsegel</label>
-			            			<select name="vorsegel" id="vorsegel" style="width: 165px;"></select>
-			            		</div>
+			                    </div>			                    
 		            		</div>
 		            	</div>      	 
 		            	<div class="control-group">
@@ -107,10 +69,7 @@ if (!$db_selected)
 	                        <tr>
 	                            <th>Name</th>
 	                            <th>Breite</th>
-	                            <th>Laenge</th>
-	                            <th>Peilung</th>
-	                            <th>Abstand</th>
-	                            <th>Manoever</th>     
+	                            <th>Laenge</th>   
 	                            <th></th>
 	                        </tr>
 	                    </thead>
@@ -132,9 +91,6 @@ if (!$db_selected)
 	                            echo("<td><span class='wnr' style='display: none;'>" . $row['wnr'] . "</span>" . $row['name'] . "</td>");
 	                            echo("<td>" . $row['lat'] . "</td>");
 	                            echo("<td>" . $row['lng'] . "</td>");
-	                            echo("<td>" . $row['btm'] . "</td>");
-	                            echo("<td>" . $row['dtm'] . "</td>");
-	                            echo("<td>" . $row['manoever'] . "</td>");
 	                            echo("<td style='width:30px; text-align:right;'><div class='btn-group'>");
 	                            echo("<a class='btn btn-small view' id='" . $row['wnr'] . "'><span><i class='icon-eye-open'></i></span></a>");
 		                        echo("<a class='btn btn-small remove' id='" . $row['wnr'] . "'><span><i class='icon-remove'></i></span></a>");

@@ -7,13 +7,9 @@
 	if (!$db_selected) {
 	    die('Error: ' . mysql_error());
 	}
-
-    if(false !== strpos($_POST['weather_time'], ':'))
-        $weather_date = convert_date_to_sql($_POST['weather_time']);
     
-	$sql = "INSERT INTO ".const_mysql_weatherinfo." (datum, uhrzeit, windstaerke, windrichtung, luftdruck, temperatur, wolken, regen, wellenhoehe, wellenrichtung) VALUES(
-			 	'" . $_POST['weather_date'] . "',
-				'" . $_POST['weather_time'] . "',
+	$sql = "INSERT INTO ".const_mysql_trackingPoints." (tracknr, windstaerke, windrichtung, luftdruck, temperatur, wolken, regen, wellenhoehe, wellenrichtung) VALUES(
+				'1', 
 				'" . $_POST['strength'] . "',
 				'" . $_POST['wind_direction'] . "',
 				'" . $_POST['airpressure'] . "',
@@ -21,20 +17,20 @@
 				'" . $_POST['clouds'] . "',
 				'" . $_POST['rain'] . "',
 				'" . $_POST['waveheight'] . "',
-				'" . $_POST['wave_direction'] . "');";
+				'" . $_POST['wave_direction'] . "');"; //TODO remove '1' with current tracking nr
 	
 	$result = mysql_query($sql, $sql_connection);
 	
 	if (!$result) {
-	    $err = array( "id" => 'Error: ' . mysql_error() );
+	    $err = array( "trackpointnr" => 'Error: ' . mysql_error() );
 	    echo json_encode($err);
 	    exit;
 	}
 	
-	$result = mysql_query("SHOW TABLE STATUS LIKE '".const_mysql_weatherinfo."'");
+	$result = mysql_query("SHOW TABLE STATUS LIKE '".const_mysql_trackingPoints."'");
 	
 	if (!$result) {
-	    $err = array( "id" => 'Error: ' . mysql_error() );
+	    $err = array( "trackpointnr" => 'Error: ' . mysql_error() );
 	    echo json_encode($err);
 	    exit;
 	}
@@ -43,9 +39,9 @@
 	
 	$nextId = $row['Auto_increment'];		
 	
-	$id = array( "id" => "" . ($nextId-1) );
+	$trackpointnr = array( "trackpointnr" => "" . ($nextId-1) );
 	
-	echo json_encode($id);
+	echo json_encode($trackpointnr);
 	
 	mysql_free_result($result);
 		
