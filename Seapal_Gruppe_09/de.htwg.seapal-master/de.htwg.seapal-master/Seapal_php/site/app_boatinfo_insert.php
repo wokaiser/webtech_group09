@@ -1,5 +1,6 @@
 <?php
 	include('_include/config.php');
+	require_once('_include/session.php');
     $sql_connection = mysql_connect(const_mysql_host, const_mysql_user, const_mysql_pw);
     $db_selected = mysql_select_db(const_mysql_db, $sql_connection);
 	
@@ -7,10 +8,11 @@
 	    die('Error: ' . mysql_error());
 	}
 	
-	$sql = "INSERT INTO ".const_mysql_boatinfo." (bootname, registernummer, segelzeichen, heimathafen, yachtclub, eigner, versicherung,
+	$sql = "INSERT INTO ".const_mysql_boatinfo." (unr, bootname, registernummer, segelzeichen, heimathafen, yachtclub, eigner, versicherung,
 			rufzeichen, typ, konstrukteur, laenge, breite, tiefgang, masthoehe, verdraengung, rigart,	
 			baujahr, motor, tankgroesse, wassertankgroesse, abwassertankgroesse, grosssegelgroesse,
 			genuagroesse, spigroesse) VALUES(
+				" . $_SESSION['bnr'] . ",
 			 	'" . $_POST['bootname'] . "',
 				" . $_POST['registernummer'] . ",
 				'" . $_POST['segelzeichen'] . "',

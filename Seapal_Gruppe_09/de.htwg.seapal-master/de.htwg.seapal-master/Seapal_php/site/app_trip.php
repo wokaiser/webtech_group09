@@ -62,7 +62,7 @@ if (!$db_selected)
 		                            echo("<td style='width:30px; text-align:right;'><div class='btn-group'>");
 			                        echo("<a class='btn btn-small view' id='" . $row['tnr'] . "'><span><i class='icon-eye-open'></i></span></a>");
 			                        echo("<a class='btn btn-small remove' id='" . $row['tnr'] . "'><span><i class='icon-remove'></i></span></a>");
-			                        echo("<a href='app_tripinfo.php?tnr=" . $row['tnr'] . "' class='btn btn-small redirect' id='" . $row['tnr'] . "'><span><i class='icon-chevron-right'></i></span></a>");
+			                        echo("<a href='app_trackinginfo.php?tnr=" . $row['tnr'] . "' class='btn btn-small redirect' id='" . $row['tnr'] . "'><span><i class='icon-chevron-right'></i></span></a>");
 			                        echo("</div></td>");
 		                            echo("</tr>");
 		                        }

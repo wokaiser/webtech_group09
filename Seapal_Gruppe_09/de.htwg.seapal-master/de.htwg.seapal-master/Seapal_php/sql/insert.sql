@@ -28,8 +28,8 @@ INSERT INTO seapal.tracking (tnr, skipper, crew, tstart, tende, tdauer) VALUES (
 
 /* insert into tracking points */
 INSERT INTO seapal.trackingPoint (tracknr, marker, btm, dtm, sog, cog, manoever, vorsegel, wdate, wtime, motor, tank, windstaerke, windrichtung, luftdruck, temperatur, wolken, regen, wellenhoehe, wellenrichtung) VALUES
-(1, "Marker 1", 15, 200, 5, 13, "Wende", "Spinnacker", DATE("2013-07-02"), "16:43:00", TRUE, "VOLL", "2", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
-(1, "Marker 2", 16, 201, 6, 14, "Wende", "Spinnacker", DATE("2013-07-02"), "16:53:00", TRUE, "VOLL", "3", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
-(1, "Marker 3", 17, 202, 7, 15, "Wende", "Spinnacker", DATE("2013-07-02"), "17:03:00", TRUE, "VOLL", "4", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
-(1, "Marker 4", 18, 203, 8, 16, "Wende", "Spinnacker", DATE("2013-07-02"), "17:13:00", TRUE, "VOLL", "5", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
-(1, "Marker 5", 19, 204, 9, 17, "Wende", "Spinnacker", DATE("2013-07-02"), "17:23:00", TRUE, "VOLL", "6", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW");
+(1, "Marker 1", 15, 200, 5, 13, "Wende", "Spinnacker", "2013-07-02", "16:43:00", TRUE, "VOLL", "2", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
+(1, "Marker 2", 16, 201, 6, 14, "Wende", "Spinnacker", "2013-07-02", "16:53:00", TRUE, "VOLL", "3", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
+(1, "Marker 3", 17, 202, 7, 15, "Wende", "Spinnacker", "2013-07-02", "17:03:00", TRUE, "VOLL", "4", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
+(1, "Marker 4", 18, 203, 8, 16, "Wende", "Spinnacker", "2013-07-02", "17:13:00", TRUE, "VOLL", "5", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
+(1, "Marker 5", 19, 204, 9, 17, "Wende", "Spinnacker", "2013-07-02", "17:23:00", TRUE, "VOLL", "6", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW");

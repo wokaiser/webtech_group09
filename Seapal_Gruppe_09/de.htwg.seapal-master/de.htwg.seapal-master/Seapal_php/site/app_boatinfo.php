@@ -174,7 +174,6 @@ if (!$db_selected)
 	                        	if (array_key_exists ('bnr' , $_GET))
 	                            	$bnr = urldecode($_GET['bnr']);
 
-
 		                        $sql = "SELECT * FROM ".const_mysql_boatinfo." WHERE unr =" . $bnr . ";";
 		                        $result = mysql_query($sql, $sql_connection);
 		                        if (!$result)
@@ -201,111 +200,6 @@ if (!$db_selected)
 	
 	                    </tbody>
 	                </table>
-	                <br /><br />
-	            </div>
-	            <br />
-	           <h2>Wetter Informationen</h2>
-	            <br />
-	            <div class="container-fluid">
-	            	<form method="POST" class="form-horizontal"> 
-                        <div class="row well" style="margin-left: 15%;">
-                            <div class="span4" align="center">	            		
-			            		<div class="control-group">
-			            			<label class="control-label">Windst&auml;rke</label>
-			            			<input class="input-medium" type="text" name="strength" id="strength" />
-			            		</div>
-			            		<div class="control-group">
-			            			<label class="control-label">Windrichtung</label>
-			            			<input class="input-medium" type="text" name="wind_direction" id="wind_direction" />
-			                    </div>
-			                    <div class="control-group">
-			            			<label class="control-label">Luftdruck</label>
-			            			<input class="input-medium" type="text" name="airpressure" id="airpressure" />
-			                    </div>
-			                    <div class="control-group">
-			            			<label class="control-label">Temperatur</label>
-			            			<input class="input-medium" type="text" name="temperature" id="temperature" />
-			                    </div> 
-			                    <div class="control-group">
-			            			<label class="control-label">Wolken</label>
-			            			<input class="input-medium" type="text" name="clouds" id="clouds" />
-			                    </div>
-			                    <div class="control-group">
-			            			<label class="control-label">Regen</label>
-			            			<input class="input-medium" type="text" name="rain" id="rain" />
-			                    </div>        
-		            		</div>
-		            		<div class="span4">
-		            			<div class="control-group">
-			            			<label class="control-label">Wellenh&ouml;he</label>
-			            			<input class="input-medium" type="text" name="waveheight" id="waveheight" />
-			            		</div>
-			            		<div class="control-group">
-			            			<label class="control-label">Wellenrichtung</label>
-			            			<input class="input-medium" type="text" name="wave_direction" id="wave_direction" />
-			                    </div>
-			                    <div class="control-group">
-			            			<label class="control-label">Uhrzeit</label>
-			            			<input class="input-medium" type="text" name="weather_time" id="weather_time" />
-			            		</div>
-			            		<div class="control-group">
-			                    	<label class="control-label">Datum</label>
-			            			<input class="input-medium" type="text" name="weather_date" id="weather_date" />
-			                    </div>
-  		            		</div>       
-		            	</div>   
-                        <div class="control-group">
-                            <input type="reset" class="btn" id="delete" value="L&ouml;schen" class="button"/>
-                            <input type="submit" class="btn" id="save_weather" name="submit_weather" value="Speichern" class="button"/>
-                        </div>  
-                    </form>
-                </div>
-	            <br />
-	            <br />
-	            <div class="appTableDiv" align="center">
-	                <table class="appTable table table-hover" cellspacing="0px" cellpadding="5px">
-	                    <thead>
-	                        <tr>
-	                            <th>Windst.</th>
-	                            <th>Windri.</th>
-	                            <th>Luftdruck</th>
-	                            <th>Temp.</th>
-	                            <th>Wolken</th>
-	                            <th>Regen</th>
-	                            <th>Wellenri.</th>
-	                            <th>Wellenh&ouml;he</th>
-	                            <th></th>
-	                        </tr>
-	                    </thead>
-		                <tbody id="entries_weather">
-	
-	                        <?php                            
-		                        $sql = "SELECT * FROM ".const_mysql_trackingPoints.";";
-		                        $result = mysql_query($sql, $sql_connection);
-		                        if (!$result)
-		                            die('Invalid query: ' . mysql_error());
-		
-		                        while ($row = mysql_fetch_array($result)) {
-		                        	echo("<tr class='selectable' id='" . $row['trackpointnr'] . "'>");
-		                            echo("<td>" . $row['windstaerke'] . "</td>");
-		                            echo("<td>" . $row['windrichtung'] . "</td>");
-		                            echo("<td>" . $row['luftdruck'] . "</td>");
-		                            echo("<td>" . $row['temperatur'] . "</td>");
-		                            echo("<td>" . $row['wolken'] . "</td>");
-		                            echo("<td>" . $row['regen'] . "</td>");
-		                            echo("<td>" . $row['wellenrichtung'] . "</td>");
-                                    echo("<td>" . $row['wellenhoehe'] . "</td>");
-		                            echo("<td style='width:30px; text-align:left;'><div class='btn-group'>");
-		                            echo("<a class='btn btn-small view weather' id='" . $row['trackpointnr'] . "'><span><i class='icon-eye-open'></i></span></a>");
-		                            echo("<a class='btn btn-small remove weather' id='" . $row['trackpointnr'] . "'><span><i class='icon-remove'></i></span></a>");
-		                            echo("</div></td>");
-		                            echo("</tr>");
-		                        }
-	                        ?>
-	
-	                    </tbody>
-	                </table>
-	                <br /><br />
 	            </div>
     		</div><!-- Content -->
 	          

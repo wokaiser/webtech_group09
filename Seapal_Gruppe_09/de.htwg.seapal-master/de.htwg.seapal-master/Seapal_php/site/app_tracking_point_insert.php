@@ -8,8 +8,8 @@
 	    die('Error: ' . mysql_error());
 	}
     
-	$sql = "INSERT INTO ".const_mysql_trackingPoints." (tracknr, windstaerke, windrichtung, luftdruck, temperatur, wolken, regen, wellenhoehe, wellenrichtung) VALUES(
-				'1', 
+	$sql = "INSERT INTO ".const_mysql_trackingPoints." (tracknr, windstaerke, windrichtung, luftdruck, temperatur, wolken, regen, wellenhoehe, wellenrichtung, marker, btm, dtm, sog, cog, manoever, vorsegel, wdate, wtime, motor, tank) VALUES (
+				'" . $_POST['tracknr'] . "',
 				'" . $_POST['strength'] . "',
 				'" . $_POST['wind_direction'] . "',
 				'" . $_POST['airpressure'] . "',
@@ -17,7 +17,18 @@
 				'" . $_POST['clouds'] . "',
 				'" . $_POST['rain'] . "',
 				'" . $_POST['waveheight'] . "',
-				'" . $_POST['wave_direction'] . "');"; //TODO remove '1' with current tracking nr
+				'" . $_POST['wave_direction'] . "',
+				'" . $_POST['marker'] . "',
+				'" . $_POST['btm'] . "',
+				'" . $_POST['dtm'] . "',
+				'" . $_POST['sog'] . "',
+				'" . $_POST['cog'] . "',
+				'" . $_POST['manoever'] . "',
+				'" . $_POST['vorsegel'] . "',
+				'" . $_POST['wdate'] . "',
+				'" . $_POST['wtime'] . "',
+				'" . $_POST['motor'] . "',
+				'" . $_POST['tank'] . "');";
 	
 	$result = mysql_query($sql, $sql_connection);
 	
