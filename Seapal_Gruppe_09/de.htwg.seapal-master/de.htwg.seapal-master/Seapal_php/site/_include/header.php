@@ -19,6 +19,7 @@
     <link href="../css/bootstrap/layout.css" rel="stylesheet">
     <link href="../css/bootstrap/bootstrap-responsive.css" rel="stylesheet">
     <link href="../css/custom/custom.css" rel="stylesheet">
+    <link href="../css/messageBox/messageBox.css" rel="stylesheet">
     
     <!-- Java-Script -->
     <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>

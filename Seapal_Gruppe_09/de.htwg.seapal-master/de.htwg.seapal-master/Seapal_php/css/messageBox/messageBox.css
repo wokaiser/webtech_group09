@@ -1,0 +1,120 @@
+/*!
+ * Some Message Boxes to show a user some information.
+ * To use the message boxes you should implement this on your html site:
+        
+        <div class="info" id="infoMessage" style="display: none;">
+            <div class="infoPicture span4"></div>
+            <div class="messageText span8" id="infoMessageText">Some info msg.</div>
+        </div>
+        
+        <div class="success" id="successMessage" style="display: none;">
+            <div class="successPicture span4"></div>
+            <div class="messageText span8" id="successMessageText">Some success msg.</div>
+        </div>
+        
+        <div class="warning" id="warningMessage" style="display: none;">
+            <div class="warningPicture span4"></div>
+            <div class="messageText span8" id="warningMessageText">Some warning msg.</div>
+        </div>
+        
+        <div class="error" id="errorMessage" style="display: none;">
+            <div class="errorPicture span4"></div>
+            <div class="messageText span8" id="errorMessageText">Some error msg.</div>
+        </div>
+ 
+ */
+
+.info, .success, .warning, .error, .validation {
+    border: 1px solid;
+    margin: 10px 0px;
+    padding:15px 10px 15px 50px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    font-size:13px;
+    position:fixed;
+    top: 50%;
+    left: 50%;
+    /*set this value in javascript, because the margin left should be set to the half of the width and that'S probably not possible in css*/
+    width:18em;
+    height:1em;
+    margin-top: -0.5em; /*set to a negative number 1/2 of your height*/
+    /*set this value in javascript, because the margin left should be set to the half of the width and that'S probably not possible in css*/
+    margin-left: -9em; /*set to a negative number 1/2 of your width*/
+    display: inline-block;
+}
+
+.info {
+color: #00529B;
+background-color: #BDE5F8;
+}
+.success {
+color: #4F8A10;
+background-color: #DFF2BF;
+}
+.warning {
+color: #9F6000;
+background-color: #FEEFB3;
+}
+.error {
+color: #D8000C;
+background-color: #FFBABA;
+}
+
+.validation {
+color: #D63301;
+background-color: #FFCCBA;
+}
+
+.infoPicture {
+border:none, outline: none;
+float: left;
+width:20px;
+height:20px;
+background: url("../img/glyphicons-halflings.png") no-repeat -95px -95px;
+margin: 0;
+padding: 0;
+margin-top: -2px;
+margin-left: -40px;
+}
+
+.successPicture {
+border:none, outline: none;
+float: left;
+width:20px;
+height:20px;
+background: url("../img/glyphicons-halflings.png") no-repeat -280px 0px;
+margin: 0;
+padding: 0;
+margin-top: -2px;
+margin-left: -40px;
+}
+
+.warningPicture {
+border:none, outline: none;
+float: left;
+width:20px;
+height:20px;
+background: url("../img/glyphicons-halflings.png") no-repeat -115px -95px;
+margin: 0;
+padding: 0;
+margin-top: -2px;
+margin-left: -40px;
+}
+
+.errorPicture {
+border:none, outline: none;
+float: left;
+width:20px;
+height:20px;
+background: url("../img/glyphicons-halflings.png") no-repeat -305px 0px;
+margin: 0;
+padding: 0;
+margin-top: -2px;
+margin-left: -40px;
+}
+
+.messageText {
+padding: 0;
+margin-top: -5px;
+margin-left: -10px;
+}

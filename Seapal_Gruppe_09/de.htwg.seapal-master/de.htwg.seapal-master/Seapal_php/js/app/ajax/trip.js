@@ -23,7 +23,7 @@ $(function() {
 		$('#entries').append(entry);
 	}
 
-	$('a.view').live("click", function(event) {
+	$('a.view').live("click", function(event) {  
         routeLoad = null;
         tnrValue = $(this).attr('id');
         //get the tripinfo json object
@@ -56,26 +56,17 @@ $(function() {
                         }
                         //push the new Route to the routes array
                         session.map.routes.push(newRoute);
-                        newRouteNotification();
+                        //the route will now be available in the map, display a message
+                        displayMessageBox("successMessage", "The route will now be displayed in the map.", "18em", "-9em");
+                    } else {
+                        //the route is already in the map, display info message
+                        displayMessageBox("infoMessage", "The route will be already displayed in the map.", "20em", "-10em");
                     }
             
                 }, "json");
             }
         );
 	});
-    
-    //call a function "callback" every "delay" ms and x "repetitions"
-    function setIntervalX(callback, delay, repetitions) {
-        var x = 0;
-        var intervalID = window.setInterval(function () {
-
-           callback();
-
-           if (++x === repetitions) {
-               window.clearInterval(intervalID);
-           }
-        }, delay);
-    }
     
     //check if a route is already in the cookie-less session (where all routes are stored)
     function rootAlreadyInMap(route) {
@@ -92,18 +83,6 @@ $(function() {
             }
         }
         return false;
-    }
-
-    //notify that a new route was insert to the map app.
-    function newRouteNotification()
-    {
-        newRouteNotification.state = 0
-        setIntervalX(function() {
-            newRouteNotification.state++;
-            if((newRouteNotification.state = newRouteNotification.state % 2) != 0) document.getElementById("button_app_map").style.background="red";
-            else document.getElementById("button_app_map").style.background=null;
-        }, 1000, 10);
-        document.getElementById("button_app_map").style.background=null;
     }
 	
 	$('a.remove').live("click", function(event) {
@@ -126,45 +105,5 @@ $(function() {
 			
 			$('#messageBox').modal('show');
 		}, "json");		
-	});
-	
-	$('#save').click(function(event) {
-	
-		event.preventDefault();
-	
-		var json = {
-            "titel": $('#titel').val(),
-            "von": $('#von').val(),
-            "nach": $('#nach').val(),
-	        "tstart": $('#tstart').val(),
-	        "tende": $('#tende').val(),
-	        "tdauer": $('#tdauer').val(),
-	        "skipper": $('#skipper').val(),
-	        "crew": $('#crew').val(),
-	        "motor": $('#motor').val(),
-	        "tank": $('#tank').val()        
-	    };
-        
-        console.log(json);
-	
-	    jQuery.post("app_trip_insert.php", json, function(data) { 
-	    
-	    	if (data['tnr'].match(/Error/)) {
-		    	
-		    	$('#dialogTitle').text('Error');
-		    	$('#dialogMessage').text(data['tnr'].replace(/Error: /, ""));
-		    	
-	    	} else {
-		    	
-		    	addEntry( data['tnr'], json );
-	    
-		    	$('#dialogTitle').text('Success');
-		    	$('#dialogMessage').text("Eintrag wurde erfolgreich gespeichert.");
-	    	}
-	    	
-	    	$('#messageBox').modal('show');
-	    
-	    }, "json");
-		
 	});
 });

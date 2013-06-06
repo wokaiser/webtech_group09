@@ -30,69 +30,6 @@ if (!$db_selected)
     		
     		<!-- Content -->
     		<div id="appWrapper" align="center">
-	            <br />
-	            <h2>Routen</h2>
-	            <br />
-	            <div class="container-fluid">
-	            	<form class="form-horizontal"> 
-		            	<div class="row well" style="margin-left: 15%;">
-		            		<div class="span4" align="center">	            		
-			            		<div class="control-group">
-			            			<label class="control-label">Titel</label>
-			            			<input type="text" name="titel" id="titel"/>
-			            		</div>
-			            		<div class="control-group">
-			            			<label class="control-label">Von</label>
-			            			<input type="text" name="von" id="von"/>
-			                    </div>
-			                    <div class="control-group">
-			            			<label class="control-label">Nach</label>
-			            			<input type="text" name="von" id="nach"/>
-			                    </div>        
-		            		</div>
-		            		<div class="span4">
-		            			<div class="control-group">
-			            			<label class="control-label">Start</label>
-			            			<input type="text" name="titel" id="tstart"/>
-			            		</div>
-			            		<div class="control-group">
-			            			<label class="control-label">Ende</label>
-			            			<input type="text" name="von" id="tende"/>
-			                    </div>
-			                    <div class="control-group">
-			            			<label class="control-label">Dauer</label>
-			            			<input type="text" name="von" id="tdauer"/>
-			                    </div>
-		            		</div>
-		            		<div class="span4">
-		            			<div class="control-group">
-			            			<label class="control-label">Skipper</label>
-			            			<input type="text" name="von" id="skipper"/>
-			                    </div>
-			                    <div class="control-group">
-			            			<label class="control-label">Crew</label>
-			            			<textarea cols="20" rows="3" id="crew"></textarea>
-			                    </div>			                            
-		            		</div>
-		            		<div class="span4">
-		            			<div class="control-group">
-			            			<label class="control-label">Motor</label>
-			            			<input type="text" name="motor" id="motor"/>
-			                    </div>	
-			                    <div class="control-group">
-			            			<label class="control-label"></label>
-			            			<span>Tank gefüllt<input type="checkbox" value="false" name="tank" id="tank" style="margin-left:20px; margin-top:-5px;"/></span>
-			                    </div>			                            
-		            		</div>
-		            	</div>      	 
-		            	<div class="control-group">
-			            	<input type="reset" class="btn" id="delete" value="L&ouml;schen" class="button"/>
-			                <input type="submit" class="btn" id="save" name="submit" value="Speichern" class="button"/>
-			            </div>  
-		            </form>
-	            </div>
-	            <br />
-	            <br />
 	            <div class="appTableDiv" id="appRoutelist" align="center">
 	                <table class="appTable table table-hover" id="tableLinesClickable" cellspacing="0px" cellpadding="5px">
 	                    <thead>
@@ -156,6 +93,27 @@ if (!$db_selected)
 				<a href="#" class="btn" data-dismiss="modal"><i class="icon-ok"></i> ok</a>
 			</div>
 		</div>
+        
+        <div class="info" id="infoMessage" style="display: none;">
+            <div class="infoPicture span4"></div>
+            <div class="messageText span8" id="infoMessageText">Some info msg.</div>
+        </div>
+        
+        <div class="success" id="successMessage" style="display: none;">
+            <div class="successPicture span4"></div>
+            <div class="messageText span8" id="successMessageText">Some success msg.</div>
+        </div>
+        
+        <div class="warning" id="warningMessage" style="display: none;">
+            <div class="warningPicture span4"></div>
+            <div class="messageText span8" id="warningMessageText">Some warning msg.</div>
+        </div>
+        
+        <div class="error" id="errorMessage" style="display: none;">
+            <div class="errorPicture span4"></div>
+            <div class="messageText span8" id="errorMessageText">Some error msg.</div>
+        </div>
+
 	    
 	    <!-- Java-Script -->
 	    <script src="../js/bootstrap/bootstrap-dropdown.js"></script>
@@ -164,7 +122,9 @@ if (!$db_selected)
 	    <script src="../js/bootstrap/bootstrap-transition.js"></script>
 	    <script src="../js/bootstrap/bootstrap-collapse.js"></script>
 	    <script src="../js/bootstrap/bootstrap-affix.js"></script>
+        <script src="../js/messageBox/messageBox.js"></script>
 	    
+
 	    <!-- Additional Java-Script -->
         <script src="../js/js-session/json-serialization.js" type="text/javascript"></script>
 	    <script src="../js/js-session/session.js" type="text/javascript"></script>
