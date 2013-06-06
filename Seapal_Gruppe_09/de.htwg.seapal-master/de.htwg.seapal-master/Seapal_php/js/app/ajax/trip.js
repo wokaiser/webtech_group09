@@ -47,10 +47,10 @@ $(function() {
                         //push the new Route to the routes array
                         session.map.routes.push(newRoute);
                         //the route will now be available in the map, display a message
-                        displayMessageBox("successMessage", "The route will now be displayed in the map.", "18em", "-9em");
+                        displayMessageBox("successMessageBox", "The route will now be displayed in the map.", "18em", "-9em");
                     } else {
                         //the route is already in the map, display info message
-                        displayMessageBox("infoMessage", "The route will be already displayed in the map.", "20em", "-10em");
+                        displayMessageBox("infoMessageBox", "The route will be already displayed in the map.", "20em", "-10em");
                     }
             
                 }, "json");

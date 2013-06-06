@@ -2,29 +2,31 @@
  * Some Message Boxes to show a user some information.
  * To use the message boxes you should implement this on your html site:
         
-        <div class="info" id="infoMessage" style="display: none;">
-            <div class="infoPicture span4"></div>
-            <div class="messageText span8" id="infoMessageText">Some info msg.</div>
+        <div class="infoMessageBox" id="infoMessageBox" style="display: none;">
+            <div class="infoMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="infoMessageBoxText">Some info msg.</div>
         </div>
         
-        <div class="success" id="successMessage" style="display: none;">
-            <div class="successPicture span4"></div>
-            <div class="messageText span8" id="successMessageText">Some success msg.</div>
+        <div class="successMessageBox" id="successMessageBox" style="display: none;">
+            <div class="successMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="successMessageBoxText">Some success msg.</div>
         </div>
         
-        <div class="warning" id="warningMessage" style="display: none;">
-            <div class="warningPicture span4"></div>
-            <div class="messageText span8" id="warningMessageText">Some warning msg.</div>
+        <div class="warningMessageBox" id="warningMessageBox" style="display: none;">
+            <div class="warningMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="warningMessageBoxText">Some warning msg.</div>
         </div>
         
-        <div class="error" id="errorMessage" style="display: none;">
-            <div class="errorPicture span4"></div>
-            <div class="messageText span8" id="errorMessageText">Some error msg.</div>
+        <div class="errorMessageBox" id="errorMessageBox" style="display: none;">
+            <div class="errorMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="errorMessageBoxText">Some error msg.</div>
         </div>
+        
+ 
  
  */
 
-.info, .success, .warning, .error, .validation {
+.infoMessageBox, .successMessageBox, .warningMessageBox, .errorMessageBox {
     border: 1px solid;
     margin: 10px 0px;
     padding:15px 10px 15px 50px;
@@ -43,29 +45,24 @@
     display: inline-block;
 }
 
-.info {
+.infoMessageBox {
 color: #00529B;
 background-color: #BDE5F8;
 }
-.success {
+.successMessageBox {
 color: #4F8A10;
 background-color: #DFF2BF;
 }
-.warning {
+.warningMessageBox {
 color: #9F6000;
 background-color: #FEEFB3;
 }
-.error {
+.errorMessageBox {
 color: #D8000C;
 background-color: #FFBABA;
 }
 
-.validation {
-color: #D63301;
-background-color: #FFCCBA;
-}
-
-.infoPicture {
+.infoMessageBoxPicture {
 border:none, outline: none;
 float: left;
 width:20px;
@@ -77,7 +74,7 @@ margin-top: -2px;
 margin-left: -40px;
 }
 
-.successPicture {
+.successMessageBoxPicture {
 border:none, outline: none;
 float: left;
 width:20px;
@@ -89,7 +86,7 @@ margin-top: -2px;
 margin-left: -40px;
 }
 
-.warningPicture {
+.warningMessageBoxPicture {
 border:none, outline: none;
 float: left;
 width:20px;
@@ -101,7 +98,7 @@ margin-top: -2px;
 margin-left: -40px;
 }
 
-.errorPicture {
+.errorMessageBoxPicture {
 border:none, outline: none;
 float: left;
 width:20px;
@@ -113,7 +110,7 @@ margin-top: -2px;
 margin-left: -40px;
 }
 
-.messageText {
+.defaultMessageBoxText {
 padding: 0;
 margin-top: -5px;
 margin-left: -10px;

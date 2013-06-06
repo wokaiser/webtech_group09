@@ -88,24 +88,24 @@ if (!$db_selected)
 			</div>
 		</div>
         
-        <div class="info" id="infoMessage" style="display: none;">
-            <div class="infoPicture span4"></div>
-            <div class="messageText span8" id="infoMessageText">Some info msg.</div>
+        <div class="infoMessageBox" id="infoMessageBox" style="display: none;">
+            <div class="infoMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="infoMessageBoxText">Some info msg.</div>
         </div>
         
-        <div class="success" id="successMessage" style="display: none;">
-            <div class="successPicture span4"></div>
-            <div class="messageText span8" id="successMessageText">Some success msg.</div>
+        <div class="successMessageBox" id="successMessageBox" style="display: none;">
+            <div class="successMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="successMessageBoxText">Some success msg.</div>
         </div>
         
-        <div class="warning" id="warningMessage" style="display: none;">
-            <div class="warningPicture span4"></div>
-            <div class="messageText span8" id="warningMessageText">Some warning msg.</div>
+        <div class="warningMessageBox" id="warningMessageBox" style="display: none;">
+            <div class="warningMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="warningMessageBoxText">Some warning msg.</div>
         </div>
         
-        <div class="error" id="errorMessage" style="display: none;">
-            <div class="errorPicture span4"></div>
-            <div class="messageText span8" id="errorMessageText">Some error msg.</div>
+        <div class="errorMessageBox" id="errorMessageBox" style="display: none;">
+            <div class="errorMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="errorMessageBoxText">Some error msg.</div>
         </div>
 
 	    
