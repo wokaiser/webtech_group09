@@ -22,16 +22,7 @@ while ($row = mysql_fetch_array($result)) {
     array_push($data, array(
         'name'     => $row['name'],
         'lat'      => floatval($row['lat']),
-        'lng'      => floatval($row['lng']),
-        'btm'      => $row['btm'],
-        'dtm'      => $row['dtm'],
-        'sog'      => $row['sog'],
-        'cog'      => $row['cog'],
-        'manoever' => $row['manoever'],
-        'vorsegel' => $row['vorsegel'],
-        'marker'   => $row['marker'],
-        'wdate'    => $row['wdate'],
-        'wtime'    => $row['wtime']
+        'lng'      => floatval($row['lng'])
 ));
 }
 // Send the data.

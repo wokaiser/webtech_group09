@@ -36,13 +36,6 @@ if (!$db_selected)
                         <input type='text'   class="routeInfoInput" id='titel'   placeholder='Titel' size='30' maxlength='30'/><br/>
                         <input type='text'   class="routeInfoInput" id='von'     placeholder='Von' size='30' maxlength='60'/><br/>
                         <input type='text'   class="routeInfoInput" id='nach'    placeholder='Nach' size='30' maxlength='60'/><br/>
-                        <input type='text'   class="routeInfoInput" id='tstart'  placeholder='Start' size='30' maxlength='30'/><br/>
-                        <input type='text'   class="routeInfoInput" id='tende'   placeholder='Ende' size='30' maxlength='30'/><br/>
-                        <input type='text'   class="routeInfoInput" id='tdauer'  placeholder='Dauer' size='30' maxlength='30'/><br/>
-                        <input type='text'   class="routeInfoInput" id='skipper' placeholder='Skipper' size='30' maxlength='30'/><br/>
-                        <input type='text'   class="routeInfoInput" id='crew'    placeholder='Crew' size='30' maxlength='30'/><br/>
-                        <input type='text'   class="routeInfoInput" id='motor'   placeholder='Motor' size='30' maxlength='30'/><br/>
-                        <input type='text'   class="routeInfoInput" id='tank'    placeholder='Tank gefüllt' size='30' maxlength='30'/><br/>
 	                    <input type="button" class="routeInfoInput btn" value="l&ouml;schen" id="deleteRouteButton" class="routeButton" onclick="javascript: deleteRoute()" />
 	                    <input type="button" class="routeInfoInput btn" value="speichern" id="saveRouteButton" class="routeButton" onclick="javascript: saveRoute()" />
 	                    <input type="button" class="routeInfoInput btn" value="beenden" id="stopRouteButton" class="routeButton" onclick="javascript: stopRouteMode()" />

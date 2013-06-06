@@ -45,9 +45,9 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
     };
 }
 
-const TRIP_INFO = ["titel", "von", "nach", "tstart", "tende", "tdauer", "skipper", "crew", "motor", "tank"];
+const TRIP_INFO = ["titel", "von", "nach"];
 
-const ROUTE_MARKER = ["name", "btm", "dtm", "sog", "cog", "manoever", "vorsegel", "wdate", "wtime"]
+const ROUTE_MARKER = ["name"]
 
 /*possible status of a map, which will be displayed in the map layer.*/
 ROUTE_STATUS = {UNSAVED : "Route not saved to database.", MAP_OVERLAY : 1}
@@ -59,13 +59,6 @@ function getNewRoute()
         titel       : "",
         von         : "",
         nach        : "",
-        tstart      : "",
-        tende       : "",
-        tdauer      : "",
-        skipper     : "",
-        crew        : "",
-        motor       : "",
-        tank        : "",
         marker      : [],
         lastZoom    : 5
     });
@@ -77,15 +70,6 @@ function getNewRouteMarker()
     {
         name     : "Marker",
         lat      : null,
-        lng      : null,
-        btm      : "BTM",
-        dtm      : "DTM",
-        sog      : "SOG",
-        cog      : "COG",
-        manoever : "manoever",
-        vorsegel : "vorsegel",
-        marker   : "marker",
-        wdate    : "wdate",
-        wtime    : "wtime"
+        lng      : null
     });
 }

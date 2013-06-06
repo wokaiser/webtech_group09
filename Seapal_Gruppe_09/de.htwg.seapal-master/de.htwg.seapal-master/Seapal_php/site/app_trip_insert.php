@@ -10,11 +10,12 @@
 	    exit;
 	}
 	
-	$sql = "INSERT INTO ".const_mysql_trip." (bnr, titel, von, nach, skipper, crew, tstart, tende, tdauer, motor, tank) VALUES (
+	$sql = "INSERT INTO ".const_mysql_trip." (bnr, titel, von, nach, lastZoom) VALUES (
 				" . $_SESSION['bnr'] . ",
 				'" . $_POST['titel'] . "',
 				'" . $_POST['von'] . "',
-				" . $_POST['nach'] . ");";
+                '" . $_POST['nach'] . "',
+				" . $_POST['lastZoom'] . ");";
 	
 	$result = mysql_query($sql, $sql_connection);
 	
@@ -24,8 +25,8 @@
 	    exit;
 	}
 	
-	$result = mysql_query("SHOW TABLE STATUS LIKE 'tripinfo'");
-	
+	$result = mysql_query("SHOW TABLE STATUS LIKE '".const_mysql_trip."'");
+    
 	if (!$result) {
 	    $err = array( "tnr" => 'Error: ' . mysql_error() );
 	    echo json_encode($err);

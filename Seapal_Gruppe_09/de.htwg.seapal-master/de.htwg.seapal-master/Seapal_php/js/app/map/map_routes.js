@@ -48,30 +48,6 @@ $(function () {
     $.contextMenu.types.name = function(item, opt, root) {
         $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='name' class='routeMarkerInfoInput' placeholder='name' size='30' maxlength='30'/>").appendTo(this);
     };
-    $.contextMenu.types.btm = function(item, opt, root) {
-        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='btm' class='routeMarkerInfoInput' placeholder='btm' size='30' maxlength='30'/>").appendTo(this);
-    }; 
-    $.contextMenu.types.dtm = function(item, opt, root) {
-        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='dtm' class='routeMarkerInfoInput' placeholder='dtm' size='30' maxlength='30'/>").appendTo(this);
-    };
-    $.contextMenu.types.sog = function(item, opt, root) {
-        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='sog' class='routeMarkerInfoInput' placeholder='sog' size='30' maxlength='30'/>").appendTo(this);
-    };
-    $.contextMenu.types.cog = function(item, opt, root) {
-        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='cog' class='routeMarkerInfoInput' placeholder='cog' size='30' maxlength='30'/>").appendTo(this);
-    };
-    $.contextMenu.types.manoever = function(item, opt, root) {
-        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='manoever' class='routeMarkerInfoInput' placeholder='manoever' size='30' maxlength='30'/>").appendTo(this);
-    };
-    $.contextMenu.types.vorsegel = function(item, opt, root) {
-        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='vorsegel' class='routeMarkerInfoInput' placeholder='vorsegel' size='30' maxlength='30'/>").appendTo(this);
-    };
-    $.contextMenu.types.wdate = function(item, opt, root) {
-        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='wdate' class='routeMarkerInfoInput' placeholder='wdate' size='30' maxlength='30'/>").appendTo(this);
-    };
-    $.contextMenu.types.wtime = function(item, opt, root) {
-        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='wtime' class='routeMarkerInfoInput' placeholder='wtime' size='30' maxlength='30'/>").appendTo(this);
-    };
 
     function deleteMarkerCallback (key) {
         deleteRouteMarker();
@@ -96,14 +72,6 @@ $(function () {
             "addMarker" : { name : "Wegpunkt hinzuf&uuml;gen", icon: "addMarker", callback: addMarkerCallback},
             separator1: "-----",
             name     : {type: "name"},
-            btm      : {type: "btm"},
-            dtm      : {type: "dtm"},
-            sog      : {type: "sog"},
-            cog      : {type: "cog"},
-            manoever : {type: "manoever"},
-            vorsegel : {type: "vorsegel"},
-            wdate    : {type: "wdate"},
-            wtime    : {type: "wtime"}
         },
         events: {
             show: function(opt) {                
@@ -227,13 +195,10 @@ function addRouteMarker(position, index) {
         currentRoute.markerArray.push(marker);
         //add marker to session if not on initialization and route mode is on
         if (!onInitialize && MODE.ROUTE == currentMode) {
-            var newDate = new Date();
             newMarker = getNewRouteMarker()
             newMarker.name = "Marker "+(session.map.routes[activeRouteInSession].marker.length+1)
             newMarker.lat = position.lat();
             newMarker.lng = position.lng();
-            newMarker.wdate = newDate.today();
-            newMarker.wtime = newDate.timeNow();
             session.map.routes[activeRouteInSession].marker.push(newMarker);
         }
     } else {
@@ -256,13 +221,10 @@ function addRouteMarker(position, index) {
         currentRoute.markerArray.splice(index, 0, marker);
         //add marker to session if not on initialization and route mode is on
         if (!onInitialize && MODE.ROUTE == currentMode) {
-            var newDate = new Date();
             newMarker = getNewRouteMarker()
             newMarker.name = "Marker "+(session.map.routes[activeRouteInSession].marker.length+1)
             newMarker.lat = position.lat();
             newMarker.lng = position.lng();
-            newMarker.wdate = newDate.today();
-            newMarker.wtime = newDate.timeNow();
             session.map.routes[activeRouteInSession].marker.splice(index, 0, newMarker);
         }
     }
@@ -570,7 +532,7 @@ function saveRouteInfoToSession() {
 //save a route from the map to the database
 function saveRoute() {
     saveRouteInfoToSession();
-    var route_name = $('#route_name').val();
+    var route_name = $('#titel').val();
     
     if (js_loggedin != true) {
         $('#dialogTitle').text('Access denied');
@@ -591,8 +553,6 @@ function saveRoute() {
     } else {
         //save the zoom level, at which the user looked at this route.
         session.map.routes[activeRouteInSession].lastZoom = map.getZoom();
-        //TODO delete temporary satement
-        session.map.routes[activeRouteInSession].tank = true;
         jQuery.post("app_trip_insert.php", session.map.routes[activeRouteInSession], function(data) { 
             if (data['tnr'].match(/Error/)) {                
                 $('#dialogTitle').text('Error');
