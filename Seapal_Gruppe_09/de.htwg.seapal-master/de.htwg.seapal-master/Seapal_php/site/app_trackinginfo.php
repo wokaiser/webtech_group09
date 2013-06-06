@@ -51,25 +51,25 @@ if (!$db_selected)
 		                    <div class="span4">
 			                    <div class="control-group">
 			            			<label class="control-label">Start</label>
-			            			<input class="input-medium" type="text" name="start" id="start" />
+			            			<input class="input-medium" type="text" name="tstart" id="tstart" />
 			                    </div>
 		                    </div>
 		                    <div class="span4">
 			                    <div class="control-group">
 			            			<label class="control-label">Ende</label>
-			            			<input class="input-medium" type="text" name="end" id="end" />
+			            			<input class="input-medium" type="text" name="tende" id="tende" />
 			                    </div>
 		                    </div>
 		                    <div class="span4">
 			                    <div class="control-group">
 			            			<label class="control-label">Dauer</label>
-			            			<input class="input-medium" type="text" name="duration" id="duration" />
+			            			<input class="input-medium" type="text" name="tdauer" id="tdauer" />
 			                    </div>
 		                    </div>	            		      
 		            	</div>   
                         <div class="control-group">
                             <input type="reset" class="btn" id="delete" value="L&ouml;schen" class="button"/>
-                            <input type="submit" class="btn" id="save_weather" name="submit_weather" value="Speichern" class="button"/>
+                            <input type="submit" class="btn" id="save_tracking" name="submit_tracking" value="Speichern" class="button"/>
                         </div>  
                     </form>
                 </div>
@@ -87,7 +87,7 @@ if (!$db_selected)
 	                            <th></th>
 	                        </tr>
 	                    </thead>
-		                <tbody id="entries_trackings">
+		                <tbody id="entries_tracking">
 	
 	                        <?php
 	                        	$tnr = -1;
@@ -112,8 +112,8 @@ if (!$db_selected)
 		                            echo("<td>" . $row['tende'] . "</td>");
 		                            echo("<td>" . $row['tdauer'] . "</td>");
 		                            echo("<td style='width:30px; text-align:right;'><div class='btn-group'>");
-		                            echo("<a class='btn btn-small view weather' id='" . $row['tracknr'] . "'><span><i class='icon-eye-open'></i></span></a>");
-		                            echo("<a class='btn btn-small remove weather' id='" . $row['tracknr'] . "'><span><i class='icon-remove'></i></span></a>");
+		                            echo("<a class='btn btn-small view tracking' id='" . $row['tracknr'] . "'><span><i class='icon-eye-open'></i></span></a>");
+		                            echo("<a class='btn btn-small remove tracking' id='" . $row['tracknr'] . "'><span><i class='icon-remove'></i></span></a>");
 		                            echo("<a href='app_tracking_point.php?tracknr=" . $row['tracknr'] . "' class='btn btn-small redirect' id='" . $row['tracknr'] . "'><span><i class='icon-chevron-right'></i></span></a>");
 		                            echo("</div></td>");
 		                            echo("</tr>");
@@ -150,6 +150,7 @@ if (!$db_selected)
 	    <!-- Additional Java-Script -->
 	   
     <?php @mysql_close($sql_connection); ?>
+    <script src="../js/app/ajax/tracking.js" type="text/javascript"></script>
        
 	</body>
 </html>
