@@ -93,8 +93,10 @@ $(function () {
 
 // track context menu ------------------------------------------------ //
 $(function () {
-    $.contextMenu.types.name = function(item, opt, root) {
-        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='trackLabel' class='routeMarkerInfoInput' placeholder='' size='30' maxlength='30'/>").appendTo(this);
+    $.contextMenu.types.trackLabel = function(item, opt, root) {
+        for (var i in TRACKING_POINT) {
+            $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='trackLabel' class='routeMarkerInfoInput' placeholder='' size='30' maxlength='30'/>").appendTo(this);
+        }
     };
     
     $.contextMenu({
