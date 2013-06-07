@@ -18,3 +18,15 @@ function displayMessageBox(msgId, txt, width, marginLeft) {
     //hide the message after some seconds
     setTimeout(function() {document.getElementById(msgId).style.display = "none";},20000);
 }
+
+/*hover effect, to hide a messagebox on hover.*/
+$(document).ready(function() {
+ $('div.messageBox').hover(
+     function () {
+       $(this).css({"display":"none"});
+     }, 
+     function () {
+     }
+ );
+
+});

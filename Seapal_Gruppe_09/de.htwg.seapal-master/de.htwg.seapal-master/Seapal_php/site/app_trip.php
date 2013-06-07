@@ -88,26 +88,25 @@ if (!$db_selected)
 			</div>
 		</div>
         
-        <div class="infoMessageBox" id="infoMessageBox" style="display: none;">
+        <div class="messageBox infoMessageBox" id="infoMessageBox" style="display: none;">
             <div class="infoMessageBoxPicture span4"></div>
             <div class="defaultMessageBoxText span8" id="infoMessageBoxText">Some info msg.</div>
         </div>
         
-        <div class="successMessageBox" id="successMessageBox" style="display: none;">
+        <div class="messageBox successMessageBox" id="successMessageBox" style="display: none;">
             <div class="successMessageBoxPicture span4"></div>
             <div class="defaultMessageBoxText span8" id="successMessageBoxText">Some success msg.</div>
         </div>
         
-        <div class="warningMessageBox" id="warningMessageBox" style="display: none;">
+        <div class="messageBox warningMessageBox" id="warningMessageBox" style="display: none;">
             <div class="warningMessageBoxPicture span4"></div>
             <div class="defaultMessageBoxText span8" id="warningMessageBoxText">Some warning msg.</div>
         </div>
         
-        <div class="errorMessageBox" id="errorMessageBox" style="display: none;">
+        <div class="messageBox errorMessageBox" id="errorMessageBox" style="display: none;">
             <div class="errorMessageBoxPicture span4"></div>
             <div class="defaultMessageBoxText span8" id="errorMessageBoxText">Some error msg.</div>
         </div>
-
 	    
 	    <!-- Java-Script -->
 	    <script src="../js/bootstrap/bootstrap-dropdown.js"></script>
