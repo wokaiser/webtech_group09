@@ -27,9 +27,9 @@ INSERT INTO seapal.wegpunkte (tnr, name, lat, lng) VALUES (2, "Marker 5", 47.66,
 INSERT INTO seapal.tracking (tnr, skipper, crew, tstart, tende, tdauer) VALUES (1, "Cpt. Nemo", "Tick Trick Track", DATE("2012-07-02"), DATE("2012-07-02"), 160);
 
 /* insert into tracking points */
-INSERT INTO seapal.trackingPoint (tracknr, marker, btm, dtm, sog, cog, manoever, vorsegel, wdate, wtime, motor, tank, windstaerke, windrichtung, luftdruck, temperatur, wolken, regen, wellenhoehe, wellenrichtung) VALUES
-(1, "Marker 1", 15, 200, 5, 13, "Wende", "Spinnacker", "2013-07-02", "16:43:00", TRUE, "VOLL", "2", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
-(1, "Marker 2", 16, 201, 6, 14, "Wende", "Spinnacker", "2013-07-02", "16:53:00", TRUE, "VOLL", "3", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
-(1, "Marker 3", 17, 202, 7, 15, "Wende", "Spinnacker", "2013-07-02", "17:03:00", TRUE, "VOLL", "4", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
-(1, "Marker 4", 18, 203, 8, 16, "Wende", "Spinnacker", "2013-07-02", "17:13:00", TRUE, "VOLL", "5", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
-(1, "Marker 5", 19, 204, 9, 17, "Wende", "Spinnacker", "2013-07-02", "17:23:00", TRUE, "VOLL", "6", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW");
+INSERT INTO seapal.trackingPoint (tracknr, marker, lat, lng, btm, dtm, sog, cog, manoever, vorsegel, wdate, wtime, motor, tank, windstaerke, windrichtung, luftdruck, temperatur, wolken, regen, wellenhoehe, wellenrichtung) VALUES
+(1, "Marker 1", 47.66, 9.17916667, 15, 200, 5, 13, "Wende", "Spinnacker", "2013-07-02", "16:43:00", TRUE, "VOLL", "2", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
+(1, "Marker 2", 47.66055556, 9.181388889, 16, 201, 6, 14, "Wende", "Spinnacker", "2013-07-02", "16:53:00", TRUE, "VOLL", "3", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
+(1, "Marker 3", 47.66166667, 9.206944444, 17, 202, 7, 15, "Wende", "Spinnacker", "2013-07-02", "17:03:00", TRUE, "VOLL", "4", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
+(1, "Marker 4", 47.66388889, 9.221944444, 18, 203, 8, 16, "Wende", "Spinnacker", "2013-07-02", "17:13:00", TRUE, "VOLL", "5", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW"),
+(1, "Marker 5", 47.67222222, 9.313333333, 19, 204, 9, 17, "Wende", "Spinnacker", "2013-07-02", "17:23:00", TRUE, "VOLL", "6", "ONO", 900, 23, "WOLKENLOS", "KEIN", 30, "NW");

@@ -8,8 +8,10 @@
 	    die('Error: ' . mysql_error());
 	}
     
-	$sql = "INSERT INTO ".const_mysql_trackingPoints." (tracknr, windstaerke, windrichtung, luftdruck, temperatur, wolken, regen, wellenhoehe, wellenrichtung, marker, btm, dtm, sog, cog, manoever, vorsegel, wdate, wtime, motor, tank) VALUES (
+	$sql = "INSERT INTO ".const_mysql_trackingPoints." (tracknr, lat, lng, windstaerke, windrichtung, luftdruck, temperatur, wolken, regen, wellenhoehe, wellenrichtung, marker, btm, dtm, sog, cog, manoever, vorsegel, wdate, wtime, motor, tank) VALUES (
 				'" . $_POST['tracknr'] . "',
+				'" . $_POST['lat'] . "',
+				'" . $_POST['lng'] . "',
 				'" . $_POST['strength'] . "',
 				'" . $_POST['wind_direction'] . "',
 				'" . $_POST['airpressure'] . "',

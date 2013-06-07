@@ -86,6 +86,8 @@ CREATE TABLE seapal.tracking (
 CREATE TABLE seapal.trackingPoint (
 	trackpointnr INT NOT NULL AUTO_INCREMENT,
 	tracknr INT NOT NULL,
+	lat REAL NOT NULL,
+	lng REAL NOT NULL,
 	marker VARCHAR(30) DEFAULT NULL,
 	btm INT DEFAULT NULL, /* bearing to marker: degree */
 	dtm INT DEFAULT NULL, /* destination to marker: meters */
