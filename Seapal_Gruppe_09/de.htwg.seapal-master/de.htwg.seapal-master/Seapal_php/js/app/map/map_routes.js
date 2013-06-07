@@ -66,12 +66,12 @@ $(function () {
     }
     
     $.contextMenu({
-        selector: '#routeContextMenu_active',
+        selector: MODE.ROUTE.activeContextMenu,
         items: {
             "deleteMarker" : { name : "Wegpunkt l&ouml;schen", icon: "deleteMarker", callback: deleteMarkerCallback},
             "addMarker" : { name : "Wegpunkt hinzuf&uuml;gen", icon: "addMarker", callback: addMarkerCallback},
             separator1: "-----",
-            name     : {type: "name"},
+            name     : {type: "name"}
         },
         events: {
             show: function(opt) {                
@@ -91,10 +91,58 @@ $(function () {
     });
 });
 
+// track context menu ------------------------------------------------ //
+$(function () {
+    $.contextMenu.types.name = function(item, opt, root) {
+        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='trackLabel' class='routeMarkerInfoInput' placeholder='' size='30' maxlength='30'/>").appendTo(this);
+    };
+    
+    $.contextMenu({
+        selector: MODE.TRACKING.activeContextMenu,
+        items: {
+            name            : {type: "trackLabel"},
+            marker          : {type: "trackLabel"}, 
+            btm             : {type: "trackLabel"}, 
+            dtm             : {type: "trackLabel"}, 
+            sog             : {type: "trackLabel"},
+            cog             : {type: "trackLabel"}, 
+            manoever        : {type: "trackLabel"}, 
+            vorsegel        : {type: "trackLabel"}, 
+            wdate           : {type: "trackLabel"}, 
+            wtime           : {type: "trackLabel"},
+            motor           : {type: "trackLabel"},
+            tank            : {type: "trackLabel"},
+            windstaerke     : {type: "trackLabel"},
+            windrichtung    : {type: "trackLabel"}, 
+            luftdruck       : {type: "trackLabel"}, 
+            temperatur      : {type: "trackLabel"},
+            wolken          : {type: "trackLabel"},
+            regen           : {type: "trackLabel"},
+            wellenhoehe     : {type: "trackLabel"},
+            wellenrichtung  : {type: "trackLabel"}
+        },
+        events: {
+            show: function(opt) {                
+                //load the tracking info from the session to the input boxes.
+                for (var i in TRACKING_POINT) {
+                    document.getElementById(TRACKING_POINT[i]).value = session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession][TRACKING_POINT[i]];
+                }
+            }, 
+            hide: function(opt) {
+                if (INACTIVE == activeRouteMarkerInSession) return;
+                //store the trip info to the session from the input boxes.
+                for (var i in TRACKING_POINT) {
+                    session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession][TRACKING_POINT[i]] = document.getElementById(TRACKING_POINT[i]).value;
+                }
+            }
+        }
+    });
+});
 
+//context menu for inactive route
 $(function () {
     $.contextMenu({
-        selector: '#routeContextMenu_inactive',
+        selector: MODE.ROUTE.inactiveContextMenu,
         callback: function (key) {
             if (key == "selectRoute") {
                 if (currentRoute != null) {
@@ -118,7 +166,33 @@ $(function () {
             }
         },
         items: {
-            "selectRoute": { name: "Diese Route ausw&auml;hlen", icon: "selectRoute" }
+            "selectRoute": { name: "Select this route", icon: "selectRoute" }
+        }
+    });
+});
+
+//context menu for inactive track
+$(function () {
+    $.contextMenu({
+        selector: MODE.TRACKING.inactiveContextMenu,
+        callback: function (key) {
+            if (key == "selectTrack") {
+                if (currentRoute != null) {
+                    toggleDraggable(currentRoute);
+                    currentRoute.route.setOptions(inactivePathOptions);
+                }
+                if (currentMode == MODE.DISTANCE) {
+                    document.getElementById('distanceToolContainer').style.display = "block";
+                    stopDistanceToolMode();
+                }
+                currentRoute = getRouteByMarker(selectedRouteMarker);
+                currentMode = MODE.TRACKING;
+                currentRoute.route.setOptions(activePathOptions);
+                toggleDraggable(currentRoute);
+            }
+        },
+        items: {
+            "selectTrack": { name: "Select this track", icon: "selectRoute" }
         }
     });
 });
@@ -135,59 +209,86 @@ function addRouteMarker(position, index) {
         icon: routeMarkerImage,
         draggable: true
         });
-    } else {
+        //add the action listener
+        google.maps.event.addListener(marker, 'click', function (event) {
+            selectedRouteMarker = getRouteMarker(event.latLng);
+            var pixel = fromLatLngToPixel(event.latLng);
+            if (getRouteByMarker(selectedRouteMarker) == currentRoute) {
+                $(MODE.ROUTE.activeContextMenu).contextMenu({ x: pixel.x, y: pixel.y });
+            } else {
+                $(MODE.ROUTE.inactiveContextMenu).contextMenu({ x: pixel.x, y: pixel.y });
+            }
+        });
+    } else if (currentMode == MODE.DISTANCE) {
         marker = new google.maps.Marker({
         position: position,
         map: map,
         icon: distanceMarkerImage,
         draggable: true
         });
-    }
-      
-
-    google.maps.event.addListener(marker, 'click', function (event) {
-        selectedRouteMarker = getRouteMarker(event.latLng);
-        var pixel = fromLatLngToPixel(event.latLng);
-        if (getRouteByMarker(selectedRouteMarker) == currentRoute) {
-            $('#routeContextMenu_active').contextMenu({ x: pixel.x, y: pixel.y });
-        } else {
-            $('#routeContextMenu_inactive').contextMenu({ x: pixel.x, y: pixel.y });
-        }
-    });
-
-    google.maps.event.addListener(marker, 'dragstart', function (event) {
-        selectedRouteMarker = getRouteMarker(event.latLng);
-        var path = currentRoute.route.getPath();
-        path.forEach(function (item, index) {
-            if (path.getAt(index) == selectedRouteMarker.position) {
-                draggedMarkerIndex = index;
+        //add the action listener
+        google.maps.event.addListener(marker, 'click', function (event) {
+            selectedRouteMarker = getRouteMarker(event.latLng);
+            var pixel = fromLatLngToPixel(event.latLng);
+            if (getRouteByMarker(selectedRouteMarker) == currentRoute) {
+                $(MODE.DISTANCE.activeContextMenu).contextMenu({ x: pixel.x, y: pixel.y });
+            } else {
+                $(MODE.DISTANCE.inactiveContextMenu).contextMenu({ x: pixel.x, y: pixel.y });
             }
         });
-    });
+    } else if (currentMode == MODE.TRACKING) {
+        marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        icon: trackingMarkerImage,
+        draggable: false
+        });
+        //add the action listener
+        google.maps.event.addListener(marker, 'click', function (event) {
+            selectedRouteMarker = getRouteMarker(event.latLng);
+            var pixel = fromLatLngToPixel(event.latLng);
+            if (getRouteByMarker(selectedRouteMarker) == currentRoute) {
+                $(MODE.TRACKING.activeContextMenu).contextMenu({ x: pixel.x, y: pixel.y });
+            } else {
+                $(MODE.TRACKING.inactiveContextMenu).contextMenu({ x: pixel.x, y: pixel.y });
+            }
+        });
+    } 
 
-    google.maps.event.addListener(marker, 'drag', function (event) {
-        var path = currentRoute.route.getPath();
-        path.removeAt(draggedMarkerIndex);
-        path.insertAt(draggedMarkerIndex, selectedRouteMarker.position);
-        session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].lat = selectedRouteMarker.position.lat();
-        session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].lng = selectedRouteMarker.position.lng();
-        updateRouteDistance();
+    if (currentMode != MODE.TRACKING) {
+        google.maps.event.addListener(marker, 'dragstart', function (event) {
+            selectedRouteMarker = getRouteMarker(event.latLng);
+            var path = currentRoute.route.getPath();
+            path.forEach(function (item, index) {
+                if (path.getAt(index) == selectedRouteMarker.position) {
+                    draggedMarkerIndex = index;
+                }
+            });
+        });
+
+        google.maps.event.addListener(marker, 'drag', function (event) {
+            var path = currentRoute.route.getPath();
+            path.removeAt(draggedMarkerIndex);
+            path.insertAt(draggedMarkerIndex, selectedRouteMarker.position);
+            session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].lat = selectedRouteMarker.position.lat();
+            session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].lng = selectedRouteMarker.position.lng();
+            updateRouteDistance();
+            
+            if (currentRoute.markerArray.indexOf(selectedRouteMarker) == 0) {
+            
+                if (currentMode == MODE.ROUTE) {
+                    currentRoute.markerInfobox = drawRouteInfobox(marker.position, currentRoute.name);
+
+                } else {
+                    currentRoute.markerInfobox = drawDistanceInfobox(marker.position);
+                }
+            }
+        });
         
-        if (currentRoute.markerArray.indexOf(selectedRouteMarker) == 0) {
-        
-        	if (currentMode == MODE.ROUTE) {
-	        	currentRoute.markerInfobox = drawRouteInfobox(marker.position, currentRoute.name);
-
-        	} else {
-	        	currentRoute.markerInfobox = drawDistanceInfobox(marker.position);
-        	}
-        }
-    });
-    
-    google.maps.event.addListener(marker, 'dragend', function (event) {
-        updateRouteMenuEntries();
-    });
-
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+            updateRouteMenuEntries();
+        });
+    }
     marker.setMap(map);
 
     if (index == null) {
@@ -301,6 +402,8 @@ function updateRouteDistance() {
 
 //function to update "von" und "nach" of route by using geolocation
 function updateRouteMenuEntries() {
+    //update route menu entries just in route mode
+    if (currentMode != MODE.ROUTE) return;
     //Get near locations
     var startPosition = new google.maps.LatLng(session.map.routes[activeRouteInSession].marker[0].lat, session.map.routes[activeRouteInSession].marker[0].lng);
     var startPositionString = "";
@@ -334,6 +437,18 @@ function updateRouteMenuEntries() {
     });
 }
 
+//draw trackingInfobox
+function drawTrackingInfobox(latLng, name) {
+
+    if (currentRoute.markerInfobox != null) {
+        currentRoute.markerInfobox.setMap(null);
+    }
+
+    customTxt = "<div class='markerInfoBox label label-info' id='fixedMarkerInfobox'>"
+     + name + "</div>";
+    return new TxtOverlay(latLng, customTxt, "coordinate_info_box", map, 40, -29);
+}
+
 // draw fixedMarkerInfobox 
 function drawRouteInfobox(latLng, name) {
 
@@ -357,23 +472,34 @@ function drawDistanceInfobox(latLng) {
     return new TxtOverlay(latLng, customTxt, "coordinate_info_box", map, 40, -29);
 }
 
-function startNewRoute(position, isDistanceToolRoute, routeName) {
+function startNewRoute(position, mode, routeName) {
     var route;
-    
-    if (isDistanceToolRoute) {
+
+    if (MODE.DISTANCE == mode) {
         route = new google.maps.Polyline(distanceToolOptions);
         if (!onInitialize) {document.getElementById('distanceToolContainer').style.display = "block";}
         currentMode = MODE.DISTANCE;
-    } else {
+    } else if (MODE.ROUTE == mode) {
         route = new google.maps.Polyline(activePathOptions);
         if (!onInitialize) {document.getElementById('routeMenuContainer').style.display = "block";}
         currentMode = MODE.ROUTE;
+    } else if (MODE.TRACKING == mode) {
+        route = new google.maps.Polyline(activePathOptions);
+     //   if (!onInitialize) {document.getElementById('routeMenuContainer').style.display = "block";}
+        currentMode = MODE.TRACKING;
     }
     
     //check if not in initialization
     if (!onInitialize && MODE.ROUTE == currentMode) {
         //add a new route to the session
         session.map.routes.push(getNewRoute());
+        //set the active route for the session access
+        activeRouteInSession = session.map.routes.length - 1;
+    } else if (!onInitialize && MODE.TRACKING == currentMode) {
+        //close the actual displayed route
+        stopRouteMode();
+        //add a new route to the session
+        session.map.routes.push(getNewTracking());
         //set the active route for the session access
         activeRouteInSession = session.map.routes.length - 1;
     }
@@ -385,11 +511,13 @@ function startNewRoute(position, isDistanceToolRoute, routeName) {
     // initialize new route
     currentRoute = new Route(route, routeName);
     route.setMap(map);
-    
-    if (!isDistanceToolRoute) {
-        currentRoute.markerInfobox = drawRouteInfobox(position, currentRoute.name);
-    } else {
+
+    if (MODE.DISTANCE == mode) {
 	    currentRoute.markerInfobox = drawDistanceInfobox(position);
+    } else if (MODE.ROUTE == mode) {
+        currentRoute.markerInfobox = drawRouteInfobox(position, currentRoute.name);
+    }  else if (MODE.TRACKING == mode) {
+        currentRoute.markerInfobox = drawTrackingInfobox(position, currentRoute.name);
     }
     
     routeArray.push(currentRoute);
@@ -504,8 +632,11 @@ function stopDistanceToolMode() {
 }
 
 function deleteRoute() {
-    //delete the route from the session
-    session.map.routes.splice(activeRouteInSession, 1);
+    //delete from session, only if we are NOT in DISTANCE mode
+    if (MODE.DISTANCE != currentMode) {
+        //delete the route from the session
+        session.map.routes.splice(activeRouteInSession, 1);
+    }
     //set the active route to inactive
     activeRouteInSession = INACTIVE;
     currentRoute.route.setMap(null);

@@ -5,7 +5,7 @@ const SESSION_VERSION = "1.0"
 /*option types for "options" in session*/
 SESSION_OPTION_TYPE = {LAYER : 0, MAP_OVERLAY : 1, FOLLOW_CURRENT_POSITION : 2};
 
-SESSION_ROUTE_TYPE = {ROUTE : 0, TRACKING : 1};
+SESSION_ROUTE_TYPE = {DEFAULT: "DEFAULT", ROUTE: "ROUTE", DISTANCE: "DISTANCE", NAVIGATION: "NAVIGATION", TRACKING: "TRACKING"};
 
 /*Var with the id and the link to each individual layer.*/
 var LAYER = { SEAMARK: { id: 1, link: "http://tiles.openseamap.org/seamark/" }, 
@@ -27,7 +27,7 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
                              fixedMarker       : [],
                              routes            : []},
         options     :       [{id      : "wl_seamark",
-                              active  : true,
+                              active  : false,
                               type    : SESSION_OPTION_TYPE.LAYER,
                               layer   : LAYER.SEAMARK},
                              {id      : "wl_air",
@@ -40,7 +40,7 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
                               active  : false},
                              {id      : "wl_mapOverlay",
                               type    : SESSION_OPTION_TYPE.MAP_OVERLAY,
-                              active  : true},
+                              active  : false},
                              {id      : "wl_followPosition",
                               type    : SESSION_OPTION_TYPE.FOLLOW_CURRENT_POSITION,
                               active  : false}]
@@ -49,9 +49,11 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
 
 const TRIP_INFO = ["titel", "von", "nach"];
 
-const TRACKING_INFO = ["skipper", "crew", "tstart", "tende", "tdauer"]
+const ROUTE_MARKER = ["name"];
 
-const ROUTE_MARKER = ["name"]
+const TRACKING_INFO = ["skipper", "crew", "tstart", "tende", "tdauer"];
+
+const TRACKING_POINT = ["marker", "btm", "dtm", "sog", "cog", "manoever", "vorsegel", "wdate", "wtime", "motor", "tank", "windstaerke", "windrichtung", "luftdruck", "temperatur", "wolken", "regen", "wellenhoehe", "wellenrichtung"];
 
 /*possible status of a map, which will be displayed in the map layer.*/
 ROUTE_STATUS = {UNSAVED : "Route not saved to database.", MAP_OVERLAY : 1}

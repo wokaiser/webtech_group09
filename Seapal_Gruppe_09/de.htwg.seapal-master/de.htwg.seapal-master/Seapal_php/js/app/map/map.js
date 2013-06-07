@@ -17,7 +17,15 @@ var map = null;
 
 var overlay = new google.maps.OverlayView();
 
-var MODE = { DEFAULT: { value: 0, name: "default" }, ROUTE: { value: 1, name: "route" }, DISTANCE: { value: 2, name: "distance" }, NAVIGATION: { value: 3, name: "navigation" } };
+var MODE = { 
+        DEFAULT      : { value: 0, name: "DEFAULT"      , activeContextMenu: null, inactiveContextMenu: "#temporaryMarkerContextMenu"}, 
+        FIXED_MARKER : { value: 0, name: "FIXED_MARKER" , activeContextMenu: null, inactiveContextMenu: "#fixedMarkerContextMenu"}, 
+        ROUTE        : { value: 1, name: "ROUTE"        , activeContextMenu: "#routeContextMenu_active", inactiveContextMenu: "#routeContextMenu_inactive" }, 
+        DISTANCE     : { value: 2, name: "DISTANCE"     , activeContextMenu: "#routeContextMenu_active", inactiveContextMenu: "#routeContextMenu_inactive" }, 
+        NAVIGATION   : { value: 3, name: "NAVIGATION"   , activeContextMenu: "#routeContextMenu_active", inactiveContextMenu: "#routeContextMenu_inactive" }, 
+        TRACKING     : { value: 4, name: "TRACKING"     , activeContextMenu: "#trackingContextMenu_active", inactiveContextMenu: "#trackingContextMenu_inactive"} 
+    };
+    
 var currentMode = MODE.DEFAULT;
 
 var currentPositionMarker = null;
@@ -59,6 +67,12 @@ var routeMarkerImage = new google.maps.MarkerImage('../img/icons/flag4.png',
 );
 
 var distanceMarkerImage = new google.maps.MarkerImage('../img/icons/flag5.png',
+    new google.maps.Size(40, 40), //size
+    new google.maps.Point(0, 0),  //origin point
+    new google.maps.Point(7, 34)  //offset point
+);
+
+var trackingMarkerImage = new google.maps.MarkerImage('../img/icons/flag3.png',
     new google.maps.Size(40, 40), //size
     new google.maps.Point(0, 0),  //origin point
     new google.maps.Point(7, 34)  //offset point
@@ -148,7 +162,7 @@ function initialize() {
     //set routes
     for (i = 0; i < session.map.routes.length; i++) {
         activeRouteInSession = i;
-        startNewRoute(new google.maps.LatLng(session.map.routes[i].marker[0].lat, session.map.routes[i].marker[0].lng), false, session.map.routes[i].titel);
+        startNewRoute(new google.maps.LatLng(session.map.routes[i].marker[0].lat, session.map.routes[i].marker[0].lng), MODE[session.map.routes[i].type], session.map.routes[i].titel);
         for (j = 1; j < session.map.routes[i].marker.length; j++) {
             addRouteMarker(new google.maps.LatLng(session.map.routes[i].marker[j].lat, session.map.routes[i].marker[j].lng));
         }
@@ -211,7 +225,7 @@ function initialize() {
 // temporary marker context menu ----------------------------------------- //
 $(function () {
     $.contextMenu({
-        selector: '#temporaryMarkerContextMenu',
+        selector: MODE.DEFAULT.inactiveContextMenu,
         events: {
             hide: function () {
                 startTimeout();
@@ -225,11 +239,11 @@ $(function () {
 
             } else if (key == "startroute") {
 
-                startNewRoute(temporaryMarker.position, false, null);
+                startNewRoute(temporaryMarker.position, MODE.ROUTE, null);
 
             } else if (key == "distance") {
 
-                startNewRoute(temporaryMarker.position, true, null);
+                startNewRoute(temporaryMarker.position, MODE.DISTANCE, null);
 
             } else if (key == "destination") {
             
@@ -254,7 +268,7 @@ $(function () {
 // fixed marker context menu ------------------------------------------------ //
 $(function () {
     $.contextMenu({
-        selector: '#fixedMarkerContextMenu',
+        selector: MODE.FIXED_MARKER.inactiveContextMenu,
         callback: function (key, options) {
             if (key == "destination") {
 
@@ -348,7 +362,7 @@ function setTemporaryMarker(position) {
         var pixel = fromLatLngToPixel(event.latLng);
         
         if (currentMode != MODE.NAVIGATION) {
-	        $('#temporaryMarkerContextMenu').contextMenu({ x: pixel.x, y: pixel.y });
+	        $(MODE.DEFAULT.inactiveContextMenu).contextMenu({ x: pixel.x, y: pixel.y });
         }
         
         stopTimeout();
@@ -411,7 +425,7 @@ function setFixedMarker(position) {
         var pixel = fromLatLngToPixel(event.latLng);
         
         if (currentMode != MODE.NAVIGATION) {
-	        $('#fixedMarkerContextMenu').contextMenu({ x: pixel.x, y: pixel.y });
+	        $(MODE.FIXED_MARKER.inactiveContextMenu).contextMenu({ x: pixel.x, y: pixel.y });
         }
     });
 

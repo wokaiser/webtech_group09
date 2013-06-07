@@ -81,7 +81,9 @@ if (!$db_selected)
 	        <div id="temporaryMarkerContextMenu"></div>
 	        <div id="fixedMarkerContextMenu"></div>
 	        <div id="routeContextMenu_active"></div>
-	        <div id="routeContextMenu_inactive"></div>	
+	        <div id="routeContextMenu_inactive"></div>
+	        <div id="trackingContextMenu_active"></div>
+	        <div id="trackingContextMenu_inactive"></div>	
 			<div id="chat" align="center">
                 <div id="chat-area" style="height:200px; width:200px; background-color: white; overflow: auto;"></div>
 			</div>
