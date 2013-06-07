@@ -17,7 +17,7 @@ function addTrackingPoint(position, data) {
 var activeRoute = null;
 var animatedRoute = null;
 
-$('#startSimulation').live("click", function(event) {
+$('#startTrackingButton').live("click", function(event) {
     activeRoute = session.map.routes[activeRouteInSession].marker;
     PlayRoute();
 });

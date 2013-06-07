@@ -36,9 +36,6 @@
                     </ul>
                 </li>
 			</ul>
-			<ul class="navbar-form pull-right" style="list-style-type: none;">
-				<li><a class="btn" id="startSimulation"><i class="icon-play"></i></a><li>
-			</ul>
 		</div>
 	</div>
 </div>
