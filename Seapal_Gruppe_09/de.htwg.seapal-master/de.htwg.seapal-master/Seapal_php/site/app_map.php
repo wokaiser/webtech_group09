@@ -36,9 +36,10 @@ if (!$db_selected)
                         <input type='text'   class="routeInfoInput" id='titel'   placeholder='Titel' size='30' maxlength='30'/><br/>
                         <input type='text'   class="routeInfoInput" id='von'     placeholder='Von' size='30' maxlength='60'/><br/>
                         <input type='text'   class="routeInfoInput" id='nach'    placeholder='Nach' size='30' maxlength='60'/><br/>
-	                    <input type="button" class="routeInfoInput btn" value="l&ouml;schen" id="deleteRouteButton" class="routeButton" onclick="javascript: deleteRoute()" />
-	                    <input type="button" class="routeInfoInput btn" value="speichern" id="saveRouteButton" class="routeButton" onclick="javascript: saveRoute()" />
-	                    <input type="button" class="routeInfoInput btn" value="beenden" id="stopRouteButton" class="routeButton" onclick="javascript: stopRouteMode()" />
+	                    <input type="button" class="routeInfoInput btn" value="Save Route" id="saveRouteButton" class="routeButton" onclick="javascript: saveRoute()" />
+	                    <input type="button" class="routeInfoInput btn" value="Delete Route" id="deleteRouteButton" class="routeButton" onclick="javascript: deleteRoute()" />
+                        <input type="button" class="routeInfoInput btn" value="Start Tracking" id="startTrackingButton" class="routeButton" onclick="javascript: startTracking()" />                        
+	                    <input type="button" class="routeInfoInput btn" value="Quit Menu" id="stopRouteButton" class="routeButton" onclick="javascript: stopRouteMode()" />
 	                </div>
 	            	<br><br>
 	                <div id="route_distance">Routen-L&auml;nge: <span id="route_distance_number"></span> m</div>
@@ -115,6 +116,7 @@ if (!$db_selected)
 	    <script src="../js/app/map/labels.js" type="text/javascript"></script>
 	    <script src="../js/app/map/map.js" type="text/javascript"></script>
 	    <script src="../js/app/map/map_routes.js" type="text/javascript"></script>
+	    <script src="../js/app/map/tracking.js" type="text/javascript"></script>
 	    <script src="../js/app/map/validation.js" type="text/javascript"></script>
 	    <script src="../js/app/map/contextMenu.js" type="text/javascript"></script>
 	    <script src="../js/app/map/TxtOverlay.js" type="text/javascript"></script>

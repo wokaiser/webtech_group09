@@ -29,12 +29,12 @@ $(function() {
             { tnr: tnrValue}, function(route){
                 routeLoad = route;
                 jQuery.get("app_trip_load.php", {'tnr': tnrValue}, function(data) {
+                    //create a new route
+                    newRoute = getNewRoute();
+                    //set the marker to the route
+                    newRoute.marker = routeLoad;
                     //add the route only to the cookie-less session if the route not already exist
-                    if (!rootAlreadyInMap(routeLoad)) {
-                        //create a new route
-                        newRoute = getNewRoute();
-                        //set the marker to the route
-                        newRoute.marker = routeLoad;
+                    if (!rootAlreadyInMap(newRoute)) {
                         //add the other components to the route
                         //load the trip info from to the session.
                         for (var i in TRIP_INFO) {
@@ -57,12 +57,13 @@ $(function() {
     //check if a route is already in the cookie-less session (where all routes are stored)
     function rootAlreadyInMap(route) {
         for (var i in session.map.routes){
-            if (session.map.routes[i].marker.length != route.length) {
+            if ((session.map.routes[i].marker.length != route.marker.length)
+              ||(session.map.routes[i].type != route.type)) {
                 continue;
             }
             for (var j in session.map.routes[i].marker) {
-                if ((session.map.routes[i].marker[j].lat != route[j].lat)
-                  ||(session.map.routes[i].marker[j].lng != route[j].lng)) {
+                if ((session.map.routes[i].marker[j].lat != route.marker[j].lat)
+                  ||(session.map.routes[i].marker[j].lng != route.marker[j].lng)) {
                     break;
                 }
                 return true;

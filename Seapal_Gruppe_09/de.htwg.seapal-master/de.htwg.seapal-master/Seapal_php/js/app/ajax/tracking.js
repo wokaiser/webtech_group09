@@ -41,19 +41,19 @@ $(function() {
             { tracknr: tracknrValue}, function(tracking){
                 trackingLoad = tracking;
                 jQuery.get("app_trackinginfo_load.php", {'tracknr': tracknrValue}, function(data) {
+                    //create a new track
+                    newTracking = getNewTracking();
+                    //set the trackingpoints to the track
+                    newTracking.marker = trackingLoad;
                     //add the tracking only to the cookie-less session if the tracking not already exist
-                    if (!trackAlreadyInMap(trackingLoad)) {
-                        //create a new track
-                        newTracking = getNewTracking();
-                        //set the trackingpoints to the track
-                        newTracking.trackpoints = trackingLoad;
+                    if (!rootAlreadyInMap(newTracking)) {
                         //add the other components to the track
                         //load the trip info from to the session.
                         for (var i in TRACKING_INFO) {
                             newTracking[TRACKING_INFO[i]] = data[TRACKING_INFO[i]];
                         }
                         //push the new track to the trackings array
-                        session.map.trackings.push(newTracking);
+                        session.map.routes.push(newTracking);
                         //the track will now be available in the map, display a message
                         displayMessageBox("successMessageBox", "The track will now be displayed in the map.", "18em", "-9em");
                     } else {
@@ -66,15 +66,16 @@ $(function() {
         );
 	});
     
-    //check if a track is already in the cookie-less session (where all tracks are stored)
-    function trackAlreadyInMap(tracking) {
-        for (var i in session.map.trackings){
-            if (session.map.trackings[i].trackpoints.length != tracking.length) {
+    //check if a route is already in the cookie-less session (where all routes are stored)
+    function rootAlreadyInMap(route) {
+        for (var i in session.map.routes){
+            if ((session.map.routes[i].marker.length != route.marker.length)
+              ||(session.map.routes[i].type != route.type)) {
                 continue;
             }
-            for (var j in session.map.trackings[i].trackpoints) {
-                if ((session.map.trackings[i].trackpoints[j].lat != tracking[j].lat)
-                  ||(session.map.trackings[i].trackpoints[j].lng != tracking[j].lng)) {
+            for (var j in session.map.routes[i].marker) {
+                if ((session.map.routes[i].marker[j].lat != route.marker[j].lat)
+                  ||(session.map.routes[i].marker[j].lng != route.marker[j].lng)) {
                     break;
                 }
                 return true;
@@ -82,7 +83,6 @@ $(function() {
         }
         return false;
     }
-
 	$('a.remove.tracking').live("click", function(event) {
 		var buttonID = this;
 	 	var id = $(this).attr('id');

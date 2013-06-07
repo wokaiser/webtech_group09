@@ -3,7 +3,9 @@ const SESSION = "seapalSessionApp";
 const SESSION_VERSION = "1.0"
 
 /*option types for "options" in session*/
-SESSION_OPTION_TYPE = {LAYER : 0, MAP_OVERLAY : 1, FOLLOW_CURRENT_POSITION : 2}
+SESSION_OPTION_TYPE = {LAYER : 0, MAP_OVERLAY : 1, FOLLOW_CURRENT_POSITION : 2};
+
+SESSION_ROUTE_TYPE = {ROUTE : 0, TRACKING : 1};
 
 /*Var with the id and the link to each individual layer.*/
 var LAYER = { SEAMARK: { id: 1, link: "http://tiles.openseamap.org/seamark/" }, 
@@ -23,8 +25,7 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
                              mapTypeId         : google.maps.MapTypeId.ROADMAP,
                              temporaryMarker   : null,
                              fixedMarker       : [],
-                             routes            : [],
-                             trackings         : []},
+                             routes            : []},
         options     :       [{id      : "wl_seamark",
                               active  : true,
                               type    : SESSION_OPTION_TYPE.LAYER,
@@ -59,6 +60,7 @@ function getNewRoute()
 {
     return(
     {
+        type        : SESSION_ROUTE_TYPE.ROUTE,
         titel       : "",
         von         : "",
         nach        : "",
@@ -81,12 +83,13 @@ function getNewTracking()
 {
     return(
     {
+        type        : SESSION_ROUTE_TYPE.TRACKING,
         skipper     : "",
         crew        : "",
         tstart      : "",
         tende       : "",
         tdauer      : "",
-        trackpoints : []
+        marker      : []
     });
 }
 
