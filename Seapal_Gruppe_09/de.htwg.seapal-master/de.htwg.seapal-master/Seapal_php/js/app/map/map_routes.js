@@ -92,54 +92,53 @@ $(function () {
 });
 
 // track context menu ------------------------------------------------ //
-$(function () {
-    $.contextMenu.types.trackLabel = function(item, opt, root) {
-        for (var i in TRACKING_POINT) {
-            $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='trackLabel' class='routeMarkerInfoInput' placeholder='' size='30' maxlength='30'/>").appendTo(this);
-        }
-    };
-    
+$(function () {    
     $.contextMenu({
-        selector: MODE.TRACKING.activeContextMenu,
-        items: {
-            name            : {type: "trackLabel"},
-            marker          : {type: "trackLabel"}, 
-            btm             : {type: "trackLabel"}, 
-            dtm             : {type: "trackLabel"}, 
-            sog             : {type: "trackLabel"},
-            cog             : {type: "trackLabel"}, 
-            manoever        : {type: "trackLabel"}, 
-            vorsegel        : {type: "trackLabel"}, 
-            wdate           : {type: "trackLabel"}, 
-            wtime           : {type: "trackLabel"},
-            motor           : {type: "trackLabel"},
-            tank            : {type: "trackLabel"},
-            windstaerke     : {type: "trackLabel"},
-            windrichtung    : {type: "trackLabel"}, 
-            luftdruck       : {type: "trackLabel"}, 
-            temperatur      : {type: "trackLabel"},
-            wolken          : {type: "trackLabel"},
-            regen           : {type: "trackLabel"},
-            wellenhoehe     : {type: "trackLabel"},
-            wellenrichtung  : {type: "trackLabel"}
-        },
-        events: {
-            show: function(opt) {                
-                //load the tracking info from the session to the input boxes.
-                for (var i in TRACKING_POINT) {
-                    document.getElementById(TRACKING_POINT[i]).value = session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession][TRACKING_POINT[i]];
+        selector: MODE.TRACKING.activeContextMenu, 
+        build: function($trigger, e) {
+            // this callback is executed every time the menu is to be shown
+            // its results are destroyed every time the menu is hidden
+            // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
+            return {
+                items: {
+                    title           : {name: "Trackpoint "+activeRouteMarkerInSession+1},
+                    separator1: "-----",
+                    name            : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["name"]},
+                    marker          : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["marker"]},
+                    wdate           : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wdate"]}, 
+                    wtime           : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wtime"]},                    
+                    "fold1": {
+                                "name": "Boat info", 
+                                "items": {
+                                    btm             : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["btm"]}, 
+                                    dtm             : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["dtm"]}, 
+                                    sog             : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["sog"]},
+                                    cog             : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["cog"]}, 
+                                    manoever        : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["manoever"]}, 
+                                    vorsegel        : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["vorsegel"]}, 
+                                    motor           : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["motor"]},
+                                    tank            : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["tank"]},
+                                }
+                    },
+                    "fold2": {
+                                "name": "Weather info", 
+                                "items": {
+                                    windstaerke     : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["windstaerke"]},
+                                    windrichtung    : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["windrichtung"]}, 
+                                    luftdruck       : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["luftdruck"]}, 
+                                    temperatur      : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["temperatur"]},
+                                    wolken          : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wolken"]},
+                                    regen           : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["regen"]},
+                                    wellenhoehe     : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wellenhoehe"]},
+                                    wellenrichtung  : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wellenrichtung"]}
+                                  }
+                    },
                 }
-            }, 
-            hide: function(opt) {
-                if (INACTIVE == activeRouteMarkerInSession) return;
-                //store the trip info to the session from the input boxes.
-                for (var i in TRACKING_POINT) {
-                    session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession][TRACKING_POINT[i]] = document.getElementById(TRACKING_POINT[i]).value;
-                }
-            }
+            };
         }
     });
 });
+
 
 //context menu for inactive route
 $(function () {
