@@ -30,51 +30,6 @@ if (!$db_selected)
     	
     		<!-- Content -->
     		<div id="appWrapper" align="center">
-	            <br />	            
-	           	<h2>Tracking Information</h2>
-	            <br />
-	            <div class="container-fluid" align="center">
-	            	<form class="form-horizontal"> 
-		            	<div class="row well" align="center">
-		            		<div class="span4">
-			            		<div class="control-group">
-			            			<label class="control-label">Skipper</label>
-			            			<input class="input-medium" type="text" name="skipper" id="skipper" />
-		            			</div>
-		            		</div>
-		            		<div class="span4">
-			            		<div class="control-group">
-			            			<label class="control-label">Crew</label>
-			            			<input class="input-medium" type="text" name="crew" id="crew" />
-			                    </div>
-		                    </div>
-		                    <div class="span4">
-			                    <div class="control-group">
-			            			<label class="control-label">Start</label>
-			            			<input class="input-medium" type="text" name="tstart" id="tstart" />
-			                    </div>
-		                    </div>
-		                    <div class="span4">
-			                    <div class="control-group">
-			            			<label class="control-label">Ende</label>
-			            			<input class="input-medium" type="text" name="tende" id="tende" />
-			                    </div>
-		                    </div>
-		                    <div class="span4">
-			                    <div class="control-group">
-			            			<label class="control-label">Dauer</label>
-			            			<input class="input-medium" type="text" name="tdauer" id="tdauer" />
-			                    </div>
-		                    </div>	            		      
-		            	</div>   
-                        <div class="control-group">
-                            <input type="reset" class="btn" id="delete" value="L&ouml;schen" class="button"/>
-                            <input type="submit" class="btn" id="save_tracking" name="submit_tracking" value="Speichern" class="button"/>
-                        </div>  
-                    </form>
-                </div>
-	            <br />
-	            <br />
 	            <div class="appTableDiv" align="center">
 	                <table class="appTable table table-hover" cellspacing="0px" cellpadding="5px">
 	                    <thead>
@@ -140,12 +95,33 @@ if (!$db_selected)
 				<a href="#" class="btn" data-dismiss="modal"><i class="icon-ok"></i> ok</a>
 			</div>
 		</div>
+        
+        <div class="messageBox infoMessageBox" id="infoMessageBox" style="display: none;">
+            <div class="infoMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="infoMessageBoxText">Some info msg.</div>
+        </div>
+        
+        <div class="messageBox successMessageBox" id="successMessageBox" style="display: none;">
+            <div class="successMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="successMessageBoxText">Some success msg.</div>
+        </div>
+        
+        <div class="messageBox warningMessageBox" id="warningMessageBox" style="display: none;">
+            <div class="warningMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="warningMessageBoxText">Some warning msg.</div>
+        </div>
+        
+        <div class="messageBox errorMessageBox" id="errorMessageBox" style="display: none;">
+            <div class="errorMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="errorMessageBoxText">Some error msg.</div>
+        </div>
 	    
 	    <!-- Java-Script -->
 	    <script src="../js/bootstrap/bootstrap-transition.js"></script>
 	    <script src="../js/bootstrap/bootstrap-dropdown.js"></script>
 	    <script src="../js/bootstrap/bootstrap-button.js"></script>
 	    <script src="../js/bootstrap/bootstrap-modal.js"></script>
+        <script src="../js/messageBox/messageBox.js"></script>
 	    
 	    <!-- Additional Java-Script -->
 	   

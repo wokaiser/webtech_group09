@@ -29,10 +29,6 @@ $(function() {
             { tnr: tnrValue}, function(route){
                 routeLoad = route;
                 jQuery.get("app_trip_load.php", {'tnr': tnrValue}, function(data) {
-                    $('#titel').val(data['titel']);
-                    $('#von').val(data['von']);
-                    $('#nach').val(data['nach']);
-            
                     //add the route only to the cookie-less session if the route not already exist
                     if (!rootAlreadyInMap(routeLoad)) {
                         //create a new route

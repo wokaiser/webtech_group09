@@ -23,7 +23,8 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
                              mapTypeId         : google.maps.MapTypeId.ROADMAP,
                              temporaryMarker   : null,
                              fixedMarker       : [],
-                             routes            : []},
+                             routes            : [],
+                             trackings         : []},
         options     :       [{id      : "wl_seamark",
                               active  : true,
                               type    : SESSION_OPTION_TYPE.LAYER,
@@ -46,6 +47,8 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
 }
 
 const TRIP_INFO = ["titel", "von", "nach"];
+
+const TRACKING_INFO = ["skipper", "crew", "tstart", "tende", "tdauer"]
 
 const ROUTE_MARKER = ["name"]
 
@@ -71,5 +74,46 @@ function getNewRouteMarker()
         name     : "Marker",
         lat      : null,
         lng      : null
+    });
+}
+
+function getNewTracking()
+{
+    return(
+    {
+        skipper     : "",
+        crew        : "",
+        tstart      : "",
+        tende       : "",
+        tdauer      : "",
+        trackpoints : []
+    });
+}
+
+function getNewTrackPoint() 
+{   
+    return(
+    {
+        marker          : "Marker",
+        lat             : null,
+        lng             : null,
+        btm             : null,
+        dtm             : null,
+        sog             : null,
+        cog             : null,
+        manoever        : "",
+        vorsegel        : "",
+        wdate           : "",
+        wtime           : "",
+        motor           : "",
+        tank            : "",
+        windstaerke     : "",
+        windrichtung    : "",
+        luftdruck       : "",
+        temperatur      : "",
+        wolken          : "",
+        regen           : "",
+        wellenhoehe     : "",
+        wellenrichtung  : ""
     });
 }
