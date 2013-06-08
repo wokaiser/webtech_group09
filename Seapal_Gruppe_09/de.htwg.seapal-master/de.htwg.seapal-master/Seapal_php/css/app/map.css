@@ -5,12 +5,13 @@ label {
 }
 
 #map_overlay {
-    width:206px;
+    width:145px;
     height:200px;
     position:absolute;
     left:145px;
     top:13%;
     margin:-100px 0 0 -140px;
+    align: left;
 
     border-color: #DEE3E5;
     padding-left: 10px;
@@ -19,9 +20,9 @@ label {
     background-repeat: repeat-x;
     border: 1px solid #000000;
     background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
-    webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 20.065);
     webkit-border-radius: 4px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 20.065);
     
     display: block;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

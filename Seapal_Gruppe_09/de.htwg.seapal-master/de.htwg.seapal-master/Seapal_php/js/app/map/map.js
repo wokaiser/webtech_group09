@@ -565,7 +565,7 @@ function mapOverlay() {
     var lat = latLng.lat();
     var lng = latLng.lng();
     var weatherCurrent = "http://openweathermap.org/data/2.1/find/city?lat="+lat+"&lon="+lng+"&cnt=1";    
-    var txt = "<center>";
+    var txt = "";
     
     //save actual displayed position of the map in the cookie-less session
     session.map.lat = lat;
@@ -585,17 +585,30 @@ function mapOverlay() {
         crossDomain:true, 
         dataType: "jsonp", 
         success:function(data,text,xhqr){
-            txt = "<b>Weather Information</b>"                               + "</br>";
-            txt += data.list[0].name                                         + "</br>";
-            txt += "Weather          " + data.list[0].weather[0].description + "</br>";
-            txt += "Wind speed       " + data.list[0].wind.speed             + " m/s" + "</br>";
-            txt += "Humidity         " + data.list[0].main.humidity          + " %" + "</br>";
-            txt += "Pressure         " + data.list[0].main.pressure          + " hPa" + "</br>";
-            txt += "Temperature      " + convertToCelcius(data.list[0].main.temp) + " °C" + "</br>";
-            txt += "Min Temperature  " + convertToCelcius(data.list[0].main.temp_min) + " °C" + "</br>";
-            txt += "Max Temperature  " + convertToCelcius(data.list[0].main.temp_max) + " °C" + "</br>";
-            txt += "</center>";
+            if (null == data) return;
+            txt += "<div style='align=left; font-size: medium; font-weight: bold; margin-bottom: 0px;'>"+data.list[0].name+"</div> "
+            txt += "<div style='float: left; width: 140px;' >"
+                txt += "<div style='display: block; clear: left;' >"
+                    txt += "<div style='float: left;' title='Titel'>"
+                        txt += "<img height='45' width='45' style='border: medium none; width: 45px; height: 45px; background: url(&quot;http://openweathermap.org/img/w/"+data.list[0].weather[0].icon+".png&quot;) repeat scroll 0% 0% transparent;' alt='title' src='http://openweathermap.org/images/transparent.png'/>"
+                    txt += "</div>"
+                    
+                    txt += "<div style='float: left;' >"
+                        txt += "<div style='display: block; clear: left; font-size: medium; font-weight: bold; padding: 0pt 3pt;' title='Current Temperature'>"+convertToCelcius(data.list[0].main.temp)+"</div>"
+                        txt += "<div style='display: block; width: 85px; overflow: visible;' ></div>"
+                    txt += "</div>"
+                txt += "</div>"
+                        
+                txt += "<div style='display: block; clear: left; font-size: small;'>Clouds: "+data.list[0].clouds.all+"%</div>"
+                txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Humidity: "+data.list[0].main.humidity+"%</div>"
+                txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Wind: "+data.list[0].wind.speed+" m/s</div>"
+                txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Pressure: "+data.list[0].main.pressure+" hpa</div>"
+                txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Min Temperature: "+convertToCelcius(data.list[0].main.temp_min)+" °C</div>"
+                txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Max Temperature: "+convertToCelcius(data.list[0].main.temp_max)+" °C</div>"
+            txt += "</div>"            
         
+            //all weather data retrieved, set txt to map overlay
+            document.getElementById("map_overlay").innerHTML = txt;
             //build string for weather history and forecast request
             var weatherHistory  = "http://openweathermap.org/data/2.1/history/city/?id="+data.list[0].id+"&start="+data.list[0].dt+"&cnt=1";
             var weatherForecast = "http://openweathermap.org/data/2.1/forecast/city?lat="+lat+"&lon="+lng+"&cnt=1";
@@ -603,30 +616,13 @@ function mapOverlay() {
             /*---------------------------------------*/
             /*           Weather Forecast            */
             /*---------------------------------------*/
-            $.ajax(weatherForecast, {
-                crossDomain:true, 
-                dataType: "jsonp", 
-                success:function(data,text,xhqr){
+   //         $.ajax(weatherForecast, {
+   //             crossDomain:true, 
+   //            dataType: "jsonp", 
+   //             success:function(data,text,xhqr){
                     //weather forecast data
                     
-                    
-                    /*---------------------------------------*/
-                    /*           Weather History             */
-                    /*---------------------------------------*/
-                    $.ajax(weatherHistory, {
-                        crossDomain:true, 
-                        dataType: "jsonp", 
-                        success:function(data,text,xhqr){
-                            //weather history data
-                            
-                            
-                            
-                            //all weather data retrieved, set txt to map overlay
-                            document.getElementById("map_overlay").innerHTML = txt;
-                        }
-                    });   
-                }
-            });
+   //         });
         }
     }); 
 }
