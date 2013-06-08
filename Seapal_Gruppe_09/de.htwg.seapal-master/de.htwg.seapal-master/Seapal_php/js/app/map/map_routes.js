@@ -57,10 +57,6 @@ function Route(route, routeName) {
 
 // route context menu ------------------------------------------------ //
 $(function () {
-    $.contextMenu.types.name = function(item, opt, root) {
-        $("<input style='height:10px; margin-bottom:1px; margin-left:-23px;' type='text' id='name' class='routeMarkerInfoInput' placeholder='name' size='30' maxlength='30'/>").appendTo(this);
-    };
-
     function deleteMarkerCallback (key) {
         deleteRouteMarker();
     }
@@ -79,26 +75,18 @@ $(function () {
     
     $.contextMenu({
         selector: MODE.ROUTE.activeContextMenu,
-        items: {
-            "deleteMarker" : { name : "Wegpunkt l&ouml;schen", icon: "deleteMarker", callback: deleteMarkerCallback},
-            "addMarker" : { name : "Wegpunkt hinzuf&uuml;gen", icon: "addMarker", callback: addMarkerCallback},
-            separator1: "-----",
-            name     : {type: "name"}
-        },
-        events: {
-            show: function(opt) {                
-                //load the trip info from the session to the input boxes.
-                for (var i in ROUTE_MARKER) {
-                    document.getElementById(ROUTE_MARKER[i]).value = session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession][ROUTE_MARKER[i]];
+        build: function($trigger, e) {
+            // this callback is executed every time the menu is to be shown
+            // its results are destroyed every time the menu is hidden
+            // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
+            return {
+                items: {
+                    title           : {name: "<b>Marker "+(activeRouteMarkerInSession+1)+"</b>",  icon: "marker"},
+                    separator1: "-----",
+                    "deleteMarker"  : { name : "Wegpunkt l&ouml;schen", icon: "deleteMarker", callback: deleteMarkerCallback},
+                    "addMarker"     : { name : "Wegpunkt hinzuf&uuml;gen", icon: "addMarker", callback: addMarkerCallback},
                 }
-            }, 
-            hide: function(opt) {
-                if (INACTIVE == activeRouteMarkerInSession) return;
-                //store the trip info to the session from the input boxes.
-                for (var i in ROUTE_MARKER) {
-                    session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession][ROUTE_MARKER[i]] = document.getElementById(ROUTE_MARKER[i]).value;
-                }
-            }
+            };
         }
     });
 });
@@ -113,9 +101,8 @@ $(function () {
             // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
             return {
                 items: {
-                    title           : {name: "<b>Trackpoint "+(activeRouteMarkerInSession+1)+"</b>"},
+                    title           : {name: "<b>Trackpoint "+(activeRouteMarkerInSession+1)+"</b>",  icon: "marker"},
                     separator1: "-----",
-                    name            : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["name"]},
                     marker          : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["marker"]},
                     wdate           : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wdate"]}, 
                     wtime           : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wtime"]},                    
@@ -366,14 +353,6 @@ function addRouteMarker(position, index) {
     updateRouteDistance();
 }
 
-//For todays date;
-Date.prototype.today = function(){ 
-    return ((this.getDate() < 10)?"0":"") + this.getDate() +"."+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"."+ this.getFullYear() 
-};
-//For the time now
-Date.prototype.timeNow = function(){
-     return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
-};
 
 // removes selected route marker
 function deleteRouteMarker() {
@@ -510,6 +489,11 @@ function drawDistanceInfobox(latLng) {
 function startNewRoute(position, mode, routeName) {
     var route;
 
+    if (!onInitialize && (MODE.TRACKING == currentMode || MODE.ROUTE == currentMode)) {
+        //close the actual displayed route
+        stopRouteMode();
+    }
+
     if (MODE.DISTANCE == mode) {
         route = new google.maps.Polyline(distanceToolOptions);
         if (!onInitialize) {document.getElementById('distanceToolContainer').style.display = "block";}
@@ -531,8 +515,6 @@ function startNewRoute(position, mode, routeName) {
         //set the active route for the session access
         activeRouteInSession = session.map.routes.length - 1;
     } else if (!onInitialize && MODE.TRACKING == currentMode) {
-        //close the actual displayed route
-        stopRouteMode();
         //add a new route to the session
         session.map.routes.push(getNewTracking());
         //set the active route for the session access
@@ -700,6 +682,10 @@ function saveRouteInfoToSession() {
         for (var i in TRIP_INFO) {
             session.map.routes[activeRouteInSession][TRIP_INFO[i]] = document.getElementById(TRIP_INFO[i]).value;
         }
+        //set the correct marker names, because the markers will be created on the cklick of a marker
+        for (var i in session.map.routes[activeRouteInSession].marker.length) {
+            session.map.routes[activeRouteInSession].marker[i] = "Marker "+i+1;
+        }
     }
 }
 
@@ -752,7 +738,6 @@ function tripRoutePost(data) {
         activeRouteMarkerInSession++;
         if (activeRouteMarkerInSession < session.map.routes[activeRouteInSession].marker.length)
         {
-            console.log(activeRouteMarkerInSession);
             session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tnr = session.map.routes[activeRouteInSession].marker[0].tnr;
             jQuery.post("app_tripinfo_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], tripRoutePost, "json");
         } else {
