@@ -4,9 +4,9 @@ label {
     margin-left: 20px;
 }
 
-#map_overlay {
+#map_overlay, #weatherForecast_overlay {
     width:145px;
-    height:200px;
+    height:185px;
     position:absolute;
     left:145px;
     top:13%;
@@ -29,6 +29,12 @@ label {
     font-size: 14px;
     line-height: 20px;
     color: #333333;
+}
+
+#weatherForecast_overlay {
+    left:320px;
+    width:700px;
+    height:105px;
 }
 
 #map_canvas {

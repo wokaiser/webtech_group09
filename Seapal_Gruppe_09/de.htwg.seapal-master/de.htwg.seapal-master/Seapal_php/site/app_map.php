@@ -88,6 +88,10 @@ if (!$db_selected)
                 <div id="map_overlay" style="display: none;">
 
                 </div>
+                
+                <div id="weatherForecast_overlay" style="display: none;">
+
+                </div>
             </div>
  
 	        <!-- Context Menus -->

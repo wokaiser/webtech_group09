@@ -116,7 +116,6 @@ function initialize() {
     document.getElementById('distanceToolContainer').style.display = "none";
     document.getElementById('navigationContainer').style.width = document.body.offsetWidth + "px";
     document.getElementById('navigationContainer').style.display = "none";
-    document.getElementById('chat').style.display = "none";
 
     // initialize map
     map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
@@ -573,6 +572,8 @@ function mapOverlay() {
     session.map.zoom = map.getZoom();
     /*store session*/
     Session.set(SESSION, session);
+    /*hide forecast, because mapOverlay will only be called on map position change and than there is a new forecast for the new position required*/
+    document.getElementById("weatherForecast_overlay").style.display = "none";
     
     //return if mapOverlay is inactive
     if (!getSessionOption("wl_mapOverlay").active) return;
@@ -594,7 +595,7 @@ function mapOverlay() {
                     txt += "</div>"
                     
                     txt += "<div style='float: left;' >"
-                        txt += "<div style='display: block; clear: left; font-size: medium; font-weight: bold; padding: 0pt 3pt;' title='Current Temperature'>"+convertToCelcius(data.list[0].main.temp)+"</div>"
+                        txt += "<div style='display: block; clear: left; font-size: medium; font-weight: bold; padding: 0pt 3pt;' title='Current Temperature'>"+convertToCelcius(data.list[0].main.temp)+" °C</div>"
                         txt += "<div style='display: block; width: 85px; overflow: visible;' ></div>"
                     txt += "</div>"
                 txt += "</div>"
@@ -605,24 +606,116 @@ function mapOverlay() {
                 txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Pressure: "+data.list[0].main.pressure+" hpa</div>"
                 txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Min Temperature: "+convertToCelcius(data.list[0].main.temp_min)+" °C</div>"
                 txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Max Temperature: "+convertToCelcius(data.list[0].main.temp_max)+" °C</div>"
-            txt += "</div>"            
+                txt += "<a href='no-javascript.html' title='Get weather forecast' id='getWeatherForecast'>Get weather forecast</a>"
+            txt += "</div>"
         
+            if (data.list[0].name.length > 16) {document.getElementById('map_overlay').style.height = "225px";}
+            else {document.getElementById('map_overlay').style.height = "205px";}
             //all weather data retrieved, set txt to map overlay
             document.getElementById("map_overlay").innerHTML = txt;
+            //initialise the action handler for the getWeatherForecast link
+            document.getElementById('getWeatherForecast').onclick = getWeatherForecast;;
             //build string for weather history and forecast request
             var weatherHistory  = "http://openweathermap.org/data/2.1/history/city/?id="+data.list[0].id+"&start="+data.list[0].dt+"&cnt=1";
-            var weatherForecast = "http://openweathermap.org/data/2.1/forecast/city?lat="+lat+"&lon="+lng+"&cnt=1";
-            
-            /*---------------------------------------*/
-            /*           Weather Forecast            */
-            /*---------------------------------------*/
-   //         $.ajax(weatherForecast, {
-   //             crossDomain:true, 
-   //            dataType: "jsonp", 
-   //             success:function(data,text,xhqr){
-                    //weather forecast data
-                    
-   //         });
+
         }
-    }); 
+    });
+}
+
+Date.prototype.getFullMonth = function(){ 
+    return ((((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1));
+};
+
+Date.prototype.getFullDay = function(offset){ 
+    return ((((this.getDate()+offset) < 10)?"0":"") + (this.getDate()+offset));
+};
+
+if (typeof String.prototype.startsWith != 'function') {
+  // see below for better implementation!
+  String.prototype.startsWith = function (str){
+    return this.indexOf(str) == 0;
+  };
+}
+
+const WEEKDAY = new Array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+
+const MIN_TEMPERATUR_INIT = 999;
+const MAX_TEMPERATUR_INIT = -1;
+
+function getWeatherForecast() {
+    latLng = map.getCenter();
+    var lat = latLng.lat();
+    var lng = latLng.lng();
+    var txt = "";
+    
+    var weatherForecast = "http://openweathermap.org/data/2.1/forecast/city?lat="+lat+"&lon="+lng+"&cnt=1";
+            
+    /*---------------------------------------*/
+    /*           Weather Forecast            */
+    /*---------------------------------------*/
+    $.ajax(weatherForecast, {
+        crossDomain:true, 
+        dataType: "jsonp", 
+        success:function(data,text,xhqr){
+            var weekday = new Date().getDay();
+            var minTemp;
+            var maxTemp;
+            var dayTxt;
+
+            //loop for number of day's to forecast
+            for (var day = 1; day <= 7; day++) {
+                minTemp = MIN_TEMPERATUR_INIT;
+                maxTemp = MAX_TEMPERATUR_INIT;
+                searchDate = new Date().getFullYear()+"-"+new Date().getFullMonth()+"-"+new Date().getFullDay(day);
+
+                for (var i in data.list) {
+                    if (data.list[i].dt_txt.startsWith(searchDate)) {
+                        if (data.list[i].main.temp_min < minTemp) {
+                            minTemp = data.list[i].main.temp_min;
+                        }
+                        if (data.list[i].main.temp_max > maxTemp) {
+                            maxTemp = data.list[i].main.temp_max;
+                        }
+                    }
+                }
+                
+                if (minTemp == MIN_TEMPERATUR_INIT) {
+                    minTemp = "n.a"
+                } else {
+                    minTemp = convertToCelcius(minTemp)+" °C";
+                }
+                if (maxTemp == MAX_TEMPERATUR_INIT) {
+                    maxTemp = "n.a"
+                } else {
+                    maxTemp = convertToCelcius(maxTemp)+" °C";
+                }
+                if (1 === day) {
+                    dayTxt = "Today";
+                } else if (2 == day) {
+                    dayTxt = "Tomorrow";
+                } else {
+                    dayTxt = WEEKDAY[weekday];
+                }
+                                
+                txt += "<div class='left'>"
+                    txt += "<div style='text-align:center; font-size: small; font-weight: bold; margin-bottom: 0px;'>"+dayTxt+"</div> "
+                    txt += "<img height='45' width='45' style='text-align:center; border: medium none; width: 45px; height: 45px; background: url(&quot;http://openweathermap.org/img/w/"+data.list[i].weather[0].icon+".png&quot;) repeat scroll 0% 0% transparent;' alt='title' src='http://openweathermap.org/images/transparent.png'/>"
+                    txt += "<div style='display: block; clear: left; color: #DAB500; font-size: x-small; text-align:center;' title='Max Temperature'>"+maxTemp+"</div>"
+                    txt += "<div style='display: block; clear: left; color: gray; font-size: x-small; text-align:center;' title='Min Temperature'>"+minTemp+"</div>"
+                txt += "</div>"
+                
+                weekday++;
+                if (weekday >= WEEKDAY.length) {
+                    weekday = 0;
+                }
+            }
+            //all weather data retrieved, set txt to map overlay
+            document.getElementById("weatherForecast_overlay").innerHTML = txt;
+            //Visible weatherForecast_overlay
+            document.getElementById("weatherForecast_overlay").style.display="block";
+            //hide the weatherForecast_overlay after some seconds
+            setTimeout(function() {document.getElementById("weatherForecast_overlay").style.display = "none";},20000);
+        }
+    });
+    return false;
 }
