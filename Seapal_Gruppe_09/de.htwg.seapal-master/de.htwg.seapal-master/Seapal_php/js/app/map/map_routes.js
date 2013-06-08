@@ -24,7 +24,7 @@ var inactivePathOptions = {
 }
 
 var activeTrackPathOptions = {
-    strokeColor: "#C8FF76",
+    strokeColor: "#00B050",
     strokeOpacity: 1.0,
     strokeWeight: 1
 }
@@ -481,7 +481,7 @@ function drawTrackingInfobox(latLng, name) {
 
     customTxt = "<div class='markerInfoBox label label-success' id='fixedMarkerInfobox'>"
      + name + "</div>";
-    return new TxtOverlay(latLng, customTxt, "coordinate_info_box", map, 40, -29);
+    return new TxtOverlay(latLng, customTxt, "coordinate_info_box", map, 40, 0);
 }
 
 // draw fixedMarkerInfobox 
