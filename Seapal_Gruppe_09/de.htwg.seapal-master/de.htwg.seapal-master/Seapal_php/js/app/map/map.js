@@ -72,7 +72,7 @@ var distanceMarkerImage = new google.maps.MarkerImage('../img/icons/flag5.png',
     new google.maps.Point(7, 34)  //offset point
 );
 
-var trackingMarkerImage = new google.maps.MarkerImage('../img/icons/flag3.png',
+var trackingMarkerImage = new google.maps.MarkerImage('../img/icons/flag2.png',
     new google.maps.Size(40, 40), //size
     new google.maps.Point(0, 0),  //origin point
     new google.maps.Point(7, 34)  //offset point

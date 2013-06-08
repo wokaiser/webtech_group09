@@ -85,6 +85,7 @@ function getNewTracking()
 {
     return(
     {
+        titel       : "Tracking",
         type        : SESSION_ROUTE_TYPE.TRACKING,
         skipper     : "",
         crew        : "",

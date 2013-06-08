@@ -65,6 +65,19 @@ if (!$db_selected)
 	            	<div id="navigation_distance">Distanz: <span id="navigation_number"></span> m</div>
 	            </div>
 	        </div>
+              
+    		<!-- Tracking Menu -->
+    		<div id="trackingContainer" style="display: none;">
+            	<div id="routeMenu" class="well">
+            		<h4>Tracking</h4>
+	            	<div class="btn-group btn-group-vertical">
+	                    <input type="button" class="routeInfoInput btn" value="Delete Track" id="deleteTrackButton" onclick="javascript: deleteTrack()" />
+	            	    <input type="button" class="routeInfoInput btn routeButton" value="Quit Menu" id="stopTrackingButton" class="routeButton" onclick="javascript: stopTrackingMode()" />
+	                </div>
+	            	<br><br>
+	                <div id="tracking_distance">Track lenght <span id="tracking_number"></span> m</div>
+	            </div>
+	        </div>
 	        
 	        <!-- Map -->
 	        <div id="appWrapper">

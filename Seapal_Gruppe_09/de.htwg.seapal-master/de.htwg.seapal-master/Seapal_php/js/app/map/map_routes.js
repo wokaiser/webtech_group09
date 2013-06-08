@@ -23,6 +23,18 @@ var inactivePathOptions = {
     strokeWeight: 2
 }
 
+var activeTrackPathOptions = {
+    strokeColor: "#C8FF76",
+    strokeOpacity: 1.0,
+    strokeWeight: 1
+}
+
+var inactiveTrackPathOptions = {
+    strokeColor: "#D9FF9E",
+    strokeOpacity: 0.5,
+    strokeWeight: 0.5
+}
+
 var distanceToolOptions = {
     strokeColor: "#FDB771",
     strokeOpacity: 0.7,
@@ -101,7 +113,7 @@ $(function () {
             // e is the original contextmenu event, containing e.pageX and e.pageY (amongst other data)
             return {
                 items: {
-                    title           : {name: "Trackpoint "+activeRouteMarkerInSession+1},
+                    title           : {name: "<b>Trackpoint "+(activeRouteMarkerInSession+1)+"</b>"},
                     separator1: "-----",
                     name            : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["name"]},
                     marker          : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["marker"]},
@@ -146,9 +158,17 @@ $(function () {
         selector: MODE.ROUTE.inactiveContextMenu,
         callback: function (key) {
             if (key == "selectRoute") {
-                if (currentRoute != null) {
+                document.getElementById('routeMenuContainer').style.display = "none";
+                document.getElementById('distanceToolContainer').style.display = "none";
+                document.getElementById('navigationContainer').style.display = "none";
+                document.getElementById('trackingContainer').style.display = "none";
+                if (currentRoute != null && currentMode == MODE.ROUTE) {
                     toggleDraggable(currentRoute);
                     currentRoute.route.setOptions(inactivePathOptions);
+                } else if(currentRoute != null && currentMode == MODE.TRACKING) {
+                    currentRoute.route.setOptions(inactiveTrackPathOptions);
+                } else if(currentRoute != null && currentMode == MODE.NAVIGATION) {
+                    currentRoute.route.setOptions(inactiveTrackPathOptions);
                 }
                 if (currentMode == MODE.DISTANCE) {
                     document.getElementById('distanceToolContainer').style.display = "block";
@@ -178,18 +198,20 @@ $(function () {
         selector: MODE.TRACKING.inactiveContextMenu,
         callback: function (key) {
             if (key == "selectTrack") {
-                if (currentRoute != null) {
-                    toggleDraggable(currentRoute);
+                document.getElementById('routeMenuContainer').style.display = "none";
+                document.getElementById('distanceToolContainer').style.display = "none";
+                document.getElementById('navigationContainer').style.display = "none";
+                document.getElementById('trackingContainer').style.display = "none";
+                if (currentRoute != null && currentMode == MODE.ROUTE) {
                     currentRoute.route.setOptions(inactivePathOptions);
-                }
-                if (currentMode == MODE.DISTANCE) {
-                    document.getElementById('distanceToolContainer').style.display = "block";
-                    stopDistanceToolMode();
+                } else if(currentRoute != null && currentMode == MODE.TRACKING) {
+                    currentRoute.route.setOptions(inactiveTrackPathOptions);
                 }
                 currentRoute = getRouteByMarker(selectedRouteMarker);
                 currentMode = MODE.TRACKING;
-                currentRoute.route.setOptions(activePathOptions);
-                toggleDraggable(currentRoute);
+                currentRoute.route.setOptions(activeTrackPathOptions);
+                updateRouteDistance();
+                document.getElementById('trackingContainer').style.display = "block";
             }
         },
         items: {
@@ -302,6 +324,11 @@ function addRouteMarker(position, index) {
             newMarker.lat = position.lat();
             newMarker.lng = position.lng();
             session.map.routes[activeRouteInSession].marker.push(newMarker);
+        } else if (!onInitialize && MODE.TRACKING == currentMode) {
+            newMarker = getNewTrackPoint()
+            newMarker.lat = position.lat();
+            newMarker.lng = position.lng();
+            session.map.routes[activeRouteInSession].marker.push(newMarker);
         }
     } else {
         if (index == currentRoute.markerArray.length) {
@@ -325,6 +352,11 @@ function addRouteMarker(position, index) {
         if (!onInitialize && MODE.ROUTE == currentMode) {
             newMarker = getNewRouteMarker()
             newMarker.name = "Marker "+(session.map.routes[activeRouteInSession].marker.length+1)
+            newMarker.lat = position.lat();
+            newMarker.lng = position.lng();
+            session.map.routes[activeRouteInSession].marker.splice(index, 0, newMarker);
+        } else if (!onInitialize && MODE.ROUTE == currentMode) {
+            newMarker = getNewTrackPoint()
             newMarker.lat = position.lat();
             newMarker.lng = position.lng();
             session.map.routes[activeRouteInSession].marker.splice(index, 0, newMarker);
@@ -396,6 +428,8 @@ function updateRouteDistance() {
 
     if (currentMode == MODE.DISTANCE) {
         document.getElementById("distanceTool_number").innerHTML = currentRoute.length;
+    } else if (currentMode == MODE.TRACKING) {
+        document.getElementById("tracking_number").innerHTML = currentRoute.length;
     } else {
         document.getElementById("route_distance_number").innerHTML = currentRoute.length;
     }
@@ -445,7 +479,7 @@ function drawTrackingInfobox(latLng, name) {
         currentRoute.markerInfobox.setMap(null);
     }
 
-    customTxt = "<div class='markerInfoBox label label-info' id='fixedMarkerInfobox'>"
+    customTxt = "<div class='markerInfoBox label label-success' id='fixedMarkerInfobox'>"
      + name + "</div>";
     return new TxtOverlay(latLng, customTxt, "coordinate_info_box", map, 40, -29);
 }
@@ -485,7 +519,7 @@ function startNewRoute(position, mode, routeName) {
         if (!onInitialize) {document.getElementById('routeMenuContainer').style.display = "block";}
         currentMode = MODE.ROUTE;
     } else if (MODE.TRACKING == mode) {
-        route = new google.maps.Polyline(activePathOptions);
+        route = new google.maps.Polyline(activeTrackPathOptions);
      //   if (!onInitialize) {document.getElementById('routeMenuContainer').style.display = "block";}
         currentMode = MODE.TRACKING;
     }
@@ -526,15 +560,15 @@ function startNewRoute(position, mode, routeName) {
 }
 
 function stopRouteMode() {
-   
-    //Commented this section out. Because set marker is than still there but no longer accessible.
-    //It should be ok to have a route with only one marker, but it should not be possible to save this route
-    //(will be handled in saveRoute() function.
-  //  if (currentRoute.markerArray.length == 1 && currentMode == MODE.ROUTE) {
-  //      currentRoute.markerArray[0].setMap(null);
-  //  } else { 
-        currentRoute.route.setOptions(inactivePathOptions);
-        toggleDraggable(currentRoute);  
+        //toggle draggable NOT if in tracking mode
+        if (currentMode == MODE.TRACKING) {
+            currentRoute.route.setOptions(inactiveTrackPathOptions);
+        }  
+        else {
+            currentRoute.route.setOptions(inactivePathOptions);
+            toggleDraggable(currentRoute);  
+        }
+
  //   }
     
     currentRoute = null;
@@ -542,6 +576,7 @@ function stopRouteMode() {
     saveRouteInfoToSession();
     document.getElementById('routeMenuContainer').style.display = "none";
     document.getElementById('distanceToolContainer').style.display = "none";
+    document.getElementById('trackingContainer').style.display = "none";
 
     //load the default to the trip info box
     for (var i in TRIP_INFO) {
@@ -624,8 +659,15 @@ function stopNavigationMode() {
 	currentMode = MODE.DEFAULT;
 	destinationMarker.setMap(null);
     destinationRoute.setMap(null);
-    navigationRoute = null;
     document.getElementById('navigationContainer').style.display = "none";
+}
+
+function stopTrackingMode() {
+    stopRouteMode();
+}
+
+function deleteTrack() {
+    deleteRoute();
 }
 
 function stopDistanceToolMode() {
