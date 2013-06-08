@@ -116,7 +116,6 @@ function initialize() {
     document.getElementById('distanceToolContainer').style.display = "none";
     document.getElementById('navigationContainer').style.width = document.body.offsetWidth + "px";
     document.getElementById('navigationContainer').style.display = "none";
-    document.getElementById('chat').style.display = "none";
 
     // initialize map
     map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
