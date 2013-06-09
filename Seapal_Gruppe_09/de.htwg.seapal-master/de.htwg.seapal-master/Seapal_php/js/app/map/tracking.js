@@ -1,15 +1,22 @@
 function startTracking() {
-
+    event.preventDefault();
 } 
 
 
-function startNewTracking(position, data) {    
-    addTrackingPoint(position, data);
+function startNewTracking() {    
+    startNewRoute(new google.maps.LatLng(activeRoute[0].lat, activeRoute[0].lng), MODE.TRACKING, activeRoute.title);
+    session.map.routes[activeRouteInSession].marker[0].marker = "Marker 1";
+    session.map.routes[activeRouteInSession].marker[0].wdate = new Date().today();
+    session.map.routes[activeRouteInSession].marker[0].wtime = new Date().timeNow();
 }
 
 
-function addTrackingPoint(position, data) {
-
+function addTrackingPoint(lat, lng) {
+    addRouteMarker(new google.maps.LatLng(lat, lng), null);
+    session.map.routes[activeRouteInSession].marker[actCount].marker = "Marker "+(actCount+1);
+    session.map.routes[activeRouteInSession].marker[actCount].wdate = new Date().today();
+    session.map.routes[activeRouteInSession].marker[actCount].wtime = new Date().timeNow();
+    actCount++;
 }
 
 
@@ -22,6 +29,9 @@ Date.prototype.timeNow = function(){
      return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
 };
 
+var actCount = 1;
+var trCount = 0;
+var activeRoute = null;
 
 /* ------------------------------------- ship movement simulation ------------------------------------- */
 $(function() {
@@ -66,6 +76,14 @@ function UpdateShipMarkerPosition( message ) {
         currentPositionMarker.setVisible(false);
         currentPositionMarker = new google.maps.Marker(nextMarkerOptions);
         //currentPositionMarker.setPosition(new google.maps.LatLng(latLng[0], latLng[1])); //Maybe use this function, but it causes map view not movable while tracking
+
+        // Count here to a value and than make a new trackingPoint
+        if(trCount < 100) {
+            trCount++;            
+        } else {
+            trCount = 0;
+            addTrackingPoint(currentPosition.lat(), currentPosition.lng());
+        }
     }
 }
 
@@ -74,26 +92,18 @@ function SendRequest( message ) {
 }
 
 $('#startTrackingButton').live("click", function(event) {
-
-    /*activeRoute = session.map.routes[activeRouteInSession];
-    
-    startNewRoute(new google.maps.LatLng(activeRoute.marker[0].lat, activeRoute.marker[0].lng), MODE.TRACKING, activeRoute.title);
-    session.map.routes[activeRouteInSession].marker[0].marker = "Marker "+(i+1);
-    session.map.routes[activeRouteInSession].marker[0].wdate = new Date().today();
-    session.map.routes[activeRouteInSession].marker[0].wtime = new Date().timeNow();
-    //weather info boat info usw
-    //....
-    
-    
-    for (var i = 1; i < activeRoute.marker.length; i++) {
-        addRouteMarker(new google.maps.LatLng(activeRoute.marker[i].lat, activeRoute.marker[i].lng), null);
-        //set attributes like weather usw
-        session.map.routes[activeRouteInSession].marker[i].marker = "Marker "+(i+1);
-        session.map.routes[activeRouteInSession].marker[i].wdate = new Date().today();
-        session.map.routes[activeRouteInSession].marker[i].wtime = new Date().timeNow();
-        //weather info boat info usw
-        //....
-    }*/
+    ResetCounter();
     activeRoute = session.map.routes[activeRouteInSession].marker;
+    startNewTracking(activeRoute[0].lat, activeRoute[0].lng);
+
     SendRequest(JSON.stringify(activeRoute));    
 });
+
+function ResetCounter() {
+    actCount = 1;
+    trCount = 0;
+}
+
+function GatherData() {
+
+}
