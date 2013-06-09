@@ -25,7 +25,7 @@ function addTrackingPoint(lat, lng) {
         dataType: "jsonp", 
         success:function(data,text,xhqr){
             addRouteMarker(new google.maps.LatLng(lat, lng), null);
-            session.map.routes[activeRouteInSession].marker[actCount].marker = "Marker " + actCount;
+            session.map.routes[activeRouteInSession].marker[actCount].marker = actCount;
             session.map.routes[activeRouteInSession].marker[actCount].wdate = new Date().today();
             session.map.routes[activeRouteInSession].marker[actCount].wtime = new Date().timeNow();
             session.map.routes[activeRouteInSession].marker[actCount].windstaerke = data.list[0].wind.speed + " m/s";
@@ -41,6 +41,9 @@ function addTrackingPoint(lat, lng) {
             session.map.routes[activeRouteInSession].marker[actCount].vorsegel = "spin";
             session.map.routes[activeRouteInSession].marker[actCount].motor = "No Motor used";
             session.map.routes[activeRouteInSession].marker[actCount].tank = "73 %";
+            session.map.routes[activeRouteInSession].marker[actCount].regen = "See clouds";
+            session.map.routes[activeRouteInSession].marker[actCount].wellenrichtung = "121 °";
+            session.map.routes[activeRouteInSession].marker[actCount].wellenhoehe = "1 m";
             actCount++;
         }
     });    
@@ -52,6 +55,10 @@ function saveTrackingRoute() {
     if (js_loggedin != true) {
         $('#dialogTitle').text('Access denied');
         $('#dialogMessage').text("To use this functionality you have to be signed in.");
+        $('#messageBox').modal('show');
+    } else if ("" == session.map.routes[activeRouteInSession].trackTitel || "" == session.map.routes[activeRouteInSession].skipper || "" == session.map.routes[activeRouteInSession].crew) {
+        $('#dialogTitle').text('Error');
+        $('#dialogMessage').text("Please fill in all the first three boxes.");
         $('#messageBox').modal('show');
     } else {
         console.log(session.map.routes[activeRouteInSession]);
