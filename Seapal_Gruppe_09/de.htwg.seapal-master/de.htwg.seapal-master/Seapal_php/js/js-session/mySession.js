@@ -49,7 +49,7 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
 
 const TRIP_INFO = ["titel", "von", "nach"];
 
-const TRIP_INFO_LOAD = ["titel", "von", "nach", "lastZoom", "lastLat", "lastLng"];
+const TRIP_INFO_LOAD = ["tnr", "titel", "von", "nach", "lastZoom", "lastLat", "lastLng"];
 
 const ROUTE_MARKER = ["name"];
 
@@ -91,6 +91,7 @@ function getNewTracking()
 {
     return(
     {
+        tnr         : null,
         titel       : "Tracking",
         type        : SESSION_ROUTE_TYPE.TRACKING,
         skipper     : "",

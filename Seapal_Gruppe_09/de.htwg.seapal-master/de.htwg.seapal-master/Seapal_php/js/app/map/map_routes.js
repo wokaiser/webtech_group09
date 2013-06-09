@@ -727,6 +727,7 @@ function saveRoute() {
                 $('#messageBox').modal('show');
             } else {
                 activeRouteMarkerInSession = 0;
+                session.map.routes[activeRouteInSession].tnr = data['tnr'];
                 session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tnr = data['tnr'];
                 //rekursive call to insert all markers of the route to the database
                 jQuery.post("app_tripinfo_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], tripRoutePost, "json");

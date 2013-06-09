@@ -4,7 +4,7 @@ function startTracking() {
 
 
 function startNewTracking() {    
-    startNewRoute(new google.maps.LatLng(activeRoute[0].lat, activeRoute[0].lng), MODE.TRACKING, activeRoute.title);
+    startNewRoute(new google.maps.LatLng(activeRoute.marker[0].lat, activeRoute.marker[0].lng), MODE.TRACKING, activeRoute.title);
     session.map.routes[activeRouteInSession].marker[0].marker = "Marker 1";
     session.map.routes[activeRouteInSession].marker[0].wdate = new Date().today();
     session.map.routes[activeRouteInSession].marker[0].wtime = new Date().timeNow();
@@ -51,7 +51,11 @@ function saveTrackingRoute() {
         $('#messageBox').modal('show');
     } else {
         //save the zoom level, at which the user looked at this route.
-        session.map.routes[activeRouteInSession].lastZoom = map.getZoom();
+        session.map.routes[activeRouteInSession].lastZoom = activeRoute.lastZoom;
+        session.map.routes[activeRouteInSession].lastLat = activeRoute.lastLat;
+        session.map.routes[activeRouteInSession].lastLng = activeRoute.lastLng;
+        //save the tnr for the tracking, which is a foreign key pointing to the route.
+        session.map.routes[activeRouteInSession].tnr = activeRoute.tnr;
         jQuery.post("app_trackinginfo_insert.php", session.map.routes[activeRouteInSession], function(data) { 
             if (data['tracknr'].match(/Error/)) {                
                 $('#dialogTitle').text('Error');
@@ -61,14 +65,14 @@ function saveTrackingRoute() {
                 activeRouteMarkerInSession = 0;
                 session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tnr = data['tracknr'];
                 //rekursive call to insert all markers of the route to the database
-                jQuery.post("app_tracking_point_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], tripRoutePost, "json");
+                jQuery.post("app_tracking_point_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], trackRoutePost, "json");
             }                
         }, "json");
     }
 }
 
 //rekursive function to save all markers of one route. This function calls itself for each marker.
-function tripRoutePost(data) { 
+function trackRoutePost(data) { 
     if (data['trackpointnr'].match(/Error/)) {
         $('#dialogTitle').text('Error');
         $('#dialogMessage').text(data['trackpointnr'].replace(/Error: /, ""));
@@ -78,7 +82,7 @@ function tripRoutePost(data) {
         if (activeRouteMarkerInSession < session.map.routes[activeRouteInSession].marker.length)
         {
             session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].wnr = session.map.routes[activeRouteInSession].marker[0].tracknr;
-            jQuery.post("app_tracking_point_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], tripRoutePost, "json");
+            jQuery.post("app_tracking_point_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], trackRoutePost, "json");
         } else {
             $('#dialogTitle').text('Success');
             $('#dialogMessage').text("Eintrag wurde erfolgreich gespeichert.");
@@ -160,8 +164,18 @@ function SendRequest( message ) {
 
 $('#startTrackingButton').live("click", function(event) {
     ResetCounter();
-    activeRoute = session.map.routes[activeRouteInSession].marker;
-    startNewTracking(activeRoute[0].lat, activeRoute[0].lng);
+    
+    //check if the route, which should be tracked is saved to the database
+    if (null == session.map.routes[activeRouteInSession].tnr) {
+        $('#dialogTitle').text('Error');
+        $('#dialogMessage').text("You should save your route, before you can start tracking.");
+        $('#messageBox').modal('show'); 
+        return;
+    }
+    
+    
+    activeRoute = session.map.routes[activeRouteInSession];
+    startNewTracking();
 
     SendRequest(JSON.stringify(activeRoute));    
 });
