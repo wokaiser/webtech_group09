@@ -833,32 +833,38 @@ $(document).ready(function() {
 /*functions to switch to the position of the next/prev/first/last route*/
 
 function routeBackward() {
-    console.log("routeBackward");
-    if (activeRouteInSession <= 0) {
+    var indexUpdate;
+    if (activeRouteInSession == 0 && session.map.routes.length > 0) {
+        indexUpdate = session.map.routes.length - 1;
+    } else if (session.map.routes.length <= 0) {
         return;
+    } else {
+        indexUpdate = activeRouteInSession - 1;
     }
-    updateMapPosition((activeRouteInSession - 1));
+    updateMapPosition(indexUpdate);
 }
 
 function routeFastBackward() {
-    console.log("routeFastBackward");
-    if (activeRouteInSession <= 0) {
+    if (session.map.routes.length <= 0) {
         return;
     }
     updateMapPosition(0);
 }
 
 function routeForward() {
-    console.log("routeForward");
-    if (activeRouteInSession >= (session.map.routes.length - 1)) {
+    var indexUpdate;
+    if (activeRouteInSession >= (session.map.routes.length - 1) && session.map.routes.length > 0) {
+        indexUpdate = 0;
+    } else if (session.map.routes.length <= 0) {
         return;
+    } else {
+        indexUpdate = activeRouteInSession + 1;
     }
-    updateMapPosition((activeRouteInSession + 1));
+    updateMapPosition(indexUpdate);
 }
 
 function routeFastForward() {
-    console.log("routeFastForward");
-    if (activeRouteInSession > (session.map.routes.length - 1)) {
+    if (session.map.routes.length <= 0 || activeRouteInSession > (session.map.routes.length - 1)) {
         return;
     }
     updateMapPosition((session.map.routes.length - 1));
