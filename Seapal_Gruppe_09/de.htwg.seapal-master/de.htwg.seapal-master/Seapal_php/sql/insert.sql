@@ -8,8 +8,8 @@ INSERT INTO seapal.bootinfo (unr, bootname, registernummer, segelzeichen, heimat
 INSERT INTO seapal.bootinfo (unr, bootname, registernummer, segelzeichen, heimathafen, yachtclub, eigner, versicherung, rufzeichen, typ, konstrukteur, laenge, breite, tiefgang, masthoehe, verdraengung, rigart, baujahr, motor, tankgroesse, wassertankgroesse, abwassertankgroesse, grosssegelgroesse, genuagroesse, spigroesse) VALUES (2, "MS Deutschland", 150, "MSD15", "Hamburg", "Hamburg Yacht Club", "Peter Miller", "Allianz", "MSD", "Schiff", "Emil Klaus", 200, 50, 7, 10, 1000, "T27", 1993, "Duotec 100", 500, 50, 30, 10, 25, 13);
 
 /* insert trips */
-INSERT INTO seapal.tripinfo (bnr, titel, von, nach) VALUES (1, "Kurztrip nach Hagnau", "Konstanz", "Hagnau");
-INSERT INTO seapal.tripinfo (bnr, titel, von, nach) VALUES (2, "Kurztrip nach Konstanz", "Hangnau", "Konstanz");
+INSERT INTO seapal.tripinfo (bnr, titel, von, nach, lastZoom, lastLat, lastLng) VALUES (1, "Kurztrip nach Hagnau", "Konstanz", "Hagnau", 10, 47.66, 9.17916667);
+INSERT INTO seapal.tripinfo (bnr, titel, von, nach, lastZoom, lastLat, lastLng) VALUES (2, "Kurztrip nach Konstanz", "Hangnau", "Konstanz", 10, 47.67222222, 9.313333333);
 
 INSERT INTO seapal.wegpunkte (tnr, name, lat, lng) VALUES (1, "Marker 1", 47.66, 9.17916667);
 INSERT INTO seapal.wegpunkte (tnr, name, lat, lng) VALUES (1, "Marker 2", 47.66055556, 9.181388889);
@@ -24,7 +24,7 @@ INSERT INTO seapal.wegpunkte (tnr, name, lat, lng) VALUES (2, "Marker 4", 47.660
 INSERT INTO seapal.wegpunkte (tnr, name, lat, lng) VALUES (2, "Marker 5", 47.66, 9.17916667);
 
 /* insert tracking */
-INSERT INTO seapal.tracking (tnr, skipper, crew, tstart, tende, tdauer) VALUES (1, "Cpt. Nemo", "Tick Trick Track", DATE("2012-07-02"), DATE("2012-07-02"), 160);
+INSERT INTO seapal.tracking (tnr, titel, skipper, crew, tstart, tende, tdauer, lastZoom, lastLat, lastLng) VALUES (1, "Nemos Fahrt", "Cpt. Nemo", "Tick Trick Track", DATE("2012-07-02"), DATE("2012-07-02"), 160, 12, 47.66, 9.17916667);
 
 /* insert into tracking points */
 INSERT INTO seapal.trackingPoint (tracknr, marker, lat, lng, btm, dtm, sog, cog, manoever, vorsegel, wdate, wtime, motor, tank, windstaerke, windrichtung, luftdruck, temperatur, wolken, regen, wellenhoehe, wellenrichtung) VALUES

@@ -54,6 +54,8 @@ CREATE TABLE seapal.tripinfo (
 	von VARCHAR(30) NOT NULL,
 	nach VARCHAR(30) NOT NULL,
 	lastZoom INT NOT NULL,
+    lastLat REAL NOT NULL,
+    lastLng REAL NOT NULL,
 	PRIMARY KEY (tnr),
 	FOREIGN KEY (bnr) REFERENCES benutzer (bnr) ON DELETE CASCADE
 );
@@ -73,11 +75,15 @@ CREATE TABLE seapal.wegpunkte (
 CREATE TABLE seapal.tracking (
 	tracknr INT NOT NULL AUTO_INCREMENT,
 	tnr INT NOT NULL,
+	titel VARCHAR(30) NOT NULL,
 	skipper VARCHAR(30) DEFAULT NULL,
 	crew VARCHAR(100) DEFAULT NULL,
 	tstart VARCHAR(30) DEFAULT NULL,
 	tende VARCHAR(30) DEFAULT NULL,
 	tdauer FLOAT DEFAULT NULL,
+	lastZoom INT NOT NULL,
+    lastLat REAL NOT NULL,
+    lastLng REAL NOT NULL,
 	PRIMARY KEY (tracknr),
 	FOREIGN KEY (tnr) REFERENCES tripinfo (tnr) ON DELETE CASCADE
 );

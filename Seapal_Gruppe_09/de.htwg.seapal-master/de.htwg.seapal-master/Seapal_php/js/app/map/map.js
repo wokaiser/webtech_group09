@@ -661,19 +661,22 @@ function getWeatherForecast() {
             var minTemp;
             var maxTemp;
             var dayTxt;
-
+            console.log(data.list);
             //loop for number of day's to forecast
             for (var day = 1; day <= 7; day++) {
                 minTemp = MIN_TEMPERATUR_INIT;
                 maxTemp = MAX_TEMPERATUR_INIT;
                 searchDate = new Date().getFullYear()+"-"+new Date().getFullMonth()+"-"+new Date().getFullDay(day);
-
+                var icon = "10d";    
+                
                 for (var i in data.list) {
                     if (data.list[i].dt_txt.startsWith(searchDate)) {
                         if (data.list[i].main.temp_min < minTemp) {
+                            icon = data.list[i].weather[0].icon;
                             minTemp = data.list[i].main.temp_min;
                         }
                         if (data.list[i].main.temp_max > maxTemp) {
+                            icon = data.list[i].weather[0].icon;
                             maxTemp = data.list[i].main.temp_max;
                         }
                     }
@@ -697,9 +700,10 @@ function getWeatherForecast() {
                     dayTxt = WEEKDAY[weekday];
                 }
                                 
+                console.log(data.list[i].weather[0].icon);
                 txt += "<div class='left'>"
                     txt += "<div style='text-align:center; font-size: small; font-weight: bold; margin-bottom: 0px;'>"+dayTxt+"</div> "
-                    txt += "<img height='45' width='45' style='text-align:center; border: medium none; width: 45px; height: 45px; background: url(&quot;http://openweathermap.org/img/w/"+data.list[i].weather[0].icon+".png&quot;) repeat scroll 0% 0% transparent;' alt='title' src='http://openweathermap.org/images/transparent.png'/>"
+                    txt += "<img height='45' width='45' style='text-align:center; border: medium none; width: 45px; height: 45px; background: url(&quot;http://openweathermap.org/img/w/"+icon+".png&quot;) repeat scroll 0% 0% transparent;' alt='title' src='http://openweathermap.org/images/transparent.png'/>"
                     txt += "<div style='display: block; clear: left; color: #DAB500; font-size: x-small; text-align:center;' title='Max Temperature'>"+maxTemp+"</div>"
                     txt += "<div style='display: block; clear: left; color: gray; font-size: x-small; text-align:center;' title='Min Temperature'>"+minTemp+"</div>"
                 txt += "</div>"

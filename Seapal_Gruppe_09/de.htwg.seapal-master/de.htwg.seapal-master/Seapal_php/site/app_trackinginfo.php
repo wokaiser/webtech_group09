@@ -34,6 +34,7 @@ if (!$db_selected)
 	                <table class="appTable table table-hover" cellspacing="0px" cellpadding="5px">
 	                    <thead>
 	                        <tr>
+	                            <th>Titel</th>
 	                            <th>Skipper</th>
 	                            <th>Crew</th>
 	                            <th>Start</th>
@@ -61,6 +62,7 @@ if (!$db_selected)
 		
 		                        while ($row = mysql_fetch_array($result)) {
 		                        	echo("<tr class='selectable'>");
+		                            echo("<td>" . $row['titel'] . "</td>");
 		                            echo("<td>" . $row['skipper'] . "</td>");
 		                            echo("<td>" . $row['crew'] . "</td>");
 		                            echo("<td>" . $row['tstart'] . "</td>");

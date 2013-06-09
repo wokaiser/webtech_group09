@@ -37,8 +37,8 @@ $(function() {
                     if (!rootAlreadyInMap(newRoute)) {
                         //add the other components to the route
                         //load the trip info from to the session.
-                        for (var i in TRIP_INFO) {
-                            newRoute[TRIP_INFO[i]] = data[TRIP_INFO[i]];
+                        for (var i in TRIP_INFO_LOAD) {
+                            newRoute[TRIP_INFO_LOAD[i]] = data[TRIP_INFO_LOAD[i]];
                         }
                         //push the new Route to the routes array
                         session.map.routes.push(newRoute);

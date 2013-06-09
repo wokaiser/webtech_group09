@@ -10,12 +10,14 @@
 	    exit;
 	}
 	
-	$sql = "INSERT INTO ".const_mysql_trip." (bnr, titel, von, nach, lastZoom) VALUES (
+	$sql = "INSERT INTO ".const_mysql_trip." (bnr, titel, von, nach, lastZoom, lastLat, lastLng) VALUES (
 				" . $_SESSION['bnr'] . ",
 				'" . $_POST['titel'] . "',
 				'" . $_POST['von'] . "',
                 '" . $_POST['nach'] . "',
-				" . $_POST['lastZoom'] . ");";
+                '" . $_POST['lastZoom'] . "',
+                '" . $_POST['lastLat'] . "',
+				" . $_POST['lastLng'] . ");";
 	
 	$result = mysql_query($sql, $sql_connection);
 	

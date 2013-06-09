@@ -16,7 +16,9 @@
 	}
 	
 	$row = mysql_fetch_array($result);
-	
+	$row['lastZoom'] = floatval($row['lastZoom']);
+	$row['lastLat'] = floatval($row['lastLat']);
+	$row['lastLng'] = floatval($row['lastLng']);
 	echo json_encode($row);
 	
 	mysql_free_result($result);

@@ -49,9 +49,13 @@ if (typeof(session) == 'undefined' || SESSION_VERSION != session.version) {
 
 const TRIP_INFO = ["titel", "von", "nach"];
 
+const TRIP_INFO_LOAD = ["titel", "von", "nach", "lastZoom", "lastLat", "lastLng"];
+
 const ROUTE_MARKER = ["name"];
 
-const TRACKING_INFO = ["skipper", "crew", "tstart", "tende", "tdauer"];
+const TRACKING_INFO = ["titel", "skipper", "crew", "tstart", "tende", "tdauer"];
+
+const TRACKING_INFO_LOAD = ["titel", "skipper", "crew", "tstart", "tende", "tdauer", "lastZoom", "lastLat", "lastLng"];
 
 const TRACKING_POINT = ["marker", "btm", "dtm", "sog", "cog", "manoever", "vorsegel", "wdate", "wtime", "motor", "tank", "windstaerke", "windrichtung", "luftdruck", "temperatur", "wolken", "regen", "wellenhoehe", "wellenrichtung"];
 

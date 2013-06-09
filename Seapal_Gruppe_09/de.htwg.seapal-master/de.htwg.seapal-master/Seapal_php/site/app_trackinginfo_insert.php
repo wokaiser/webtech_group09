@@ -8,13 +8,17 @@
 	    die('Error: ' . mysql_error());
 	}
     
-	$sql = "INSERT INTO ".const_mysql_tracking." (tnr, skipper, crew, tstart, tende, tdauer) VALUES (
-				'" . $_POST['tnr'] . "',
+	$sql = "INSERT INTO ".const_mysql_tracking." (tnr, titel, skipper, crew, tstart, tende, tdauer, lastZoom, lastLat, lastLng) VALUES (
+                '" . $_POST['tnr'] . "',
+				'" . $_POST['titel'] . "',
 				'" . $_POST['skipper'] . "',
 				'" . $_POST['crew'] . "',
 				'" . $_POST['tstart'] . "',
 				'" . $_POST['tende'] . "',
-				'" . $_POST['tdauer'] . "');";
+				'" . $_POST['tdauer'] . "',
+				'" . $_POST['lastZoom'] . "',
+				'" . $_POST['lastLat'] . "',
+				'" . $_POST['lastLng'] . "');";
 	
 	$result = mysql_query($sql, $sql_connection);
 	

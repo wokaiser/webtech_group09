@@ -49,8 +49,8 @@ $(function() {
                     if (!rootAlreadyInMap(newTracking)) {
                         //add the other components to the track
                         //load the trip info from to the session.
-                        for (var i in TRACKING_INFO) {
-                            newTracking[TRACKING_INFO[i]] = data[TRACKING_INFO[i]];
+                        for (var i in TRACKING_INFO_LOAD) {
+                            newTracking[TRACKING_INFO_LOAD[i]] = data[TRACKING_INFO_LOAD[i]];
                         }
                         //push the new track to the trackings array
                         session.map.routes.push(newTracking);
