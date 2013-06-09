@@ -5,6 +5,12 @@ function startTracking() {
 
 function startNewTracking() {    
     startNewRoute(new google.maps.LatLng(activeRoute.marker[0].lat, activeRoute.marker[0].lng), MODE.TRACKING, activeRoute.title);
+    //save the zoom level, at which the user looked at this route.
+    session.map.routes[activeRouteInSession].lastZoom = activeRoute.lastZoom;
+    session.map.routes[activeRouteInSession].lastLat = activeRoute.lastLat;
+    session.map.routes[activeRouteInSession].lastLng = activeRoute.lastLng;
+    //save the tnr for the tracking, which is a foreign key pointing to the route.
+    session.map.routes[activeRouteInSession].tnr = activeRoute.tnr;
     session.map.routes[activeRouteInSession].marker[0].marker = "Marker 1";
     session.map.routes[activeRouteInSession].marker[0].wdate = new Date().today();
     session.map.routes[activeRouteInSession].marker[0].wtime = new Date().timeNow();
@@ -44,26 +50,21 @@ function addTrackingPoint(lat, lng) {
 
 //save a route from the map to the database
 function saveTrackingRoute() {
-    console.log("Saving");    
+    activeRoute = session.map.routes[activeRouteInSession];
     if (js_loggedin != true) {
         $('#dialogTitle').text('Access denied');
         $('#dialogMessage').text("To use this functionality you have to be signed in.");
         $('#messageBox').modal('show');
     } else {
-        //save the zoom level, at which the user looked at this route.
-        session.map.routes[activeRouteInSession].lastZoom = activeRoute.lastZoom;
-        session.map.routes[activeRouteInSession].lastLat = activeRoute.lastLat;
-        session.map.routes[activeRouteInSession].lastLng = activeRoute.lastLng;
-        //save the tnr for the tracking, which is a foreign key pointing to the route.
-        session.map.routes[activeRouteInSession].tnr = activeRoute.tnr;
-        jQuery.post("app_trackinginfo_insert.php", session.map.routes[activeRouteInSession], function(data) { 
+        console.log(session.map.routes[activeRouteInSession]);
+        jQuery.post("app_trackinginfo_insert.php", session.map.routes[activeRouteInSession], function(data) {            
             if (data['tracknr'].match(/Error/)) {                
                 $('#dialogTitle').text('Error');
                 $('#dialogMessage').text(data['tracknr'].replace(/Error: /, ""));
                 $('#messageBox').modal('show');
             } else {
                 activeRouteMarkerInSession = 0;
-                session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tnr = data['tracknr'];
+                session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tracknr = data['tracknr'];
                 //rekursive call to insert all markers of the route to the database
                 jQuery.post("app_tracking_point_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], trackRoutePost, "json");
             }                
@@ -81,7 +82,7 @@ function trackRoutePost(data) {
         activeRouteMarkerInSession++;
         if (activeRouteMarkerInSession < session.map.routes[activeRouteInSession].marker.length)
         {
-            session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].wnr = session.map.routes[activeRouteInSession].marker[0].tracknr;
+            session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tracknr = session.map.routes[activeRouteInSession].marker[0].tracknr;
             jQuery.post("app_tracking_point_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], trackRoutePost, "json");
         } else {
             $('#dialogTitle').text('Success');
@@ -127,6 +128,7 @@ $(function() {
 
     //Log any messages sent from server
     Server.bind('message', function( message ) {
+        console.log("Received from server: " + message);
         UpdateShipMarkerPosition( message );        
     });
 
@@ -177,7 +179,7 @@ $('#startTrackingButton').live("click", function(event) {
     activeRoute = session.map.routes[activeRouteInSession];
     startNewTracking();
 
-    SendRequest(JSON.stringify(activeRoute));    
+    SendRequest(JSON.stringify(activeRoute.marker));    
 });
 
 function ResetCounter() {
