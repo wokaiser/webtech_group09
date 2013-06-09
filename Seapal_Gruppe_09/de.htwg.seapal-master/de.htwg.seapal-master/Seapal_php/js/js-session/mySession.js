@@ -67,7 +67,9 @@ function getNewRoute()
         von         : "",
         nach        : "",
         marker      : [],
-        lastZoom    : 5
+        lastLat     : null,
+        lastLng     : null,
+        lastZoom    : null
     });
 }
 
@@ -92,7 +94,10 @@ function getNewTracking()
         tstart      : "",
         tende       : "",
         tdauer      : "",
-        marker      : []
+        marker      : [],
+        lastLat     : null,
+        lastLng     : null,
+        lastZoom    : null
     });
 }
 

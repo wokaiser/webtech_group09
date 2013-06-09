@@ -36,8 +36,15 @@
                     </ul>
                 </li>
 			</ul>
-		</div>
-	</div>
+            <div class="btn-group pull-right" <?php if ($filename != "app_map") echo("style='display: none;'>"); ?>>
+                <a href="#" class="btn btn-inverse "><i class="icon-white icon-fast-backward" onclick="javascript: routeFastBackward()"></i></a>
+                <a href="#" class="btn btn-inverse "><i class="icon-white icon-backward" onclick="javascript: routeBackward()"></i></a>
+                <a href="#" class="btn btn-inverse ">Route</a>
+                <a href="#" class="btn btn-inverse "><i class="icon-white icon-forward" onclick="javascript: routeForward()"></i></a>
+                <a href="#" class="btn btn-inverse "><i class="icon-white icon-fast-forward" onclick="javascript: routeFastForward()"></i></a>
+            </div>
+		</div>	
+    </div>
 </div>
 
 <!-- Java-Script -->

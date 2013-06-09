@@ -212,6 +212,15 @@ function addRouteMarker(position, index) {
 
     var marker;
     
+    if (!onInitialize && (currentMode == MODE.ROUTE || currentMode == MODE.TRACKING)) {
+        //get the coordinates from the center of the map
+        latLng = map.getCenter();
+        session.map.routes[activeRouteInSession].lastLat = latLng.lat();
+        session.map.routes[activeRouteInSession].lastLng = latLng.lng();
+        //save the zoom level, at which the user looked at this route.
+        session.map.routes[activeRouteInSession].lastZoom = map.getZoom();
+    }
+    
     if (currentMode == MODE.ROUTE) {
         marker = new google.maps.Marker({
         position: position,
@@ -542,17 +551,15 @@ function startNewRoute(position, mode, routeName) {
 }
 
 function stopRouteMode() {
-        //toggle draggable NOT if in tracking mode
-        if (currentMode == MODE.TRACKING) {
-            currentRoute.route.setOptions(inactiveTrackPathOptions);
-        }  
-        else {
-            currentRoute.route.setOptions(inactivePathOptions);
-            toggleDraggable(currentRoute);  
-        }
+    //toggle draggable NOT if in tracking mode
+    if (currentMode == MODE.TRACKING) {
+        currentRoute.route.setOptions(inactiveTrackPathOptions);
+    }  
+    else {
+        currentRoute.route.setOptions(inactivePathOptions);
+        toggleDraggable(currentRoute);  
+    }
 
- //   }
-    
     currentRoute = null;
     currentMode = MODE.DEFAULT;
     saveRouteInfoToSession();
@@ -821,3 +828,51 @@ $(document).ready(function() {
     });
 });
 
+
+
+/*functions to switch to the position of the next/prev/first/last route*/
+
+function routeBackward() {
+    console.log("routeBackward");
+    if (activeRouteInSession <= 0) {
+        return;
+    }
+    updateMapPosition((activeRouteInSession - 1));
+}
+
+function routeFastBackward() {
+    console.log("routeFastBackward");
+    if (activeRouteInSession <= 0) {
+        return;
+    }
+    updateMapPosition(0);
+}
+
+function routeForward() {
+    console.log("routeForward");
+    if (activeRouteInSession >= (session.map.routes.length - 1)) {
+        return;
+    }
+    updateMapPosition((activeRouteInSession + 1));
+}
+
+function routeFastForward() {
+    console.log("routeFastForward");
+    if (activeRouteInSession > (session.map.routes.length - 1)) {
+        return;
+    }
+    updateMapPosition((session.map.routes.length - 1));
+}
+
+function updateMapPosition(newActiveRoute) {
+    if (currentMode == MODE.DISTANCE) {
+        stopDistanceToolMode();
+    } else if (currentMode == MODE.ROUTE) {
+        stopRouteMode();
+    } else if (currentMode == MODE.TRACKING) {
+        stopTrackingMode();
+    }
+    activeRouteInSession = newActiveRoute;
+    map.setZoom(session.map.routes[activeRouteInSession].lastZoom);
+    map.panTo(new google.maps.LatLng(session.map.routes[activeRouteInSession].lastLat, session.map.routes[activeRouteInSession].lastLng));
+}
