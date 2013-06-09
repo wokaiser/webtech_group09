@@ -11,9 +11,7 @@ function startNewTracking() {
     session.map.routes[activeRouteInSession].lastLng = activeRoute.lastLng;
     //save the tnr for the tracking, which is a foreign key pointing to the route.
     session.map.routes[activeRouteInSession].tnr = activeRoute.tnr;
-    session.map.routes[activeRouteInSession].marker[0].marker = "Marker 1";
-    session.map.routes[activeRouteInSession].marker[0].wdate = new Date().today();
-    session.map.routes[activeRouteInSession].marker[0].wtime = new Date().timeNow();
+    addTrackingPoint(activeRoute.marker[0].lat, activeRoute.marker[0].lng);
 }
 
 
@@ -27,20 +25,20 @@ function addTrackingPoint(lat, lng) {
         dataType: "jsonp", 
         success:function(data,text,xhqr){
             addRouteMarker(new google.maps.LatLng(lat, lng), null);
-            session.map.routes[activeRouteInSession].marker[actCount].marker = "Marker " + (actCount + 1);
+            session.map.routes[activeRouteInSession].marker[actCount].marker = "Marker " + actCount;
             session.map.routes[activeRouteInSession].marker[actCount].wdate = new Date().today();
             session.map.routes[activeRouteInSession].marker[actCount].wtime = new Date().timeNow();
-            session.map.routes[activeRouteInSession].marker[actCount].windstaerke = "Wind speed: " + data.list[0].wind.speed + " m/s";
-            session.map.routes[activeRouteInSession].marker[actCount].windrichtung = "Wind direct.: " + data.list[0].wind.deg + " °";
-            session.map.routes[activeRouteInSession].marker[actCount].luftdruck = "Airpressure: " + data.list[0].main.pressure + " hPa";
-            session.map.routes[activeRouteInSession].marker[actCount].temperatur = "Temperature: " + convertToCelcius(data.list[0].main.temp) + " °C";
-            session.map.routes[activeRouteInSession].marker[actCount].wolken = "Clouds: " + data.list[0].weather[0].main;
-            session.map.routes[activeRouteInSession].marker[actCount].btm = "Bearing to Marker: 192 °";
-            session.map.routes[activeRouteInSession].marker[actCount].dtm = "Destination to Marker: 120 m";
-            session.map.routes[activeRouteInSession].marker[actCount].sog = "Speed over ground: 5 knts";
-            session.map.routes[activeRouteInSession].marker[actCount].cog = "Course over ground: 253°";
-            session.map.routes[activeRouteInSession].marker[actCount].manoever = "Manoeuver: none";
-            session.map.routes[activeRouteInSession].marker[actCount].vorsegel = "Head sail: spin";
+            session.map.routes[activeRouteInSession].marker[actCount].windstaerke = data.list[0].wind.speed + " m/s";
+            session.map.routes[activeRouteInSession].marker[actCount].windrichtung = data.list[0].wind.deg + " °";
+            session.map.routes[activeRouteInSession].marker[actCount].luftdruck = data.list[0].main.pressure + " hPa";
+            session.map.routes[activeRouteInSession].marker[actCount].temperatur = convertToCelcius(data.list[0].main.temp) + " °C";
+            session.map.routes[activeRouteInSession].marker[actCount].wolken = data.list[0].weather[0].main;
+            session.map.routes[activeRouteInSession].marker[actCount].btm = "192 °";
+            session.map.routes[activeRouteInSession].marker[actCount].dtm = "120 m";
+            session.map.routes[activeRouteInSession].marker[actCount].sog = "5 knts";
+            session.map.routes[activeRouteInSession].marker[actCount].cog = "253°";
+            session.map.routes[activeRouteInSession].marker[actCount].manoever = "none";
+            session.map.routes[activeRouteInSession].marker[actCount].vorsegel = "spin";
             session.map.routes[activeRouteInSession].marker[actCount].motor = "No Motor used";
             session.map.routes[activeRouteInSession].marker[actCount].tank = "73 %";
             actCount++;
