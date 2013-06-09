@@ -62,7 +62,7 @@ if (!$db_selected)
 		
 		                        while ($row = mysql_fetch_array($result)) {
 		                        	echo("<tr class='selectable'>");
-		                            echo("<td>" . $row['titel'] . "</td>");
+		                            echo("<td>" . $row['trackTitel'] . "</td>");
 		                            echo("<td>" . $row['skipper'] . "</td>");
 		                            echo("<td>" . $row['crew'] . "</td>");
 		                            echo("<td>" . $row['tstart'] . "</td>");

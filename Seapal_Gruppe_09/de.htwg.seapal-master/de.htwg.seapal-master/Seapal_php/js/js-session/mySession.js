@@ -53,9 +53,9 @@ const TRIP_INFO_LOAD = ["tnr", "titel", "von", "nach", "lastZoom", "lastLat", "l
 
 const ROUTE_MARKER = ["name"];
 
-const TRACKING_INFO = ["titel", "skipper", "crew", "tstart", "tende", "tdauer"];
+const TRACKING_INFO = ["trackTitel", "skipper", "crew", "tstart", "tende", "tdauer"];
 
-const TRACKING_INFO_LOAD = ["titel", "skipper", "crew", "tstart", "tende", "tdauer", "lastZoom", "lastLat", "lastLng"];
+const TRACKING_INFO_LOAD = ["trackTitel", "skipper", "crew", "tstart", "tende", "tdauer", "lastZoom", "lastLat", "lastLng"];
 
 const TRACKING_POINT = ["marker", "btm", "dtm", "sog", "cog", "manoever", "vorsegel", "wdate", "wtime", "motor", "tank", "windstaerke", "windrichtung", "luftdruck", "temperatur", "wolken", "regen", "wellenhoehe", "wellenrichtung"];
 
@@ -81,7 +81,7 @@ function getNewRouteMarker()
 {   
     return(
     {
-        name     : "Marker",
+        name     : "",
         lat      : null,
         lng      : null
     });
@@ -92,7 +92,7 @@ function getNewTracking()
     return(
     {
         tnr         : null,
-        titel       : "Tracking",
+        trackTitel  : "",
         type        : SESSION_ROUTE_TYPE.TRACKING,
         skipper     : "",
         crew        : "",
@@ -110,7 +110,7 @@ function getNewTrackPoint()
 {   
     return(
     {
-        marker          : "Marker",
+        marker          : "",
         lat             : null,
         lng             : null,
         btm             : null,

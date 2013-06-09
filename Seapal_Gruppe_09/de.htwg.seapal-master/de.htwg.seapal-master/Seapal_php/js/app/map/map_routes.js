@@ -199,6 +199,10 @@ $(function () {
                 currentRoute.route.setOptions(activeTrackPathOptions);
                 updateRouteDistance();
                 document.getElementById('trackingMenuContainer').style.display = "block";
+                //load the trip info from the session to the input boxes.
+                for (var i in TRACKING_INFO) {
+                    document.getElementById(TRACKING_INFO[i]).value = session.map.routes[activeRouteInSession][TRACKING_INFO[i]];
+                }
             }
         },
         items: {
@@ -571,6 +575,10 @@ function stopRouteMode() {
     for (var i in TRIP_INFO) {
         document.getElementById(TRIP_INFO[i]).value = "";
     }
+    //load the default to the trip info box
+    for (var i in TRACKING_INFO) {
+        document.getElementById(TRACKING_INFO[i]).value = "";
+    }
 }
 
 function startNewNavigation(start, destination) {
@@ -685,13 +693,21 @@ function deleteRoute() {
 function saveRouteInfoToSession() {
     //save only if not in initialise mode
     if (!onInitialize && session.map.routes.length > 0 && INACTIVE != activeRouteInSession) {
-        //store the trip info to the session from the input boxes.
-        for (var i in TRIP_INFO) {
-            session.map.routes[activeRouteInSession][TRIP_INFO[i]] = document.getElementById(TRIP_INFO[i]).value;
-        }
-        //set the correct marker names, because the markers will be created on the cklick of a marker
-        for (var i in session.map.routes[activeRouteInSession].marker.length) {
-            session.map.routes[activeRouteInSession].marker[i] = "Marker "+i+1;
+        //check which mode is active
+        if (currentMode == MODE.ROUTE) {
+            //store the trip info to the session from the input boxes.
+            for (var i in TRIP_INFO) {
+                session.map.routes[activeRouteInSession][TRIP_INFO[i]] = document.getElementById(TRIP_INFO[i]).value;
+            }
+            //set the correct marker names, because the markers will be created on the cklick of a marker
+            for (var i in session.map.routes[activeRouteInSession].marker.length) {
+                session.map.routes[activeRouteInSession].marker[i] = "Marker "+i+1;
+            }
+        } else if (currentMode == MODE.TRACKING) {
+            //store the trip info to the session from the input boxes.
+            for (var i in TRACKING_INFO) {
+                session.map.routes[activeRouteInSession][TRACKING_INFO[i]] = document.getElementById(TRACKING_INFO[i]).value;
+            }
         }
     }
 }
@@ -823,6 +839,19 @@ $(document).ready(function() {
             currentRoute.markerInfobox.setMap(null);
             currentRoute.name = this.value;
             currentRoute.markerInfobox = drawRouteInfobox(new google.maps.LatLng(session.map.routes[activeRouteInSession].marker[0].lat, session.map.routes[activeRouteInSession].marker[0].lng), currentRoute.name);
+        }
+        session.map.routes[activeRouteInSession][this.id] = this.value;
+        return false;
+    });
+    
+    /* Check for on change event for one of the track info input boxes*/
+    $('.trackInfoInput').change(function(e) {
+        //if the titel was changed, a new route info box should be drawn.
+        if ("trackTitel" == this.id) {
+            //remove the old marker info box and draw a new at the coordinates of the first route marker
+            currentRoute.markerInfobox.setMap(null);
+            currentRoute.name = this.value;
+            currentRoute.markerInfobox = drawTrackingInfobox(new google.maps.LatLng(session.map.routes[activeRouteInSession].marker[0].lat, session.map.routes[activeRouteInSession].marker[0].lng), currentRoute.name);
         }
         session.map.routes[activeRouteInSession][this.id] = this.value;
         return false;

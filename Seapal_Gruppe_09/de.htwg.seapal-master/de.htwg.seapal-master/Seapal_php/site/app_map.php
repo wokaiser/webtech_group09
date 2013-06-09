@@ -71,15 +71,15 @@ if (!$db_selected)
             	<div id="trackingMenu" class="well">
             		<h4>Tracking Menü</h4>
 	            	<div class="btn-group btn-group-vertical">
-                        <input type='text'   class="routeInfoInput" id='titel'   placeholder='Titel' size='30' maxlength='30'/><br/>
-                        <input type='text'   class="routeInfoInput" id='skipper' placeholder='Skipper' size='30' maxlength='60'/><br/>
-                        <input type='text'   class="routeInfoInput" id='crew'    placeholder='Crew' size='30' maxlength='60'/><br/>
-                        <input type='text'   class="routeInfoInput" id='tstart'  placeholder='Start of tracking' size='30' maxlength='60'/><br/>
-                        <input type='text'   class="routeInfoInput" id='tende'   placeholder='End of tracking' size='30' maxlength='60'/><br/>
-                        <input type='text'   class="routeInfoInput" id='tdauer'  placeholder='Tracking duration' size='30' maxlength='60'/><br/>
-	                    <input type="button" class="routeInfoInput btn" value="Save Track" id="saveTrackButton" class="routeButton" onclick="javascript: saveTrackingRoute()" />
-	                    <input type="button" class="routeInfoInput btn" value="Delete Track" id="deleteTrackButton" class="routeButton" onclick="javascript: deleteTrack()" />                      
-	                    <input type="button" class="routeInfoInput btn" value="Quit Menu" id="stopTrackingButton" class="routeButton" onclick="javascript: stopTrackingMode()" />
+                        <input type='text'   class="trackInfoInput" id='trackTitel'   placeholder='Titel' size='30' maxlength='30'/><br/>
+                        <input type='text'   class="trackInfoInput" id='skipper' placeholder='Skipper' size='30' maxlength='60'/><br/>
+                        <input type='text'   class="trackInfoInput" id='crew'    placeholder='Crew' size='30' maxlength='60'/><br/>
+                        <input type='text'   class="trackInfoInput" id='tstart'  placeholder='Start of tracking' size='30' maxlength='60'/><br/>
+                        <input type='text'   class="trackInfoInput" id='tende'   placeholder='End of tracking' size='30' maxlength='60'/><br/>
+                        <input type='text'   class="trackInfoInput" id='tdauer'  placeholder='Tracking duration' size='30' maxlength='60'/><br/>
+	                    <input type="button" class="trackInfoInput btn" value="Save Track" id="saveTrackButton" class="routeButton" onclick="javascript: saveTrackingRoute()" />
+	                    <input type="button" class="trackInfoInput btn" value="Delete Track" id="deleteTrackButton" class="routeButton" onclick="javascript: deleteTrack()" />                      
+	                    <input type="button" class="trackInfoInput btn" value="Quit Menu" id="stopTrackingButton" class="routeButton" onclick="javascript: stopTrackingMode()" />
 	                </div>
 	            	<br><br>
 	                <div id="tracking_distance">Track lenght: <span id="tracking_number"></span> m</div>

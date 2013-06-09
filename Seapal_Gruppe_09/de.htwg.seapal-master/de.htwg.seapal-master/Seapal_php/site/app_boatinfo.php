@@ -227,7 +227,6 @@ if (!$db_selected)
 	    
 	    <!-- Additional Java-Script -->
 	    <script src="../js/app/ajax/boatinfo.js" type="text/javascript"></script>
-        <script src="../js/app/ajax/weatherinfo.js" type="text/javascript"></script>
 	   
     <?php @mysql_close($sql_connection); ?>
        

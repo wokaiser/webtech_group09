@@ -75,7 +75,7 @@ CREATE TABLE seapal.wegpunkte (
 CREATE TABLE seapal.tracking (
 	tracknr INT NOT NULL AUTO_INCREMENT,
 	tnr INT NOT NULL,
-	titel VARCHAR(30) NOT NULL,
+	trackTitel VARCHAR(30) NOT NULL,
 	skipper VARCHAR(30) DEFAULT NULL,
 	crew VARCHAR(100) DEFAULT NULL,
 	tstart VARCHAR(30) DEFAULT NULL,

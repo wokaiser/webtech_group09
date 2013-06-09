@@ -8,9 +8,9 @@
 	    die('Error: ' . mysql_error());
 	}
     
-	$sql = "INSERT INTO ".const_mysql_tracking." (tnr, titel, skipper, crew, tstart, tende, tdauer, lastZoom, lastLat, lastLng) VALUES (
+	$sql = "INSERT INTO ".const_mysql_tracking." (tnr, trackTitel, skipper, crew, tstart, tende, tdauer, lastZoom, lastLat, lastLng) VALUES (
                 '" . $_POST['tnr'] . "',
-				'" . $_POST['titel'] . "',
+				'" . $_POST['trackTitel'] . "',
 				'" . $_POST['skipper'] . "',
 				'" . $_POST['crew'] . "',
 				'" . $_POST['tstart'] . "',

@@ -80,7 +80,7 @@ label {
     text-align: center;
 }
 
-.routeInfoInput {
+.routeInfoInput, .trackInfoInput {
     width:180px;
 }
 

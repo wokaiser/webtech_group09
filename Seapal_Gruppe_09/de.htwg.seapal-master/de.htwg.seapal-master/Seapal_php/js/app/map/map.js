@@ -163,7 +163,10 @@ function initialize() {
     //set routes
     for (i = 0; i < session.map.routes.length; i++) {
         activeRouteInSession = i;
-        startNewRoute(new google.maps.LatLng(session.map.routes[i].marker[0].lat, session.map.routes[i].marker[0].lng), MODE[session.map.routes[i].type], session.map.routes[i].titel);
+        titel = null;
+        if (session.map.routes[i].type == SESSION_ROUTE_TYPE.ROUTE) {titel = session.map.routes[i].titel;}
+        else if (session.map.routes[i].type == SESSION_ROUTE_TYPE.TRACKING) {titel = session.map.routes[i].trackTitel;}
+        startNewRoute(new google.maps.LatLng(session.map.routes[i].marker[0].lat, session.map.routes[i].marker[0].lng), MODE[session.map.routes[i].type], titel);
         for (j = 1; j < session.map.routes[i].marker.length; j++) {
             addRouteMarker(new google.maps.LatLng(session.map.routes[i].marker[j].lat, session.map.routes[i].marker[j].lng));
         }

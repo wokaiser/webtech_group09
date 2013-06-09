@@ -2,24 +2,6 @@ $(function() {
     var routeLoad = null;
 	var tnrValue = null;
     
-	function addEntry(tnr, json) {
-		
-		var entry = "";
-		
-		entry += "<tr class='selectable'>";
-	    entry += "<td>" + json.titel + "</td>";
-	    entry += "<td>" + json.von + "</td>";
-	    entry += "<td>" + json.nach + "</td>";
-	    entry += "<td style='width:30px; text-align:right;'><div class='btn-group'>";
-		entry += "<a class='btn btn-small view' id='" + tnr + "'><span><i class='icon-eye-open'></i></span></a>";
-		entry += "<a class='btn btn-small remove' id='" + tnr + "'><span><i class='icon-remove'></i></span></a>";
-		entry += "<a href='app_tripinfo.php?tnr=" + tnr + "' class='btn btn-small redirect' id='" + tnr + "'><span><i class='icon-chevron-right'></i></span></a>";
-		entry += "</div></td>";
-	    entry += "</tr>";
-	    
-		$('#entries').append(entry);
-	}
-
 	$('a.view').live("click", function(event) {  
         routeLoad = null;
         tnrValue = $(this).attr('id');
