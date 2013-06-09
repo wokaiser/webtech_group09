@@ -26,6 +26,7 @@ function wsOnMessage($clientID, $message, $messageLength, $binary) {
 		$Server->wsSend($clientID, $trackingRoute[$i]);
 		usleep(25000);
 	}
+	$Server->wsSend($clientID, "done");
 }
 
 // when a client connects

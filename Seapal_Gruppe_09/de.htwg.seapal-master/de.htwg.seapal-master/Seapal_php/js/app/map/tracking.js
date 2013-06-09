@@ -97,6 +97,10 @@ function trackRoutePost(data) {
     }
 }
 
+function trackingFinished() {
+    document.getElementById('trackingMenuContainer').style.display = "block";
+}
+
 //For todays date;
 Date.prototype.today = function(){ 
     return ((this.getDate() < 10)?"0":"") + this.getDate() +"."+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"."+ this.getFullYear() 
@@ -134,7 +138,11 @@ $(function() {
     //Log any messages sent from server
     Server.bind('message', function( message ) {
         console.log("Received from server: " + message);
-        UpdateShipMarkerPosition( message );        
+        if (message != "done") {
+            UpdateShipMarkerPosition( message );
+        } else {
+            trackingFinished();
+        }
     });
 
     Server.connect();
