@@ -92,26 +92,26 @@ CREATE TABLE seapal.tracking (
 CREATE TABLE seapal.trackingPoint (
 	trackpointnr INT NOT NULL AUTO_INCREMENT,
 	tracknr INT NOT NULL,
-	lat REAL NOT NULL,
-	lng REAL NOT NULL,
+	lat REAL DEFAULT NULL,
+	lng REAL DEFAULT NULL,
 	marker VARCHAR(30) DEFAULT NULL,
-	btm INT DEFAULT NULL, /* bearing to marker: degree */
-	dtm INT DEFAULT NULL, /* destination to marker: meters */
-	sog INT DEFAULT NULL, /* speed over ground: knots */
-	cog INT DEFAULT NULL,
+	btm VARCHAR(30) DEFAULT NULL, /* bearing to marker: degree */
+	dtm VARCHAR(30) DEFAULT NULL, /* destination to marker: meters */
+	sog VARCHAR(30) DEFAULT NULL, /* speed over ground: knots */
+	cog VARCHAR(30) DEFAULT NULL,
 	manoever VARCHAR(30) DEFAULT NULL,
 	vorsegel VARCHAR(30) DEFAULT NULL,
 	wdate VARCHAR(30) DEFAULT NULL,
 	wtime VARCHAR(30) DEFAULT NULL,
-	motor BOOLEAN DEFAULT FALSE,
-	tank VARCHAR(30) DEFAULT FALSE,
-	windstaerke INT DEFAULT NULL,
+	motor VARCHAR(30) DEFAULT NULL,
+	tank VARCHAR(30) DEFAULT NULL,
+	windstaerke VARCHAR(30) DEFAULT NULL,
 	windrichtung VARCHAR(30) DEFAULT NULL,
-	luftdruck INT DEFAULT NULL,
-	temperatur INT DEFAULT NULL,
+	luftdruck VARCHAR(30) DEFAULT NULL,
+	temperatur VARCHAR(30) DEFAULT NULL,
 	wolken VARCHAR(30) DEFAULT NULL,
 	regen VARCHAR(30) DEFAULT NULL,
-	wellenhoehe INT DEFAULT NULL,
+	wellenhoehe VARCHAR(30) DEFAULT NULL,
 	wellenrichtung VARCHAR(30) DEFAULT NULL,
 	PRIMARY KEY (trackpointnr),
 	FOREIGN KEY (tracknr) REFERENCES tracking (tracknr) ON DELETE CASCADE
