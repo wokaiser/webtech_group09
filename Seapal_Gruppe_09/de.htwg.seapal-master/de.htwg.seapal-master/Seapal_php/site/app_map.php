@@ -31,18 +31,18 @@ if (!$db_selected)
     		<!-- Route Menu -->
     		<div id="routeMenuContainer" style="display: none;">
             	<div id="routeMenu" class="well">
-            		<h4>Routen Menü</h4>
+            		<h4>Route Menü</h4>
 	            	<div class="btn-group btn-group-vertical">
                         <input type='text'   class="routeInfoInput" id='titel'   placeholder='Titel' size='30' maxlength='30'/><br/>
-                        <input type='text'   class="routeInfoInput" id='von'     placeholder='Von' size='30' maxlength='60'/><br/>
-                        <input type='text'   class="routeInfoInput" id='nach'    placeholder='Nach' size='30' maxlength='60'/><br/>
+                        <input type='text'   class="routeInfoInput" id='von'     placeholder='From Location' size='30' maxlength='60'/><br/>
+                        <input type='text'   class="routeInfoInput" id='nach'    placeholder='To Location' size='30' maxlength='60'/><br/>
 	                    <input type="button" class="routeInfoInput btn" value="Save Route" id="saveRouteButton" class="routeButton" onclick="javascript: saveRoute()" />
 	                    <input type="button" class="routeInfoInput btn" value="Delete Route" id="deleteRouteButton" class="routeButton" onclick="javascript: deleteRoute()" />
                         <input type="button" class="routeInfoInput btn" value="Start Tracking" id="startTrackingButton" class="routeButton" onclick="javascript: startTracking()" />                        
 	                    <input type="button" class="routeInfoInput btn" value="Quit Menu" id="stopRouteButton" class="routeButton" onclick="javascript: stopRouteMode()" />
 	                </div>
 	            	<br><br>
-	                <div id="route_distance">Routen-L&auml;nge: <span id="route_distance_number"></span> m</div>
+	                <div id="route_distance">Route lenght: <span id="route_distance_number"></span> m</div>
 	            </div>
 	        </div>
 	        
@@ -52,7 +52,7 @@ if (!$db_selected)
 	            	<h4>Distanztool</h4>
 	            	<input type="button" class="btn" value="beenden" id="stopDistanceToolButton" class="distanceToolbutton" onclick="javascript: stopDistanceToolMode()" />
 	            	<br><br>
-	            	<div id="distanceTool_distance">Distanz: <span id="distanceTool_number"></span> m</div>
+	            	<div id="distanceTool_distance">Distance: <span id="distanceTool_number"></span> m</div>
 	            </div>
 	        </div>
 	        
@@ -62,20 +62,27 @@ if (!$db_selected)
 	            	<h4>Navigation</h4>
 	            	<input type="button" class="btn" value="beenden" id="stopNavigationButton" class="distanceToolbutton" onclick="javascript: stopNavigationMode()" />
 	            	<br><br>
-	            	<div id="navigation_distance">Distanz: <span id="navigation_number"></span> m</div>
+	            	<div id="navigation_distance">Distance: <span id="navigation_number"></span> m</div>
 	            </div>
 	        </div>
               
     		<!-- Tracking Menu -->
-    		<div id="trackingContainer" style="display: none;">
-            	<div id="routeMenu" class="well">
-            		<h4>Tracking</h4>
+    		<div id="trackingMenuContainer" style="display: none;">
+            	<div id="trackingMenu" class="well">
+            		<h4>Tracking Menü</h4>
 	            	<div class="btn-group btn-group-vertical">
-	                    <input type="button" class="routeInfoInput btn" value="Delete Track" id="deleteTrackButton" onclick="javascript: deleteTrack()" />
-	            	    <input type="button" class="routeInfoInput btn routeButton" value="Quit Menu" id="stopTrackingButton" class="routeButton" onclick="javascript: stopTrackingMode()" />
+                        <input type='text'   class="routeInfoInput" id='titel'   placeholder='Titel' size='30' maxlength='30'/><br/>
+                        <input type='text'   class="routeInfoInput" id='skipper' placeholder='Skipper' size='30' maxlength='60'/><br/>
+                        <input type='text'   class="routeInfoInput" id='crew'    placeholder='Crew' size='30' maxlength='60'/><br/>
+                        <input type='text'   class="routeInfoInput" id='tstart'  placeholder='Start of tracking' size='30' maxlength='60'/><br/>
+                        <input type='text'   class="routeInfoInput" id='tende'   placeholder='End of tracking' size='30' maxlength='60'/><br/>
+                        <input type='text'   class="routeInfoInput" id='tdauer'  placeholder='Tracking duration' size='30' maxlength='60'/><br/>
+	                    <input type="button" class="routeInfoInput btn" value="Save Track" id="saveTrackButton" class="routeButton" onclick="javascript: saveTrackingRoute()" />
+	                    <input type="button" class="routeInfoInput btn" value="Delete Track" id="deleteTrackButton" class="routeButton" onclick="javascript: deleteTrack()" />                      
+	                    <input type="button" class="routeInfoInput btn" value="Quit Menu" id="stopTrackingButton" class="routeButton" onclick="javascript: stopTrackingMode()" />
 	                </div>
 	            	<br><br>
-	                <div id="tracking_distance">Track lenght <span id="tracking_number"></span> m</div>
+	                <div id="tracking_distance">Track lenght: <span id="tracking_number"></span> m</div>
 	            </div>
 	        </div>
 	        

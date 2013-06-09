@@ -148,7 +148,7 @@ $(function () {
                 document.getElementById('routeMenuContainer').style.display = "none";
                 document.getElementById('distanceToolContainer').style.display = "none";
                 document.getElementById('navigationContainer').style.display = "none";
-                document.getElementById('trackingContainer').style.display = "none";
+                document.getElementById('trackingMenuContainer').style.display = "none";
                 if (currentRoute != null && currentMode == MODE.ROUTE) {
                     toggleDraggable(currentRoute);
                     currentRoute.route.setOptions(inactivePathOptions);
@@ -188,7 +188,7 @@ $(function () {
                 document.getElementById('routeMenuContainer').style.display = "none";
                 document.getElementById('distanceToolContainer').style.display = "none";
                 document.getElementById('navigationContainer').style.display = "none";
-                document.getElementById('trackingContainer').style.display = "none";
+                document.getElementById('trackingMenuContainer').style.display = "none";
                 if (currentRoute != null && currentMode == MODE.ROUTE) {
                     currentRoute.route.setOptions(inactivePathOptions);
                 } else if(currentRoute != null && currentMode == MODE.TRACKING) {
@@ -198,7 +198,7 @@ $(function () {
                 currentMode = MODE.TRACKING;
                 currentRoute.route.setOptions(activeTrackPathOptions);
                 updateRouteDistance();
-                document.getElementById('trackingContainer').style.display = "block";
+                document.getElementById('trackingMenuContainer').style.display = "block";
             }
         },
         items: {
@@ -565,7 +565,7 @@ function stopRouteMode() {
     saveRouteInfoToSession();
     document.getElementById('routeMenuContainer').style.display = "none";
     document.getElementById('distanceToolContainer').style.display = "none";
-    document.getElementById('trackingContainer').style.display = "none";
+    document.getElementById('trackingMenuContainer').style.display = "none";
 
     //load the default to the trip info box
     for (var i in TRIP_INFO) {

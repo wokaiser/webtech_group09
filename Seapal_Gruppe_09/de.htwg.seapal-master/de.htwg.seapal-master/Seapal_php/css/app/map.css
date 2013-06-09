@@ -62,7 +62,7 @@ label {
     font-weight: bold;
 }
 
-#routeMenuContainer, #distanceToolContainer, #followCurrentPositionContainer, #navigationContainer {
+#routeMenuContainer, #distanceToolContainer, #followCurrentPositionContainer, #navigationContainer , #trackingMenuContainer {
     position: relative;
     margin-right: auto;
     margin-left: auto;
@@ -73,7 +73,7 @@ label {
     z-index: 2;
 }
 
-#routeMenu, #distanceToolMenu, #navigationMenu {
+#routeMenu, #distanceToolMenu, #navigationMenu, #trackingMenu {
     position: absolute;
     z-index: 2;
     white-space: nowrap;
@@ -84,7 +84,7 @@ label {
     width:180px;
 }
 
-#route_distance, #distanceTool_distance, #navigation_distance {
+#route_distance, #distanceTool_distance, #navigation_distance, #tracking_distance {
     font-weight: bolder;
 }
 
@@ -111,11 +111,11 @@ label {
     padding-bottom: 5px;
 }
         
-#distanceToolContainer, #routeMenuContainer, #navigationContainer {
+#routeMenuContainer, #distanceToolContainer, #followCurrentPositionContainer, #navigationContainer , #trackingMenuContainer {
     float: right;
 }
         
-#routeMenu, #distanceToolMenu, #navigationMenu {
+#routeMenu, #distanceToolMenu, #navigationMenu, #trackingMenu  {
     width: 208px;
     padding: 5px 5px 5px 5px;
     margin-left: 86.5%;
