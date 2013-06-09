@@ -1,14 +1,27 @@
+var actCount = 0;
+var trCount = 0;
+var activeRoute = null;
+var activeRouteMarkerInSession = 0;
+var Server;
+var activeTracking = false;
+var startOfTrackingTime = null;
+
+function trackingActive() {
+    return activeTracking;
+}
+
 function startTracking() {
     event.preventDefault();
 } 
 
-
-function startNewTracking() {    
-    startNewRoute(new google.maps.LatLng(activeRoute.marker[0].lat, activeRoute.marker[0].lng), MODE.TRACKING, activeRoute.title);
+function startNewTracking() {
+    startNewRoute(new google.maps.LatLng(activeRoute.marker[0].lat, activeRoute.marker[0].lng), MODE.TRACKING, activeRoute.titel);
     //save the zoom level, at which the user looked at this route.
     session.map.routes[activeRouteInSession].lastZoom = activeRoute.lastZoom;
     session.map.routes[activeRouteInSession].lastLat = activeRoute.lastLat;
     session.map.routes[activeRouteInSession].lastLng = activeRoute.lastLng;
+    session.map.routes[activeRouteInSession].tstart = new Date().today();
+    session.map.routes[activeRouteInSession].trackTitel = activeRoute.titel;
     //save the tnr for the tracking, which is a foreign key pointing to the route.
     session.map.routes[activeRouteInSession].tnr = activeRoute.tnr;
     addTrackingPoint(activeRoute.marker[0].lat, activeRoute.marker[0].lng);
@@ -24,8 +37,11 @@ function addTrackingPoint(lat, lng) {
         crossDomain:true, 
         dataType: "jsonp", 
         success:function(data,text,xhqr){
-            addRouteMarker(new google.maps.LatLng(lat, lng), null);
-            session.map.routes[activeRouteInSession].marker[actCount].marker = actCount;
+            //if actCount is 0, we do not add a route marker, because this call comes from the startNewRoute, which already set a route marker
+            if (0 < actCount) {
+                addRouteMarker(new google.maps.LatLng(lat, lng), null);
+            }
+            session.map.routes[activeRouteInSession].marker[actCount].marker = actCount + 1;
             session.map.routes[activeRouteInSession].marker[actCount].wdate = new Date().today();
             session.map.routes[activeRouteInSession].marker[actCount].wtime = new Date().timeNow();
             session.map.routes[activeRouteInSession].marker[actCount].windstaerke = data.list[0].wind.speed + " m/s";
@@ -56,12 +72,16 @@ function saveTrackingRoute() {
         $('#dialogTitle').text('Access denied');
         $('#dialogMessage').text("To use this functionality you have to be signed in.");
         $('#messageBox').modal('show');
-    } else if ("" == session.map.routes[activeRouteInSession].trackTitel || "" == session.map.routes[activeRouteInSession].skipper || "" == session.map.routes[activeRouteInSession].crew) {
+    } else if (("" == session.map.routes[activeRouteInSession].trackTitel)
+            ||( "" == session.map.routes[activeRouteInSession].skipper)
+            ||("" == session.map.routes[activeRouteInSession].crew)
+            ||("" == session.map.routes[activeRouteInSession].tstart)
+            ||("" == session.map.routes[activeRouteInSession].tende)
+            ||("" == session.map.routes[activeRouteInSession].tdauer)) {
         $('#dialogTitle').text('Error');
-        $('#dialogMessage').text("Please fill in all the first three boxes.");
+        $('#dialogMessage').text("Please fill in all Track Menu entries.");
         $('#messageBox').modal('show');
     } else {
-        console.log(session.map.routes[activeRouteInSession]);
         jQuery.post("app_trackinginfo_insert.php", session.map.routes[activeRouteInSession], function(data) {            
             if (data['tracknr'].match(/Error/)) {                
                 $('#dialogTitle').text('Error');
@@ -91,14 +111,35 @@ function trackRoutePost(data) {
             jQuery.post("app_tracking_point_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], trackRoutePost, "json");
         } else {
             $('#dialogTitle').text('Success');
-            $('#dialogMessage').text("Eintrag wurde erfolgreich gespeichert.");
+            $('#dialogMessage').text("Track successfully saved.");
             $('#messageBox').modal('show');
         }
     }
 }
 
 function trackingFinished() {
+    //save end of tracking date
+    session.map.routes[activeRouteInSession].tende = new Date().today();
+
+    //calculate the duration of the tracking
+    var endOfTrackingTime = new Date().getTime() / 1000;
+    var timeleft = Math.floor(endOfTrackingTime - startOfTrackingTime);
+    var hour = Math.floor( timeleft / 3600 );
+    var minute = Math.floor( (timeleft%3600) / 60 );
+    var second = Math.floor( timeleft%60 );
+    session.map.routes[activeRouteInSession].tdauer = hour+":"+minute+":"+second;
+    
+    //load the trip info from the session to the input boxes.
+    for (var i in TRACKING_INFO) {
+        document.getElementById(TRACKING_INFO[i]).value = session.map.routes[activeRouteInSession][TRACKING_INFO[i]];
+    }
     document.getElementById('trackingMenuContainer').style.display = "block";
+    trackingEnabled = false;
+    setContextMenus(true);
+    //enable route switching buttons
+    enableRouteSwitchButtons();
+    //set tracking to inactive
+    activeTracking = false;
 }
 
 //For todays date;
@@ -110,10 +151,6 @@ Date.prototype.timeNow = function(){
      return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
 };
 
-var actCount = 1;
-var trCount = 0;
-var activeRoute = null;
-var activeRouteMarkerInSession = 0;
 
 /* ------------------------------------- ship movement simulation ------------------------------------- */
 $(function() {
@@ -148,8 +185,6 @@ $(function() {
     Server.connect();
 });
 
-var Server;
-
 function UpdateShipMarkerPosition( message ) {
     if (!isNaN(message.split(" ")[0]) && !isNaN(message.split(" ")[1])) {
         latLng = message.split(" ");
@@ -170,6 +205,9 @@ function UpdateShipMarkerPosition( message ) {
             trCount = 0;
             addTrackingPoint(currentPosition.lat(), currentPosition.lng());
         }
+        if (getSessionOption("wl_followPosition").active) {
+            map.panTo(currentPosition);
+        }
     }
 }
 
@@ -187,16 +225,25 @@ $('#startTrackingButton').live("click", function(event) {
         $('#messageBox').modal('show'); 
         return;
     }
-    
-    
+    //disable route switching buttons
+    disableRouteSwitchButtons();
+    //disable context menu's
+    setContextMenus(false);
+    //set tracking to active
+    activeTracking = true;
+    //the track is already in the map, display info message
+    displayMessageBox("infoMessageBox", "Tracking start now and context menu's are temporary disabled.", "28em", "-14em");
     activeRoute = session.map.routes[activeRouteInSession];
+    //get start time of tracking
+    startOfTrackingTime = new Date().getTime() / 1000;
+    //start tracking now
     startNewTracking();
 
     SendRequest(JSON.stringify(activeRoute.marker));    
 });
 
 function ResetCounter() {
-    actCount = 1;
+    actCount = 0;
     trCount = 0;
 }
 

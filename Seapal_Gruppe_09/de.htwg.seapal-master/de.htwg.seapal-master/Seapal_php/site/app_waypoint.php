@@ -22,7 +22,7 @@
 			<!-- Content -->		
 			<div id="appWrapper" align="center">
 			    <br />
-			    <h2>Wegpunkt</h2>
+			    <h2>Waypoint</h2>
 			    <br />
 			    <div class="container-fluid" align="center">
 	            	<form class="form-horizontal"> 

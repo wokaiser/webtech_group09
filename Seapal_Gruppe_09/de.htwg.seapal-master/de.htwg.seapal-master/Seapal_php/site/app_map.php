@@ -31,7 +31,7 @@ if (!$db_selected)
     		<!-- Route Menu -->
     		<div id="routeMenuContainer" style="display: none;">
             	<div id="routeMenu" class="well">
-            		<h4>Route Menü</h4>
+            		<h4>Route Menu</h4>
 	            	<div class="btn-group btn-group-vertical">
                         <input type='text'   class="routeInfoInput" id='titel'   placeholder='Titel' size='30' maxlength='30'/><br/>
                         <input type='text'   class="routeInfoInput" id='von'     placeholder='From Location' size='30' maxlength='60'/><br/>
@@ -69,7 +69,7 @@ if (!$db_selected)
     		<!-- Tracking Menu -->
     		<div id="trackingMenuContainer" style="display: none;">
             	<div id="trackingMenu" class="well">
-            		<h4>Tracking Menü</h4>
+            		<h4>Tracking Menu</h4>
 	            	<div class="btn-group btn-group-vertical">
                         <input type='text'   class="trackInfoInput" id='trackTitel'   placeholder='Titel' size='30' maxlength='30'/><br/>
                         <input type='text'   class="trackInfoInput" id='skipper' placeholder='Skipper' size='30' maxlength='60'/><br/>
@@ -104,10 +104,10 @@ if (!$db_selected)
 	        <!-- Context Menus -->
 	        <div id="temporaryMarkerContextMenu"></div>
 	        <div id="fixedMarkerContextMenu"></div>
-	        <div id="routeContextMenu_active"></div>
-	        <div id="routeContextMenu_inactive"></div>
-	        <div id="trackingContextMenu_active"></div>
-	        <div id="trackingContextMenu_inactive"></div>
+	        <div id="routeContextMenu_active" class="routeContextMenu_active"></div>
+	        <div id="routeContextMenu_inactive" class="routeContextMenu_inactive"></div>
+	        <div id="trackingContextMenu_active" class="trackingContextMenu_active"></div>
+	        <div id="trackingContextMenu_inactive" class="trackingContextMenu_inactive"></div>
 		
 		</div><!-- Container -->
         
@@ -124,6 +124,26 @@ if (!$db_selected)
 				<a href="#" class="btn" data-dismiss="modal"><i class="icon-ok"></i> ok</a>
 			</div>
 		</div>
+        
+        <div class="messageBox infoMessageBox" id="infoMessageBox" style="display: none;">
+            <div class="infoMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="infoMessageBoxText">Some info msg.</div>
+        </div>
+        
+        <div class="messageBox successMessageBox" id="successMessageBox" style="display: none;">
+            <div class="successMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="successMessageBoxText">Some success msg.</div>
+        </div>
+        
+        <div class="messageBox warningMessageBox" id="warningMessageBox" style="display: none;">
+            <div class="warningMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="warningMessageBoxText">Some warning msg.</div>
+        </div>
+        
+        <div class="messageBox errorMessageBox" id="errorMessageBox" style="display: none;">
+            <div class="errorMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="errorMessageBoxText">Some error msg.</div>
+        </div>
 	    
 	    <!-- Java-Script -->
 	    <script src="../js/bootstrap/bootstrap-dropdown.js"></script>
@@ -132,10 +152,10 @@ if (!$db_selected)
 	    <script src="../js/bootstrap/bootstrap-button.js"></script>
 	    <script src="../js/bootstrap/bootstrap-collapse.js"></script>
 	    <script src="../js/bootstrap/bootstrap-affix.js"></script>
+        <script src="../js/messageBox/messageBox.js"></script>
 	    
 	    <!-- Additional Java-Script -->
 	    <script src="../js/app/map/fancywebsocket.js" type="text/javascript" ></script>
-	    <script src="../js/app/map/chat.js" type="text/javascript" ></script>
 	    <script src="../js/app/map/labels.js" type="text/javascript"></script>
 	    <script src="../js/app/map/map.js" type="text/javascript"></script>
 	    <script src="../js/app/map/map_routes.js" type="text/javascript"></script>

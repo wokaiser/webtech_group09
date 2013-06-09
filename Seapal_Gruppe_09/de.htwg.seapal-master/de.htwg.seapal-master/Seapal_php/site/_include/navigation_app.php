@@ -6,9 +6,9 @@
 		<div class="container">		
 			<ul class="nav">
 				<li id="button_app_map" <?php if ($filename == "app_map") echo("class='active'"); ?>><a href="app_map.php">Map</a></li>
-				<li id="button_app_trackinginfo" <?php if ($filename == "app_trackinginfo") echo("class='active'"); ?>><a href="app_trackinginfo.php">Logbuch</a></li>
-                <li id="button_app_boatinfo" <?php if ($filename == "app_boatinfo") echo("class='active'"); ?>><a href="app_boatinfo.php">Boote</a></li>
-				<li id="button_app_tripinfo" <?php if ($filename == "app_trip" || $filename == "app_tripinfo" || $filename == "app_waypoint" ) echo("class='active'"); ?>><a href="app_trip.php">Routen</a></li>
+				<li id="button_app_trackinginfo" <?php if ($filename == "app_trackinginfo") echo("class='active'"); ?>><a href="app_trackinginfo.php">Logbook</a></li>
+                <li id="button_app_boatinfo" <?php if ($filename == "app_boatinfo") echo("class='active'"); ?>><a href="app_boatinfo.php">Boat Info</a></li>
+				<li id="button_app_tripinfo" <?php if ($filename == "app_trip" || $filename == "app_tripinfo" || $filename == "app_waypoint" ) echo("class='active'"); ?>><a href="app_trip.php">Routes</a></li>
                 <!--Drop down for weather layer selection-->
                 <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" <?php if ($filename != "app_map") echo("style='display: none;'>"); ?>>Map Options<b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -37,11 +37,11 @@
                 </li>
 			</ul>
             <div class="btn-group pull-right" <?php if ($filename != "app_map") echo("style='display: none;'>"); ?>>
-                <a href="#" class="btn btn-inverse "><i class="icon-white icon-fast-backward" onclick="javascript: routeFastBackward()"></i></a>
-                <a href="#" class="btn btn-inverse "><i class="icon-white icon-backward" onclick="javascript: routeBackward()"></i></a>
-                <a href="#" class="btn btn-inverse ">Route</a>
-                <a href="#" class="btn btn-inverse "><i class="icon-white icon-forward" onclick="javascript: routeForward()"></i></a>
-                <a href="#" class="btn btn-inverse "><i class="icon-white icon-fast-forward" onclick="javascript: routeFastForward()"></i></a>
+                <a href="#" class="btn btn-inverse " id="routeFastBackward"><i class="icon-white icon-fast-backward" onclick="javascript: routeFastBackward(event)"></i></a>
+                <a href="#" class="btn btn-inverse " id="routeBackward"><i class="icon-white icon-backward" onclick="javascript: routeBackward(event)"></i></a>
+                <a href="#" class="btn btn-inverse " id="routeSwitchLabel">Route</a>
+                <a href="#" class="btn btn-inverse " id="routeForward"><i class="icon-white icon-forward" onclick="javascript: routeForward(event)"></i></a>
+                <a href="#" class="btn btn-inverse " id="routeFastForward"><i class="icon-white icon-fast-forward" onclick="javascript: routeFastForward(event)"></i></a>
             </div>
 		</div>	
     </div>

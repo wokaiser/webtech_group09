@@ -90,6 +90,20 @@ function MarkerWithInfobox(marker, infobox, counter) {
     this.counter = counter;
 }
 
+function setContextMenus(status){
+    //set a list with the menus to deactivate. Just running through all modes would not work, because
+    //in some modes the same context menu will be used.
+    var MENUS = [MODE.DEFAULT.inactiveContextMenu, MODE.FIXED_MARKER.inactiveContextMenu, MODE.ROUTE.activeContextMenu, MODE.ROUTE.inactiveContextMenu, MODE.TRACKING.activeContextMenu, MODE.TRACKING.inactiveContextMenu];
+
+    for (var i in MENUS) {   
+        if (true == status && $(MENUS[i]).hasClass("context-menu-disabled")) {
+            $(MENUS[i]).toggleClass("context-menu-disabled"); 
+        } else if (false == status && !$(MENUS[i]).hasClass("context-menu-disabled")) {
+            $(MENUS[i]).toggleClass("context-menu-disabled"); 
+        }
+    }
+}
+
 // initialize map and all event listeners
 function initialize() {
     //set variable to know that initialization will be done
@@ -216,14 +230,20 @@ function initialize() {
     });
 
     google.maps.event.addListener(map, 'center_changed', function () {
-        if (!followCurrentPosition && getSessionOption("wl_followPosition").active) {
-            toggleFollowCurrentPosition();
-        } else {
-            followCurrentPosition = !followCurrentPosition;
+        if (!trackingActive()) {
+            if (!followCurrentPosition && getSessionOption("wl_followPosition").active) {
+                toggleFollowCurrentPosition();
+            } else {
+                followCurrentPosition = !followCurrentPosition;
+            }
         }
     });
     //set variable to know that initialization is done
     onInitialize = false;
+    //enable context menu's
+    setContextMenus(true);
+    //enable route switching buttons
+    enableRouteSwitchButtons();
 }
 
 // temporary marker context menu ----------------------------------------- //
@@ -613,6 +633,9 @@ function mapOverlay() {
                 txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Max Temperature: "+convertToCelcius(data.list[0].main.temp_max)+" °C</div>"
                 txt += "<a href='no-javascript.html' title='Get weather forecast' id='getWeatherForecast'>Get weather forecast</a>"
             txt += "</div>"
+            
+            //set the weather image for today to access in weather forecast
+            todaysWeatherImage = data.list[0].weather[0].icon;
         
             if (data.list[0].name.length > 16) {document.getElementById('map_overlay').style.height = "225px";}
             else {document.getElementById('map_overlay').style.height = "205px";}
@@ -643,9 +666,9 @@ if (typeof String.prototype.startsWith != 'function') {
 }
 
 const WEEKDAY = new Array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
-
 const MIN_TEMPERATUR_INIT = 999;
 const MAX_TEMPERATUR_INIT = -1;
+var todaysWeatherImage = "10d"
 
 function getWeatherForecast() {
     latLng = map.getCenter();
@@ -666,7 +689,7 @@ function getWeatherForecast() {
             var minTemp;
             var maxTemp;
             var dayTxt;
-            console.log(data.list);
+            
             //loop for number of day's to forecast
             for (var day = 1; day <= 7; day++) {
                 minTemp = MIN_TEMPERATUR_INIT;
@@ -698,6 +721,7 @@ function getWeatherForecast() {
                     maxTemp = convertToCelcius(maxTemp)+" °C";
                 }
                 if (1 === day) {
+                    icon = todaysWeatherImage;
                     dayTxt = "Today";
                 } else if (2 == day) {
                     dayTxt = "Tomorrow";
@@ -705,7 +729,6 @@ function getWeatherForecast() {
                     dayTxt = WEEKDAY[weekday];
                 }
                                 
-                console.log(data.list[i].weather[0].icon);
                 txt += "<div class='left'>"
                     txt += "<div style='text-align:center; font-size: small; font-weight: bold; margin-bottom: 0px;'>"+dayTxt+"</div> "
                     txt += "<img height='45' width='45' style='text-align:center; border: medium none; width: 45px; height: 45px; background: url(&quot;http://openweathermap.org/img/w/"+icon+".png&quot;) repeat scroll 0% 0% transparent;' alt='title' src='http://openweathermap.org/images/transparent.png'/>"

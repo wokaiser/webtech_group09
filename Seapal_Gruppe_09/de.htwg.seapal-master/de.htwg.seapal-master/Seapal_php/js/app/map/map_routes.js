@@ -8,6 +8,7 @@ var geocoder = new google.maps.Geocoder();;
 //variable to set the actual active route and marker in the session
 var activeRouteInSession;
 var activeRouteMarkerInSession;
+var routeSwitchButtonsEnabled = true;
 //define for default state of active route marker
 const INACTIVE = -1;
 
@@ -103,33 +104,32 @@ $(function () {
                 items: {
                     title           : {name: "<b>Trackpoint "+(activeRouteMarkerInSession+1)+"</b>",  icon: "marker"},
                     separator1: "-----",
-                    marker          : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["marker"]},
                     wdate           : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wdate"]}, 
                     wtime           : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wtime"]},                    
                     "fold1": {
-                                "name": "Boat info", 
+                                "name": "<b>Boat info</b>", 
                                 "items": {
-                                    btm             : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["btm"]}, 
-                                    dtm             : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["dtm"]}, 
-                                    sog             : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["sog"]},
-                                    cog             : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["cog"]}, 
-                                    manoever        : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["manoever"]}, 
-                                    vorsegel        : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["vorsegel"]}, 
-                                    motor           : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["motor"]},
-                                    tank            : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["tank"]},
+                                    btm             : {name: "<b>BTM: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["btm"]}, 
+                                    dtm             : {name: "<b>DTM: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["dtm"]}, 
+                                    sog             : {name: "<b>SOG: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["sog"]},
+                                    cog             : {name: "<b>COG: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["cog"]}, 
+                                    manoever        : {name: "<b>Manoeuvre: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["manoever"]}, 
+                                    vorsegel        : {name: "<b>For sale: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["vorsegel"]}, 
+                                    motor           : {name: "<b>Engine: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["motor"]},
+                                    tank            : {name: "<b>Tank: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["tank"]},
                                 }
                     },
                     "fold2": {
-                                "name": "Weather info", 
+                                "name": "<b>Weather info</b>", 
                                 "items": {
-                                    windstaerke     : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["windstaerke"]},
-                                    windrichtung    : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["windrichtung"]}, 
-                                    luftdruck       : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["luftdruck"]}, 
-                                    temperatur      : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["temperatur"]},
-                                    wolken          : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wolken"]},
-                                    regen           : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["regen"]},
-                                    wellenhoehe     : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wellenhoehe"]},
-                                    wellenrichtung  : {name: session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wellenrichtung"]}
+                                    windstaerke     : {name: "<b>Wind: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["windstaerke"]},
+                                    windrichtung    : {name: "<b>Direction: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["windrichtung"]}, 
+                                    luftdruck       : {name: "<b>Air: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["luftdruck"]}, 
+                                    temperatur      : {name: "<b>Temperatur: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["temperatur"]},
+                                    wolken          : {name: "<b>Cloud: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wolken"]},
+                                    regen           : {name: "<b>Rain: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["regen"]},
+                                    wellenhoehe     : {name: "<b>Wave height.: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wellenhoehe"]},
+                                    wellenrichtung  : {name: "<b>Wave direct: </b>"+session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession]["wellenrichtung"]}
                                   }
                     },
                 }
@@ -223,6 +223,8 @@ function addRouteMarker(position, index) {
         session.map.routes[activeRouteInSession].lastLng = latLng.lng();
         //save the zoom level, at which the user looked at this route.
         session.map.routes[activeRouteInSession].lastZoom = map.getZoom();
+        //route changed, so set tnr back
+        //session.map.routes[activeRouteInSession].tnr = null;
     }
     
     if (currentMode == MODE.ROUTE) {
@@ -309,6 +311,8 @@ function addRouteMarker(position, index) {
         });
         
         google.maps.event.addListener(marker, 'dragend', function (event) {
+            //route changed, so set tnr back
+            //session.map.routes[activeRouteInSession].tnr = null;
             updateRouteMenuEntries();
         });
     }
@@ -371,6 +375,8 @@ function addRouteMarker(position, index) {
 function deleteRouteMarker() {
     //delete the marker from the session
     session.map.routes[activeRouteInSession].marker.splice(activeRouteMarkerInSession, 1);
+    //route changed, so set tnr back
+    session.map.routes[activeRouteInSession].tnr = null;
     //set the active route marker to inactive
     activeRouteMarkerInSession = INACTIVE;
     if (0 == session.map.routes[activeRouteInSession].marker.length) {
@@ -723,15 +729,17 @@ function saveRoute() {
         $('#messageBox').modal('show');
     } 
     //Check if a route name was insert
-    else if ("" == route_name) {
+    else if (("" == session.map.routes[activeRouteInSession].von)
+           ||("" == session.map.routes[activeRouteInSession].nach)
+           ||("" == session.map.routes[activeRouteInSession].titel)){
         $('#dialogTitle').text('Error');
-        $('#dialogMessage').text("Geben Sie den Namen der Route an.");
+        $('#dialogMessage').text("Please fill in all Route Menu entries.");
         $('#messageBox').modal('show');
     }
     //check if enough markers are set
     else if (session.map.routes[activeRouteInSession].marker.length <= 1) {
         $('#dialogTitle').text('Error');
-        $('#dialogMessage').text("Eine Route muss mindestens 2 Marker besitzen.");
+        $('#dialogMessage').text("A route should have minimum two markers.");
         $('#messageBox').modal('show');
     } else {
         //save the zoom level, at which the user looked at this route.
@@ -862,7 +870,8 @@ $(document).ready(function() {
 
 /*functions to switch to the position of the next/prev/first/last route*/
 
-function routeBackward() {
+function routeBackward(e) {
+    e.preventDefault();
     var indexUpdate;
     if (activeRouteInSession == 0 && session.map.routes.length > 0) {
         indexUpdate = session.map.routes.length - 1;
@@ -874,14 +883,17 @@ function routeBackward() {
     updateMapPosition(indexUpdate);
 }
 
-function routeFastBackward() {
+function routeFastBackward(e) {
+    e.preventDefault();
     if (session.map.routes.length <= 0) {
+
         return;
     }
     updateMapPosition(0);
 }
 
-function routeForward() {
+function routeForward(e) {
+    e.preventDefault();
     var indexUpdate;
     if (activeRouteInSession >= (session.map.routes.length - 1) && session.map.routes.length > 0) {
         indexUpdate = 0;
@@ -893,7 +905,8 @@ function routeForward() {
     updateMapPosition(indexUpdate);
 }
 
-function routeFastForward() {
+function routeFastForward(e) {
+    e.preventDefault();
     if (session.map.routes.length <= 0 || activeRouteInSession > (session.map.routes.length - 1)) {
         return;
     }
@@ -901,6 +914,9 @@ function routeFastForward() {
 }
 
 function updateMapPosition(newActiveRoute) {
+    if (!routeSwitchButtonsEnabled) {
+        return;
+    }
     if (currentMode == MODE.DISTANCE) {
         stopDistanceToolMode();
     } else if (currentMode == MODE.ROUTE) {
@@ -911,4 +927,22 @@ function updateMapPosition(newActiveRoute) {
     activeRouteInSession = newActiveRoute;
     map.setZoom(session.map.routes[activeRouteInSession].lastZoom);
     map.panTo(new google.maps.LatLng(session.map.routes[activeRouteInSession].lastLat, session.map.routes[activeRouteInSession].lastLng));
+}
+
+function disableRouteSwitchButtons() {
+    routeSwitchButtonsEnabled = false;
+    document.getElementById('routeSwitchLabel').setAttribute("disabled","disabled");
+    document.getElementById('routeFastBackward').setAttribute("disabled","disabled");
+    document.getElementById('routeBackward').setAttribute("disabled","disabled");
+    document.getElementById('routeForward').setAttribute("disabled","disabled");
+    document.getElementById('routeFastForward').setAttribute("disabled","disabled");
+}
+
+function enableRouteSwitchButtons() {
+    routeSwitchButtonsEnabled = true;
+    document.getElementById('routeSwitchLabel').removeAttribute("disabled");
+    document.getElementById('routeFastBackward').removeAttribute("disabled");
+    document.getElementById('routeBackward').removeAttribute("disabled");
+    document.getElementById('routeForward').removeAttribute("disabled");
+    document.getElementById('routeFastForward').removeAttribute("disabled");
 }

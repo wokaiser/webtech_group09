@@ -38,8 +38,8 @@ if (!$db_selected)
 	                            <th>Skipper</th>
 	                            <th>Crew</th>
 	                            <th>Start</th>
-	                            <th>Ende</th>
-	                            <th>Dauer</th>
+	                            <th>End</th>
+	                            <th>Duration</th>
 	                            <th></th>
 	                        </tr>
 	                    </thead>

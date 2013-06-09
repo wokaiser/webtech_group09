@@ -35,8 +35,8 @@ if (!$db_selected)
 	                    <thead>
 	                        <tr>
 	                            <th>Titel</th>
-	                            <th>Von</th>
-	                            <th>Nach</th>   
+	                            <th>From</th>
+	                            <th>To</th>   
 	                            <th></th>
 	                        </tr>
 	                    </thead>
