@@ -1,15 +1,22 @@
 function startTracking() {
-
+    event.preventDefault();
 } 
 
 
-function startNewTracking(position, data) {    
-    addTrackingPoint(position, data);
+function startNewTracking() {    
+    startNewRoute(new google.maps.LatLng(activeRoute[0].lat, activeRoute[0].lng), MODE.TRACKING, activeRoute.title);
+    session.map.routes[activeRouteInSession].marker[0].marker = "Marker 1";
+    session.map.routes[activeRouteInSession].marker[0].wdate = new Date().today();
+    session.map.routes[activeRouteInSession].marker[0].wtime = new Date().timeNow();
 }
 
 
-function addTrackingPoint(position, data) {
-
+function addTrackingPoint(lat, lng) {
+    addRouteMarker(new google.maps.LatLng(lat, lng), null);
+    session.map.routes[activeRouteInSession].marker[actCount].marker = "Marker "+(actCount+1);
+    session.map.routes[activeRouteInSession].marker[actCount].wdate = new Date().today();
+    session.map.routes[activeRouteInSession].marker[actCount].wtime = new Date().timeNow();
+    actCount++;
 }
 
 
@@ -22,91 +29,81 @@ Date.prototype.timeNow = function(){
      return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
 };
 
-/* ------------------------------------- ship movement simulation ------------------------------------- */
-
+var actCount = 1;
+var trCount = 0;
 var activeRoute = null;
-var animatedRoute = null;
 
-$('#startTrackingButton').live("click", function(event) {
-    //Comented out to show example on how to use tracking functionality
-    //PlayRoute();
+/* ------------------------------------- ship movement simulation ------------------------------------- */
+$(function() {
+    console.log('Connecting...');
+    Server = new FancyWebSocket('ws://localhost:9300');
     
+    // maybe useful
+     $('#stopSimulation').click(function() {                 
+            Server.disconnect();
+    });
 
+    //Let the user know we're connected
+    Server.bind('open', function() {
+        console.log( "Connected" );
+    });
 
-    activeRoute = session.map.routes[activeRouteInSession];
-    
-    startNewRoute(new google.maps.LatLng(activeRoute.marker[0].lat, activeRoute.marker[0].lng), MODE.TRACKING, activeRoute.title);
-    session.map.routes[activeRouteInSession].marker[0].marker = "Marker "+(i+1);
-    session.map.routes[activeRouteInSession].marker[0].wdate = new Date().today();
-    session.map.routes[activeRouteInSession].marker[0].wtime = new Date().timeNow();
-    //weather info boat info usw
-    //....
-    
-    
-    for (var i = 1; i < activeRoute.marker.length; i++) {
-        addRouteMarker(new google.maps.LatLng(activeRoute.marker[i].lat, activeRoute.marker[i].lng), null);
-        //set attributes like weather usw
-        session.map.routes[activeRouteInSession].marker[i].marker = "Marker "+(i+1);
-        session.map.routes[activeRouteInSession].marker[i].wdate = new Date().today();
-        session.map.routes[activeRouteInSession].marker[i].wtime = new Date().timeNow();
-        //weather info boat info usw
-        //....
-    }
+    //OH NO! Disconnection occurred.
+    Server.bind('close', function() {
+        console.log( "Disconnected" );
+    });
+
+    //Log any messages sent from server
+    Server.bind('message', function( message ) {
+        UpdateShipMarkerPosition( message );        
+    });
+
+    Server.connect();
 });
 
-/* animates the ship following the route */
-function PlayRoute() {   
-	CalculateRouteSteps(); 
-    PlayNextMarker();
-}
+var Server;
 
-/* Rekrusive funktion animating the next step on the route of the little ship */
-function PlayNextMarker (i) {
-    if (i == undefined) {
-        i = 0;
+function UpdateShipMarkerPosition( message ) {
+    if (!isNaN(message.split(" ")[0]) && !isNaN(message.split(" ")[1])) {
+        latLng = message.split(" ");
+
+        currentPosition = new google.maps.LatLng(latLng[0], latLng[1]);
+        var nextMarkerOptions = {
+            position: currentPosition,
+            map: map,
+            icon: currentPositionMarkerImage
+        }
+        currentPositionMarker.setVisible(false);
+        currentPositionMarker = new google.maps.Marker(nextMarkerOptions);
+        //currentPositionMarker.setPosition(new google.maps.LatLng(latLng[0], latLng[1])); //Maybe use this function, but it causes map view not movable while tracking
+
+        // Count here to a value and than make a new trackingPoint
+        if(trCount < 100) {
+            trCount++;            
+        } else {
+            trCount = 0;
+            addTrackingPoint(currentPosition.lat(), currentPosition.lng());
+        }
     }
-    if (i < animatedRoute.length) {
-        SetNextMarker(animatedRoute[i].lat(), animatedRoute[i].lng());
-        i++;
-        var timeout = window.setTimeout("PlayNextMarker(" + i + ")", 50);
-    }
 }
 
-/* Displays the next ship image and hides the prvious one */
-function SetNextMarker(lat, lng) {
-    currentPosition = new google.maps.LatLng(lat, lng);
-    var nextMarkerOptions = {
-        position: currentPosition,
-        map: map,
-        icon: currentPositionMarkerImage
-    }
-    currentPositionMarker.setVisible(false);
-    currentPositionMarker = new google.maps.Marker(nextMarkerOptions);
+function SendRequest( message ) {
+    Server.send( 'message', message );
 }
 
-/* Calculates all the steps the little ship has to pass on an route */
-function CalculateRouteSteps() {
-	animatedRoute = new Array();
-	var targetLength = 0;
-	for(var i = 0; i < activeRoute.length; i++) {		
-    	if (i < activeRoute.length - 1) {
-	    	var actPosition = new google.maps.LatLng(activeRoute[i].lat, activeRoute[i].lng);
-	    	var nextPosition = new google.maps.LatLng(activeRoute[i + 1].lat, activeRoute[i + 1].lng);
-	    	var distance = getDistance(actPosition, nextPosition);
-	    	var steps = distance % 500;
-	    	CalculateRouteStepsBetweenMarkers(actPosition, nextPosition, steps);
-    	}
-	}
+$('#startTrackingButton').live("click", function(event) {
+    ResetCounter();
+    activeRoute = session.map.routes[activeRouteInSession].marker;
+    startNewTracking(activeRoute[0].lat, activeRoute[0].lng);
+
+    SendRequest(JSON.stringify(activeRoute));    
+});
+
+function ResetCounter() {
+    actCount = 1;
+    trCount = 0;
 }
 
-/* Calculates all the steps between two route markers the little ship has to pas */
-function CalculateRouteStepsBetweenMarkers(startMarker, nextMarker, steps) {
-	var distance = getDistance(nextMarker, startMarker);
-	var diffLat = (nextMarker.lat() - startMarker.lat()) / steps;
-	var diffLng = (nextMarker.lng() - startMarker.lng()) / steps;
-	var tmpLat = startMarker.lat();
-	var tmpLng = startMarker.lng();
-	for(var i = 0; i < steps; i++) {
-		animatedRoute.push(new google.maps.LatLng(tmpLat += diffLat, tmpLng += diffLng));
-	}
+function GatherData() {
+
 }
