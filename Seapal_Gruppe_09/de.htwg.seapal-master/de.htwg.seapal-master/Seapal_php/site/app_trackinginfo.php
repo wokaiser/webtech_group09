@@ -51,8 +51,8 @@ if (!$db_selected)
 	                        	if (array_key_exists ('tnr' , $_GET))
 	                            	$tnr = urldecode($_GET['tnr']);
 
-	                        	if ($tnr == -1) {
-			                        $sql = "SELECT * FROM ".const_mysql_tracking.";";			                        
+	                        	if ($tnr == -1) {			                        
+			                        $sql = "SELECT b.* FROM ".const_mysql_trip." a JOIN ".const_mysql_tracking." b on a.tnr = b.tnr WHERE a.bnr = ".$_SESSION['bnr'].";";
 		                    	} else {
 									$sql = "SELECT * FROM ".const_mysql_tracking." WHERE tnr =" . $tnr . ";";
 		                    	}
