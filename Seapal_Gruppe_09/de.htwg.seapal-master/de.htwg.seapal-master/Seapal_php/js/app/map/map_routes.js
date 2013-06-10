@@ -8,7 +8,6 @@ var geocoder = new google.maps.Geocoder();;
 //variable to set the actual active route and marker in the session
 var activeRouteInSession;
 var activeRouteMarkerInSession;
-var routeSwitchButtonsEnabled = true;
 //define for default state of active route marker
 const INACTIVE = -1;
 
@@ -59,10 +58,22 @@ function Route(route, routeName) {
 // route context menu ------------------------------------------------ //
 $(function () {
     function deleteMarkerCallback (key) {
+        //return on active tracking, to avoid route manipulation
+        if (!mapEnabled()) {return};    
+        if (currentMode == MODE.ROUTE) {
+            //set tnr back, because this map changed and is than not in the database saved
+            session.map.routes[activeRouteInSession].tnr = null;
+        }
         deleteRouteMarker();
     }
     
     function addMarkerCallback (key) {
+        //return on active tracking, to avoid route manipulation
+        if (!mapEnabled()) {return};    
+        if (currentMode == MODE.ROUTE) {
+            //set tnr back, because this map changed and is than not in the database saved
+            session.map.routes[activeRouteInSession].tnr = null;
+        }
         var position = selectedRouteMarker.position;
         var index;
         for (var i = currentRoute.markerArray.length; i > 0; i--) {
@@ -223,8 +234,6 @@ function addRouteMarker(position, index) {
         session.map.routes[activeRouteInSession].lastLng = latLng.lng();
         //save the zoom level, at which the user looked at this route.
         session.map.routes[activeRouteInSession].lastZoom = map.getZoom();
-        //route changed, so set tnr back
-        //session.map.routes[activeRouteInSession].tnr = null;
     }
     
     if (currentMode == MODE.ROUTE) {
@@ -236,6 +245,8 @@ function addRouteMarker(position, index) {
         });
         //add the action listener
         google.maps.event.addListener(marker, 'click', function (event) {
+            //return on active tracking, to avoid route manipulation
+            if (!mapEnabled()) {return};            
             selectedRouteMarker = getRouteMarker(event.latLng);
             var pixel = fromLatLngToPixel(event.latLng);
             if (getRouteByMarker(selectedRouteMarker) == currentRoute) {
@@ -253,6 +264,8 @@ function addRouteMarker(position, index) {
         });
         //add the action listener
         google.maps.event.addListener(marker, 'click', function (event) {
+            //return on active tracking, to avoid route manipulation
+            if (!mapEnabled()) {return}; 
             selectedRouteMarker = getRouteMarker(event.latLng);
             var pixel = fromLatLngToPixel(event.latLng);
             if (getRouteByMarker(selectedRouteMarker) == currentRoute) {
@@ -270,6 +283,8 @@ function addRouteMarker(position, index) {
         });
         //add the action listener
         google.maps.event.addListener(marker, 'click', function (event) {
+            //return on active tracking, to avoid route manipulation
+            if (!mapEnabled()) {return}; 
             selectedRouteMarker = getRouteMarker(event.latLng);
             var pixel = fromLatLngToPixel(event.latLng);
             if (getRouteByMarker(selectedRouteMarker) == currentRoute) {
@@ -282,6 +297,8 @@ function addRouteMarker(position, index) {
 
     if (currentMode != MODE.TRACKING) {
         google.maps.event.addListener(marker, 'dragstart', function (event) {
+            //return on active tracking, to avoid route manipulation
+            if (!mapEnabled()) {return}; 
             selectedRouteMarker = getRouteMarker(event.latLng);
             var path = currentRoute.route.getPath();
             path.forEach(function (item, index) {
@@ -295,8 +312,10 @@ function addRouteMarker(position, index) {
             var path = currentRoute.route.getPath();
             path.removeAt(draggedMarkerIndex);
             path.insertAt(draggedMarkerIndex, selectedRouteMarker.position);
-            session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].lat = selectedRouteMarker.position.lat();
-            session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].lng = selectedRouteMarker.position.lng();
+            if (currentMode == MODE.ROUTE) {
+                session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].lat = selectedRouteMarker.position.lat();
+                session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].lng = selectedRouteMarker.position.lng();
+            }
             updateRouteDistance();
             
             if (currentRoute.markerArray.indexOf(selectedRouteMarker) == 0) {
@@ -311,8 +330,10 @@ function addRouteMarker(position, index) {
         });
         
         google.maps.event.addListener(marker, 'dragend', function (event) {
-            //route changed, so set tnr back
-            //session.map.routes[activeRouteInSession].tnr = null;
+            if (currentMode == MODE.ROUTE) {
+                //set tnr back, because this map changed and is than not in the database saved
+                session.map.routes[activeRouteInSession].tnr = null;
+            }
             updateRouteMenuEntries();
         });
     }
@@ -359,7 +380,7 @@ function addRouteMarker(position, index) {
             newMarker.lat = position.lat();
             newMarker.lng = position.lng();
             session.map.routes[activeRouteInSession].marker.splice(index, 0, newMarker);
-        } else if (!onInitialize && MODE.ROUTE == currentMode) {
+        } else if (!onInitialize && MODE.TRACKING == currentMode) {
             newMarker = getNewTrackPoint()
             newMarker.lat = position.lat();
             newMarker.lng = position.lng();
@@ -373,15 +394,18 @@ function addRouteMarker(position, index) {
 
 // removes selected route marker
 function deleteRouteMarker() {
-    //delete the marker from the session
-    session.map.routes[activeRouteInSession].marker.splice(activeRouteMarkerInSession, 1);
-    //route changed, so set tnr back
-    session.map.routes[activeRouteInSession].tnr = null;
+    if (currentMode == MODE.ROUTE) {
+        //delete the marker from the session
+        session.map.routes[activeRouteInSession].marker.splice(activeRouteMarkerInSession, 1);
+        //route changed, so set tnr back
+        session.map.routes[activeRouteInSession].tnr = null;
+        if (0 == session.map.routes[activeRouteInSession].marker.length) {
+            session.map.routes.splice(activeRouteInSession, 1);
+        }
+    }
     //set the active route marker to inactive
     activeRouteMarkerInSession = INACTIVE;
-    if (0 == session.map.routes[activeRouteInSession].marker.length) {
-        session.map.routes.splice(activeRouteInSession, 1);
-    }
+
     selectedRouteMarker.setMap(null);
     
     var index = currentRoute.markerArray.indexOf(selectedRouteMarker);
@@ -396,7 +420,7 @@ function deleteRouteMarker() {
     
     if (index == 0) {
     
-    	 if (currentMode == MODE.ROUTE || currentMode == MODE.DISTANCE ) {
+    	 if (currentMode == MODE.ROUTE) {
     	 	
     	 	if (currentRoute.markerArray.length == 0) {
     	 	
@@ -679,7 +703,7 @@ function stopDistanceToolMode() {
 
 function deleteRoute() {
     //delete from session, only if we are NOT in DISTANCE mode
-    if (MODE.DISTANCE != currentMode) {
+    if (MODE.ROUTE == currentMode || MODE.TRACKING == currentMode) {
         //delete the route from the session
         session.map.routes.splice(activeRouteInSession, 1);
     }
@@ -742,6 +766,7 @@ function saveRoute() {
         $('#dialogMessage').text("A route should have minimum two markers.");
         $('#messageBox').modal('show');
     } else {
+        disableMap();
         //save the zoom level, at which the user looked at this route.
         session.map.routes[activeRouteInSession].lastZoom = map.getZoom();
         jQuery.post("app_trip_insert.php", session.map.routes[activeRouteInSession], function(data) { 
@@ -749,6 +774,7 @@ function saveRoute() {
                 $('#dialogTitle').text('Error');
                 $('#dialogMessage').text(data['tnr'].replace(/Error: /, ""));
                 $('#messageBox').modal('show');
+                enableMap();
             } else {
                 activeRouteMarkerInSession = 0;
                 session.map.routes[activeRouteInSession].tnr = data['tnr'];
@@ -766,6 +792,7 @@ function tripRoutePost(data) {
         $('#dialogTitle').text('Error');
         $('#dialogMessage').text(data['wnr'].replace(/Error: /, ""));
         $('#messageBox').modal('show');
+        enableMap();
     } else {
         activeRouteMarkerInSession++;
         if (activeRouteMarkerInSession < session.map.routes[activeRouteInSession].marker.length)
@@ -776,6 +803,7 @@ function tripRoutePost(data) {
             $('#dialogTitle').text('Success');
             $('#dialogMessage').text("Eintrag wurde erfolgreich gespeichert.");
             $('#messageBox').modal('show');
+            enableMap();
         }
     }
 }
@@ -914,7 +942,7 @@ function routeFastForward(e) {
 }
 
 function updateMapPosition(newActiveRoute) {
-    if (!routeSwitchButtonsEnabled) {
+    if (!mapEnabled()) {
         return;
     }
     if (currentMode == MODE.DISTANCE) {
@@ -927,22 +955,4 @@ function updateMapPosition(newActiveRoute) {
     activeRouteInSession = newActiveRoute;
     map.setZoom(session.map.routes[activeRouteInSession].lastZoom);
     map.panTo(new google.maps.LatLng(session.map.routes[activeRouteInSession].lastLat, session.map.routes[activeRouteInSession].lastLng));
-}
-
-function disableRouteSwitchButtons() {
-    routeSwitchButtonsEnabled = false;
-    document.getElementById('routeSwitchLabel').setAttribute("disabled","disabled");
-    document.getElementById('routeFastBackward').setAttribute("disabled","disabled");
-    document.getElementById('routeBackward').setAttribute("disabled","disabled");
-    document.getElementById('routeForward').setAttribute("disabled","disabled");
-    document.getElementById('routeFastForward').setAttribute("disabled","disabled");
-}
-
-function enableRouteSwitchButtons() {
-    routeSwitchButtonsEnabled = true;
-    document.getElementById('routeSwitchLabel').removeAttribute("disabled");
-    document.getElementById('routeFastBackward').removeAttribute("disabled");
-    document.getElementById('routeBackward').removeAttribute("disabled");
-    document.getElementById('routeForward').removeAttribute("disabled");
-    document.getElementById('routeFastForward').removeAttribute("disabled");
 }

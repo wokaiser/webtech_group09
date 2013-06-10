@@ -25,6 +25,12 @@ function startNewTracking() {
     //save the tnr for the tracking, which is a foreign key pointing to the route.
     session.map.routes[activeRouteInSession].tnr = activeRoute.tnr;
     addTrackingPoint(activeRoute.marker[0].lat, activeRoute.marker[0].lng);
+    //load the trip info from the session to the input boxes.
+    for (var i in TRACKING_INFO) {
+        document.getElementById(TRACKING_INFO[i]).value = session.map.routes[activeRouteInSession][TRACKING_INFO[i]];
+    }
+    //show the tracking menu
+    document.getElementById('trackingMenuContainer').style.display = "block";
 }
 
 
@@ -67,7 +73,6 @@ function addTrackingPoint(lat, lng) {
 
 //save a route from the map to the database
 function saveTrackingRoute() {
-    activeRoute = session.map.routes[activeRouteInSession];
     if (js_loggedin != true) {
         $('#dialogTitle').text('Access denied');
         $('#dialogMessage').text("To use this functionality you have to be signed in.");
@@ -82,11 +87,13 @@ function saveTrackingRoute() {
         $('#dialogMessage').text("Please fill in all Track Menu entries.");
         $('#messageBox').modal('show');
     } else {
+        disableMap();
         jQuery.post("app_trackinginfo_insert.php", session.map.routes[activeRouteInSession], function(data) {            
             if (data['tracknr'].match(/Error/)) {                
                 $('#dialogTitle').text('Error');
                 $('#dialogMessage').text(data['tracknr'].replace(/Error: /, ""));
                 $('#messageBox').modal('show');
+                enableMap();
             } else {
                 activeRouteMarkerInSession = 0;
                 session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tracknr = data['tracknr'];
@@ -103,6 +110,7 @@ function trackRoutePost(data) {
         $('#dialogTitle').text('Error');
         $('#dialogMessage').text(data['trackpointnr'].replace(/Error: /, ""));
         $('#messageBox').modal('show');
+        enableMap();
     } else {
         activeRouteMarkerInSession++;
         if (activeRouteMarkerInSession < session.map.routes[activeRouteInSession].marker.length)
@@ -113,6 +121,7 @@ function trackRoutePost(data) {
             $('#dialogTitle').text('Success');
             $('#dialogMessage').text("Track successfully saved.");
             $('#messageBox').modal('show');
+            enableMap();
         }
     }
 }
@@ -133,13 +142,9 @@ function trackingFinished() {
     for (var i in TRACKING_INFO) {
         document.getElementById(TRACKING_INFO[i]).value = session.map.routes[activeRouteInSession][TRACKING_INFO[i]];
     }
-    document.getElementById('trackingMenuContainer').style.display = "block";
-    trackingEnabled = false;
-    setContextMenus(true);
-    //enable route switching buttons
-    enableRouteSwitchButtons();
-    //set tracking to inactive
-    activeTracking = false;
+
+    //enable map interaction
+    enableMap();
 }
 
 //For todays date;
@@ -225,12 +230,8 @@ $('#startTrackingButton').live("click", function(event) {
         $('#messageBox').modal('show'); 
         return;
     }
-    //disable route switching buttons
-    disableRouteSwitchButtons();
-    //disable context menu's
-    setContextMenus(false);
-    //set tracking to active
-    activeTracking = true;
+    //disable map interaction
+    disableMap();
     //the track is already in the map, display info message
     displayMessageBox("infoMessageBox", "Tracking start now and context menu's are temporary disabled.", "28em", "-14em");
     activeRoute = session.map.routes[activeRouteInSession];

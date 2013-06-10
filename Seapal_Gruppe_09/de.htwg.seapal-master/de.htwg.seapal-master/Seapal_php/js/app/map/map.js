@@ -90,20 +90,6 @@ function MarkerWithInfobox(marker, infobox, counter) {
     this.counter = counter;
 }
 
-function setContextMenus(status){
-    //set a list with the menus to deactivate. Just running through all modes would not work, because
-    //in some modes the same context menu will be used.
-    var MENUS = [MODE.DEFAULT.inactiveContextMenu, MODE.FIXED_MARKER.inactiveContextMenu, MODE.ROUTE.activeContextMenu, MODE.ROUTE.inactiveContextMenu, MODE.TRACKING.activeContextMenu, MODE.TRACKING.inactiveContextMenu];
-
-    for (var i in MENUS) {   
-        if (true == status && $(MENUS[i]).hasClass("context-menu-disabled")) {
-            $(MENUS[i]).toggleClass("context-menu-disabled"); 
-        } else if (false == status && !$(MENUS[i]).hasClass("context-menu-disabled")) {
-            $(MENUS[i]).toggleClass("context-menu-disabled"); 
-        }
-    }
-}
-
 // initialize map and all event listeners
 function initialize() {
     //set variable to know that initialization will be done
@@ -220,17 +206,23 @@ function initialize() {
     
     // click on map
     google.maps.event.addListener(map, 'click', function (event) {
+        //return on active tracking, to avoid route manipulation
+        if (!mapEnabled()) {return};    
 
         // handler for default mode
         if (currentMode == MODE.DEFAULT) {
             setTemporaryMarker(event.latLng);
         } else if (currentMode == MODE.ROUTE || currentMode == MODE.DISTANCE) {
+            if (currentMode == MODE.ROUTE) {
+                //set tnr back, because this map changed and is than not in the database saved
+                session.map.routes[activeRouteInSession].tnr = null;
+            }
             addRouteMarker(event.latLng);
         }
     });
 
     google.maps.event.addListener(map, 'center_changed', function () {
-        if (!trackingActive()) {
+        if (mapEnabled()) {
             if (!followCurrentPosition && getSessionOption("wl_followPosition").active) {
                 toggleFollowCurrentPosition();
             } else {
@@ -240,10 +232,6 @@ function initialize() {
     });
     //set variable to know that initialization is done
     onInitialize = false;
-    //enable context menu's
-    setContextMenus(true);
-    //enable route switching buttons
-    enableRouteSwitchButtons();
 }
 
 // temporary marker context menu ----------------------------------------- //
@@ -750,4 +738,68 @@ function getWeatherForecast() {
         }
     });
     return false;
+}
+
+
+
+var mapStatus = true;
+
+function disableMap(){
+    mapStatus = false;
+    //track buttons
+    document.getElementById('saveTrackButton').setAttribute("disabled","disabled");
+    document.getElementById('deleteTrackButton').setAttribute("disabled","disabled");
+    document.getElementById('stopTrackingButton').setAttribute("disabled","disabled");
+    //route buttons
+    document.getElementById('saveRouteButton').setAttribute("disabled","disabled");
+    document.getElementById('deleteRouteButton').setAttribute("disabled","disabled");
+    document.getElementById('startTrackingButton').setAttribute("disabled","disabled");
+    document.getElementById('stopRouteButton').setAttribute("disabled","disabled"); 
+    //switch map route buttons
+    document.getElementById('routeSwitchLabel').setAttribute("disabled","disabled");
+    document.getElementById('routeFastBackward').setAttribute("disabled","disabled");
+    document.getElementById('routeBackward').setAttribute("disabled","disabled");
+    document.getElementById('routeForward').setAttribute("disabled","disabled");
+    document.getElementById('routeFastForward').setAttribute("disabled","disabled");
+    //context menu's
+    setContextMenus(false);
+}
+
+function enableMap() {
+    mapStatus = true;
+    //track buttons
+    document.getElementById('saveTrackButton').removeAttribute("disabled");
+    document.getElementById('deleteTrackButton').removeAttribute("disabled");
+    document.getElementById('stopTrackingButton').removeAttribute("disabled");
+    //route buttons
+    document.getElementById('saveRouteButton').removeAttribute("disabled");
+    document.getElementById('deleteRouteButton').removeAttribute("disabled");
+    document.getElementById('startTrackingButton').removeAttribute("disabled");
+    document.getElementById('stopRouteButton').removeAttribute("disabled");    
+    //switch map route buttons
+    document.getElementById('routeSwitchLabel').removeAttribute("disabled");
+    document.getElementById('routeFastBackward').removeAttribute("disabled");
+    document.getElementById('routeBackward').removeAttribute("disabled");
+    document.getElementById('routeForward').removeAttribute("disabled");
+    document.getElementById('routeFastForward').removeAttribute("disabled");
+    //context menu's
+    setContextMenus(true);
+}
+
+function mapEnabled() {
+    return mapStatus;
+}
+
+function setContextMenus(status){
+    //set a list with the menus to deactivate. Just running through all modes would not work, because
+    //in some modes the same context menu will be used.
+    var MENUS = [MODE.DEFAULT.inactiveContextMenu, MODE.FIXED_MARKER.inactiveContextMenu, MODE.ROUTE.activeContextMenu, MODE.ROUTE.inactiveContextMenu, MODE.TRACKING.activeContextMenu, MODE.TRACKING.inactiveContextMenu];
+
+    for (var i in MENUS) {   
+        if (true == status && $(MENUS[i]).hasClass("context-menu-disabled")) {
+            $(MENUS[i]).toggleClass("context-menu-disabled"); 
+        } else if (false == status && !$(MENUS[i]).hasClass("context-menu-disabled")) {
+            $(MENUS[i]).toggleClass("context-menu-disabled"); 
+        }
+    }
 }
