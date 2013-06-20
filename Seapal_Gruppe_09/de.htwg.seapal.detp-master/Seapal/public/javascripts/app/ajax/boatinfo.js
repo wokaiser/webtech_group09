@@ -2,7 +2,7 @@ $(function() {
 	
 	function loadEntry(boatnr) { 
 			        	
-	    jQuery.get("app_boatinfo_load.php", {'bnr': boatnr}, function(data) {
+	    jQuery.get("/app_boatinfo_load.html", {'bnr': boatnr}, function(data) {
 
 	        $('#bootname').val(data['bootname']);
 	        $('#typ').val(data['typ']);
@@ -62,7 +62,7 @@ $(function() {
 	$('a.remove.boat').live("click", function(event) {
 		var buttonID = this;
 	 	var boatnr = $(this).attr('id');
-		jQuery.post("app_boatinfo_delete.php", { "bnr": boatnr }, function(data) {
+		jQuery.get("/app_boatinfo_delete.html", { "bnr": boatnr }, function(data) {
 		 
 		 	if (data['bnr'].match(/Error/)) {
 		    	
@@ -112,7 +112,7 @@ $(function() {
 		        "spigroesse": $('#spigroesse').val()              
 	    };
 		
-		jQuery.post("app_boatinfo_insert.php", json, function(data) { 
+		jQuery.post("/app_boatinfo_insert.html", json, function(data) { 
 			
 			if (data['bnr'].match(/Error/)) {
 		    	

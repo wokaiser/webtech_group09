@@ -169,9 +169,9 @@ public class Boatinfo extends Controller {
                 row.append("<td>" + result.getString("tiefgang") + "</td>");
                 row.append("<td>" + result.getString("eigner") + "</td>");
                 row.append("<td style='width:30px; text-align:left;'><div class='btn-group'>");
-                row.append("<a class='btn btn-small view' id='" + result.getString("bnr")
+                row.append("<a class='btn btn-small view boat' id='" + result.getString("bnr")
                   + "'><span><i class='icon-eye-open'></i></span></a>");
-                row.append("<a class='btn btn-small remove' id='" + result.getString("bnr")
+                row.append("<a class='btn btn-small remove boat' id='" + result.getString("bnr")
                   + "'><span><i class='icon-remove'></i></span></a>");
                 row.append("</div></td>");
 
