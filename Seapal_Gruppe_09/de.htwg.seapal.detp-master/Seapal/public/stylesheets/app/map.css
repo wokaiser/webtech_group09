@@ -4,9 +4,42 @@ label {
     margin-left: 20px;
 }
 
+#map_overlay, #weatherForecast_overlay {
+    width:145px;
+    height:185px;
+    position:absolute;
+    left:145px;
+    top:13%;
+    margin:-100px 0 0 -140px;
+    align: left;
+
+    border-color: #DEE3E5;
+    padding-left: 10px;
+    padding-top: 10px;
+    background-color: #fafafa;
+    background-repeat: repeat-x;
+    border: 1px solid #000000;
+    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 20.065);
+    webkit-border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 20.065);
+    
+    display: block;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333333;
+}
+
+#weatherForecast_overlay {
+    left:320px;
+    width:700px;
+    height:105px;
+}
+
 #map_canvas {
     width: 100%;
-    height: 800px;
+    min-height: 800px;
     margin: auto;
 }
 
@@ -17,6 +50,7 @@ label {
     border-style: solid;
     border-width: 1px;
     border-color: #DEE3E5;
+    position: relative;
 }
 
 #context-menu {
@@ -28,7 +62,7 @@ label {
     font-weight: bold;
 }
 
-#routeMenuContainer, #distanceToolContainer, #followCurrentPositionContainer, #navigationContainer {
+#routeMenuContainer, #distanceToolContainer, #followCurrentPositionContainer, #navigationContainer , #trackingMenuContainer {
     position: relative;
     margin-right: auto;
     margin-left: auto;
@@ -39,14 +73,18 @@ label {
     z-index: 2;
 }
 
-#routeMenu, #distanceToolMenu, #navigationMenu {
+#routeMenu, #distanceToolMenu, #navigationMenu, #trackingMenu {
     position: absolute;
     z-index: 2;
     white-space: nowrap;
     text-align: center;
 }
 
-#route_distance, #distanceTool_distance, #navigation_distance {
+.routeInfoInput, .trackInfoInput {
+    width:180px;
+}
+
+#route_distance, #distanceTool_distance, #navigation_distance, #tracking_distance {
     font-weight: bolder;
 }
 
@@ -73,15 +111,29 @@ label {
     padding-bottom: 5px;
 }
         
-#distanceToolContainer, #routeMenuContainer, #navigationContainer {
+#routeMenuContainer, #distanceToolContainer, #followCurrentPositionContainer, #navigationContainer , #trackingMenuContainer {
     float: right;
 }
         
-#routeMenu, #distanceToolMenu, #navigationMenu {
-    width: 201px;
+#routeMenu, #distanceToolMenu, #navigationMenu, #trackingMenu  {
+    width: 208px;
     padding: 5px 5px 5px 5px;
-    margin-left: 88.6%;
+    margin-left: 86.5%;
     margin-top: 40px;
+    
+
+    background-color: #fafafa;
+    background-repeat: repeat-x;
+    border: 1px solid #000000;
+    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    webkit-border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    
+    display: block;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #333333;
 }
         
 .routeButton {
@@ -93,4 +145,6 @@ label {
     margin-top: 7px;
     margin-left: 7px;
 }
+
+
 

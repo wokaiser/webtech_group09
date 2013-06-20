@@ -18,7 +18,16 @@
 			        @if(file == "index") { <li class="active"> } else { <li> } <a href='index.html'>Home</a></li>
 			        @if(file == "app_map") { <li class="active"> } else { <li> } <a href='app_map.html'>App</a></li>
 			        @if(file == "userguide") { <li class="active"> } else { <li> } <a href='userguide.html'>User Guide</a></li>
-			        @if(file == "screenshots") { <li class="active"> } else { <li> } <a href='screenshots.html'>Screenshots</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Screenshots</a>
+                        <ul class="dropdown-menu">
+							@if(file == "screenshots_ipad") { <li class="active"> } else { <li> } <a href='screenshots_ipad.php'>iPad</a></li>
+							@if(file == "screenshots_tools") { <li class="active"> } else { <li> } <a href='screenshots_tools.php'>SeaPal Tools</a></li>
+							@if(file == "screenshots_inplace") { <li class="active"> } else { <li> } <a href='screenshots_inplace.php'>SeaPal In-Place-Tools</a></li>
+                            @if(file == "screenshots_logbook") { <li class="active"> } else { <li> } <a href='screenshots_logbook.php'>SeaPal Logbook and Tracking</a></li>
+                            @if(file == "screenshots_iphone") { <li class="active"> } else { <li> } <a href='screenshots_iphone.php'>SeaPal on the iPhone</a></li>
+                        </ul>
+                    </li>
 			        @if(file == "about") { <li class="active"> } else { <li> } <a href='about.html'>About</a></li>
 			        @if(file == "contact") { <li class="active"> } else { <li> } <a href='contact.html'>Contact</a></li>
 		        </ul>

@@ -17,7 +17,7 @@
     padding:0;
     
     /* Anpassungen */
-    width: 186px;
+    width: 146px;
     
     /*
     min-width: 140px;
@@ -46,7 +46,7 @@
     padding: 2px 2px 2px 24px;
    
     /* Anpassungen */
-    width: 160px;
+    width: 120px;
 
     background-color: #EEE;
     position: relative;
@@ -108,14 +108,14 @@
 .context-menu-item.icon-add { background-image: url(images/page_white_add.png); }
 .context-menu-item.icon-quit { background-image: url(images/door.png); }
 
-.context-menu-item.icon-marker { background-image: url(../../images/icons/marker.png); }
-.context-menu-item.icon-startroute { background-image: url(../../images/icons/startroute.png); }
-.context-menu-item.icon-destination { background-image: url(../../images/icons/destination.png); }
-.context-menu-item.icon-distance { background-image: url(../../images/icons/distance.png); }
-.context-menu-item.icon-delete { background-image: url(../../images/icons/delete.png); }
-.context-menu-item.icon-addMarker { background-image: url(../../images/icons/add_marker.png); }
-.context-menu-item.icon-deleteMarker { background-image: url(../../images/icons/delete_marker.png); }
-.context-menu-item.icon-selectRoute { background-image: url(../../images/icons/select_route.png); }
+.context-menu-item.icon-marker { background-image: url(../../img/icons/marker.png); }
+.context-menu-item.icon-startroute { background-image: url(../../img/icons/startroute.png); }
+.context-menu-item.icon-destination { background-image: url(../../img/icons/destination.png); }
+.context-menu-item.icon-distance { background-image: url(../../img/icons/distance.png); }
+.context-menu-item.icon-delete { background-image: url(../../img/icons/delete.png); }
+.context-menu-item.icon-addMarker { background-image: url(../../img/icons/add_marker.png); }
+.context-menu-item.icon-deleteMarker { background-image: url(../../img/icons/delete_marker.png); }
+.context-menu-item.icon-selectRoute { background-image: url(../../img/icons/select_route.png); }
 
 /* vertically align inside labels */
 .context-menu-input > label > * { vertical-align: top; }
@@ -133,9 +133,9 @@
 .context-menu-input > label > input[type="text"],
 .context-menu-input > label > textarea,
 .context-menu-input > label > select {
+    margin-left: 0px;
     display: block;
     width: 100%;
-
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
@@ -159,4 +159,17 @@
 
 .context-menu-accesskey {
     text-decoration: underline;
+}
+
+
+.routeMarkerInfoInput {
+    position:relative;
+    width:120px;
+    /*TODO: why does height not work in css, but directly in the html tag it work.*/
+    /*height:10px;*/
+}
+
+.routeMarkerInfoInput:hover { 
+cursor: pointer;
+background-color: #FFF;
 }

@@ -1,9 +1,8 @@
 #wrapper {
     width: 100%;
-	height: 400px;
     position: relative;
     left: 0;
-    top: 40px;
+    top: 50%;
     overflow: hidden;
 }
 
@@ -14,8 +13,8 @@
     padding: 15px;
     margin: 30px;
     float: left;
+    
     box-shadow: 0 0 20px #000;
-
 }
 #carousel .empty {
     display: block;
@@ -25,29 +24,24 @@
 }
 
 #bar {
-    background-color: transparent;
+    margin-top: 90px;
+    background-color: #000#;
     text-align: center;
     width: 100%;
-    position: relative;
-    top: 10px;
+    position: absolute;
+    top: 0;
     left: 0;
-	margin-bottom: 80px;
 }
 #bar * {
-    color: #333;
-    line-height: 40px;
+    color: #000;
+    line-height: 50px;
     font-size: 18px;
     font-weight: bold;
 }
-
-#bar span {
-	line-height: 52px;
-}
-
 #prev, #next {
     margin-top: 0px;
     font-size: 50px;
-    color: #333;
+    color: #000;
     text-decoration: none;
     display: block;
     width: 50px;
@@ -61,6 +55,7 @@
 #prev.disabled, #next.disabled {
     background-color: transparent !important;
     cursor: default;
+    
     opacity: 0.1;
 }
 #prev {
