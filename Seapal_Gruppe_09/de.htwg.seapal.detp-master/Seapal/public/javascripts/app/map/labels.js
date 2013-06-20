@@ -6,7 +6,7 @@ function Label(opt_options) {
 	// Label specific
 	var span = this.span_ = document.createElement('span');
 	span.style.cssText = 'position: relative; left: 0%; top: -8px; ' +
-			  'white-space: nowrap; border: 0px; font-family:arial; font-weight:bold;' +
+			  'white-space: nowrap; border: 0px; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; font-weight:bold;' +
 			  'padding: 2px; background-color: #ddd; '+
 				'opacity: .75; '+
 				'filter: alpha(opacity=75); '+

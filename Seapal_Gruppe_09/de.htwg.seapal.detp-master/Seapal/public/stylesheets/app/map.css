@@ -25,7 +25,7 @@ label {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 20.065);
     
     display: block;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 14px;
     line-height: 20px;
     color: #333333;
@@ -75,9 +75,26 @@ label {
 
 #routeMenu, #distanceToolMenu, #navigationMenu, #trackingMenu {
     position: absolute;
+	top: 40px;
+	left: 81.6%;
     z-index: 2;
     white-space: nowrap;
     text-align: center;
+    width: 208px;
+    padding: 5px 5px 5px 5px;    
+
+    background-color: #fafafa;
+    background-repeat: repeat-x;
+    border: 1px solid #000000;
+    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    webkit-border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    
+    display: block;
+    font-family: "Open Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 14px;
+    color: #333333;
 }
 
 .routeInfoInput, .trackInfoInput {
@@ -89,22 +106,22 @@ label {
 }
 
 .markerInfoBox {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 14px;
     font-weight: normal;
     white-space: nowrap;
 }
         
 #temporaryMarkerInfobox {
-    padding: 5px 5px 5px 5px;
+    padding: 5px;
 }
         
 #fixedMarkerInfobox {
-    padding: 3px 3px 3px 3px;
+    padding: 5px;
 }
         
 .context-menu-root {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 14px;
     font-weight: normal;
     padding-top: 3px;
@@ -114,27 +131,7 @@ label {
 #routeMenuContainer, #distanceToolContainer, #followCurrentPositionContainer, #navigationContainer , #trackingMenuContainer {
     float: right;
 }
-        
-#routeMenu, #distanceToolMenu, #navigationMenu, #trackingMenu  {
-    width: 208px;
-    padding: 5px 5px 5px 5px;
-    margin-left: 86.5%;
-    margin-top: 40px;
-    
-
-    background-color: #fafafa;
-    background-repeat: repeat-x;
-    border: 1px solid #000000;
-    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
-    webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
-    webkit-border-radius: 4px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
-    
-    display: block;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    color: #333333;
-}
+       
         
 .routeButton {
     padding-top: 5px;

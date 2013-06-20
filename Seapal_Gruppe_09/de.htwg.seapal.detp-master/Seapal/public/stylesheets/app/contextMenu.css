@@ -17,7 +17,7 @@
     padding:0;
     
     /* Anpassungen */
-    width: 146px;
+    width: 180px;
     
     /*
     min-width: 140px;
@@ -37,23 +37,37 @@
     -o-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 
-    font-family: 'Open Sans Condensed', sans-serif;
-    font-weight: 200;
-    font-size: 15px;
+    font-family: "Open Sans", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 14px;
 }
 
 .context-menu-item {
-    padding: 2px 2px 2px 24px;
-   
+    padding: 4px 4px 4px 24px;
+   -webkit-box-sizing: border-box;
+   -moz-box-sizing: border-box;
+    box-sizing: border-box;
+		
     /* Anpassungen */
-    width: 120px;
-
+    width: 100%;
+	height: 25px;
+	line-height: 19px;
+	
     background-color: #EEE;
     position: relative;
     -webkit-user-select: none;
     -moz-user-select: -moz-none;
     -ms-user-select: none;
     user-select: none;
+}
+
+/* Quick & dirty ... */
+.context-menu-separator {
+	height: 1px;
+	margin-bottom: 2px;
+}
+
+.context-menu-item span {
+	
 }
 
 .context-menu-separator {
@@ -99,23 +113,23 @@
     http://css-tricks.com/13224-pseudo-spriting/ to get an idea of how to implement 
     .context-menu-item.icon:before {}
 */
-.context-menu-item.icon { min-height: 18px; background-repeat: no-repeat; background-position: 4px 2px; }
-.context-menu-item.icon-edit { background-image: url(images/page_white_edit.png); }
-.context-menu-item.icon-cut { background-image: url(images/cut.png); }
-.context-menu-item.icon-copy { background-image: url(images/page_white_copy.png); }
-.context-menu-item.icon-paste { background-image: url(images/page_white_paste.png); }
-.context-menu-item.icon-delete1 { background-image: url(images/page_white_delete.png); }
-.context-menu-item.icon-add { background-image: url(images/page_white_add.png); }
-.context-menu-item.icon-quit { background-image: url(images/door.png); }
+.context-menu-item.icon { min-height: 18px; padding-top: 1px; background-repeat: no-repeat; background-position: 4px 2px; }
+.context-menu-item.icon-edit { background-image: url(../../images/page_white_edit.png); }
+.context-menu-item.icon-cut { background-image: url(../../images/cut.png); }
+.context-menu-item.icon-copy { background-image: url(../../images/page_white_copy.png); }
+.context-menu-item.icon-paste { background-image: url(../../images/page_white_paste.png); }
+.context-menu-item.icon-delete1 { background-image: url(../../images/page_white_delete.png); }
+.context-menu-item.icon-add { background-image: url(../../images/page_white_add.png); }
+.context-menu-item.icon-quit { background-image: url(../../images/door.png); }
 
-.context-menu-item.icon-marker { background-image: url(../../img/icons/marker.png); }
-.context-menu-item.icon-startroute { background-image: url(../../img/icons/startroute.png); }
-.context-menu-item.icon-destination { background-image: url(../../img/icons/destination.png); }
-.context-menu-item.icon-distance { background-image: url(../../img/icons/distance.png); }
-.context-menu-item.icon-delete { background-image: url(../../img/icons/delete.png); }
-.context-menu-item.icon-addMarker { background-image: url(../../img/icons/add_marker.png); }
-.context-menu-item.icon-deleteMarker { background-image: url(../../img/icons/delete_marker.png); }
-.context-menu-item.icon-selectRoute { background-image: url(../../img/icons/select_route.png); }
+.context-menu-item.icon-marker { background-image: url(../../images/icons/marker.png); }
+.context-menu-item.icon-startroute { background-image: url(../../images/icons/startroute.png); }
+.context-menu-item.icon-destination { background-image: url(../../images/icons/destination.png); }
+.context-menu-item.icon-distance { background-image: url(../../images/icons/distance.png); }
+.context-menu-item.icon-delete { background-image: url(../../images/icons/delete.png); }
+.context-menu-item.icon-addMarker { background-image: url(../../images/icons/add_marker.png); }
+.context-menu-item.icon-deleteMarker { background-image: url(../../images/icons/delete_marker.png); }
+.context-menu-item.icon-selectRoute { background-image: url(../../images/icons/select_route.png); }
 
 /* vertically align inside labels */
 .context-menu-input > label > * { vertical-align: top; }
