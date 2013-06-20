@@ -5,7 +5,7 @@ import PlayProject._
 object ApplicationBuild extends Build {
 
     val appName         = "Seapal"
-    val appVersion      = "1.0-SNAPSHOT"
+    val appVersion      = "1.1"
 
     val appDependencies = Seq(
     	"mysql" % "mysql-connector-java" % "5.1.18"

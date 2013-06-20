@@ -1,14 +1,35 @@
+// Php-Server JS-Code auslagern?
+// andere M�glichkeit zur Routenbenennung �berlegen
+// wozu lat/long anzeige? entfernen?
+// openseamap fehler beheben falls m�glich
+// Benutzerposition bestimmen
+
+//for debug of cookie-less session variable
+//Session.clear();
+
+/*default position of the ship*/
+const CLIENT_DEFAULT_LAT = 47.65521295468833;
+const CLIENT_DEFAULT_LNG = 9.2010498046875;
+
+var onInitialize;
 
 var map = null;
 
 var overlay = new google.maps.OverlayView();
 
-var MODE = { DEFAULT: { value: 0, name: "default" }, ROUTE: { value: 1, name: "route" }, DISTANCE: { value: 2, name: "distance" }, NAVIGATION: { value: 3, name: "navigation" } };
+var MODE = { 
+        DEFAULT      : { value: 0, name: "DEFAULT"      , activeContextMenu: null, inactiveContextMenu: "#temporaryMarkerContextMenu"}, 
+        FIXED_MARKER : { value: 0, name: "FIXED_MARKER" , activeContextMenu: null, inactiveContextMenu: "#fixedMarkerContextMenu"}, 
+        ROUTE        : { value: 1, name: "ROUTE"        , activeContextMenu: "#routeContextMenu_active", inactiveContextMenu: "#routeContextMenu_inactive" }, 
+        DISTANCE     : { value: 2, name: "DISTANCE"     , activeContextMenu: "#routeContextMenu_active", inactiveContextMenu: "#routeContextMenu_inactive" }, 
+        NAVIGATION   : { value: 3, name: "NAVIGATION"   , activeContextMenu: "#routeContextMenu_active", inactiveContextMenu: "#routeContextMenu_inactive" }, 
+        TRACKING     : { value: 4, name: "TRACKING"     , activeContextMenu: "#trackingContextMenu_active", inactiveContextMenu: "#trackingContextMenu_inactive"} 
+    };
+    
 var currentMode = MODE.DEFAULT;
 
 var currentPositionMarker = null;
 var followCurrentPosition = false;
-var noToggleOfFollowCurrentPositionButton = false;
 
 var temporaryMarker = null;
 var temporaryMarkerInfobox = null;
@@ -51,6 +72,12 @@ var distanceMarkerImage = new google.maps.MarkerImage('/assets/images/icons/flag
     new google.maps.Point(7, 34)  //offset point
 );
 
+var trackingMarkerImage = new google.maps.MarkerImage('/assets/images/icons/trackpoint.png',
+    new google.maps.Size(40, 40), //size
+    new google.maps.Point(0, 0),  //origin point
+    new google.maps.Point(7, 25)  //offset point
+);
+
 var destinationMarkerImage = new google.maps.MarkerImage('/assets/images/icons/destination.png',
     new google.maps.Size(28, 31), //size
     new google.maps.Point(0, 0),  //origin point
@@ -65,15 +92,16 @@ function MarkerWithInfobox(marker, infobox, counter) {
 
 // initialize map and all event listeners
 function initialize() {
-
+    //set variable to know that initialization will be done
+    onInitialize = true;
     // set different map types
     var mapTypeIds = ["roadmap", "satellite", "OSM"];
 
     // set map Options
     var mapOptions = {
-        center: new google.maps.LatLng(47.65521295468833, 9.2010498046875),
-        zoom: 14,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        center: new google.maps.LatLng(session.map.lat, session.map.lng),
+        zoom: session.map.zoom,
+        mapTypeId: session.map.mapTypeId,
         mapTypeControlOptions: {
             mapTypeIds: mapTypeIds
         },
@@ -82,20 +110,20 @@ function initialize() {
     };
 
     //set route menu position
-    document.getElementById('followCurrentPositionContainer').style.width = document.body.offsetWidth + "px";
     document.getElementById('routeMenuContainer').style.width = document.body.offsetWidth + "px";
     document.getElementById('routeMenuContainer').style.display = "none";
     document.getElementById('distanceToolContainer').style.width = document.body.offsetWidth + "px";
     document.getElementById('distanceToolContainer').style.display = "none";
     document.getElementById('navigationContainer').style.width = document.body.offsetWidth + "px";
     document.getElementById('navigationContainer').style.display = "none";
-    document.getElementById('chat').style.display = "none";
+    document.getElementById('trackingMenuContainer').style.width = document.body.offsetWidth + "px";
+    document.getElementById('trackingMenuContainer').style.display = "none";
 
     // initialize map
     map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
     
     // set client position
-    currentPosition = new google.maps.LatLng(47.65521295468833, 9.2010498046875)
+    currentPosition = new google.maps.LatLng(CLIENT_DEFAULT_LAT, CLIENT_DEFAULT_LNG)
 
     var currentMarkerOptions = {
         position: currentPosition,
@@ -117,6 +145,47 @@ function initialize() {
         maxZoom: 18
     }));
 
+    //Initial map features
+    
+    
+    //init map options
+    for (var i in session.options) {
+        InitialiseMapOtionsDropdown(session.options[i])
+    }
+    
+    //set fixed markers, if there are some available
+    for (var i = 0; i < session.map.fixedMarker.length; i++) {
+        fixedMarkerCount = session.map.fixedMarker[i].fixedMarkerCount - 1;
+        setTemporaryMarker(new google.maps.LatLng(session.map.fixedMarker[i].lat, session.map.fixedMarker[i].lng));
+        setFixedMarker(new google.maps.LatLng(session.map.fixedMarker[i].lat, session.map.fixedMarker[i].lng));
+    }
+    
+    //set routes
+    for (i = 0; i < session.map.routes.length; i++) {
+        activeRouteInSession = i;
+        titel = null;
+        if (session.map.routes[i].type == SESSION_ROUTE_TYPE.ROUTE) {titel = session.map.routes[i].titel;}
+        else if (session.map.routes[i].type == SESSION_ROUTE_TYPE.TRACKING) {titel = session.map.routes[i].trackTitel;}
+        startNewRoute(new google.maps.LatLng(session.map.routes[i].marker[0].lat, session.map.routes[i].marker[0].lng), MODE[session.map.routes[i].type], titel);
+        for (j = 1; j < session.map.routes[i].marker.length; j++) {
+            addRouteMarker(new google.maps.LatLng(session.map.routes[i].marker[j].lat, session.map.routes[i].marker[j].lng));
+        }
+        stopRouteMode();
+    }
+    
+    //set temporary marker, if one is stored
+    if (null != session.map.temporaryMarker) {
+        setTemporaryMarker(new google.maps.LatLng(session.map.temporaryMarker.lat, session.map.temporaryMarker.lng));
+    }
+    
+    //add action listener for change of map type
+    google.maps.event.addListener( map, 'maptypeid_changed', function() { 
+        session.map.mapTypeId = map.getMapTypeId();
+    } );
+
+    //add action listener for mapOverlay which will be refreshed if map get refreshed
+    google.maps.event.addListener(map, 'idle', mapOverlay);
+    
     google.maps.event.addListener(currentPositionMarker, 'position_changed', function () {
         
         if (followCurrentPosition) {
@@ -128,42 +197,47 @@ function initialize() {
         }
     });
 
-    map.overlayMapTypes.push(new google.maps.ImageMapType({
-        getTileUrl: function (coord, zoom) {
-            return "http://tiles.openseamap.org/seamark/" + zoom + "/" + coord.x + "/" + coord.y + ".png";
-        },
-       tileSize: new google.maps.Size(256, 256),
-        name: "OpenSeaMap",
-        maxZoom: 18
-    }));
-
     overlay.draw = function () { };
     overlay.setMap(map);
 
+    //placeholder for overlay
+    map.overlayMapTypes.push(null);        // Placeholder for Sites
+    map.overlayMapTypes.push(null);        // Placeholder for OSM TOP + 
+    
     // click on map
     google.maps.event.addListener(map, 'click', function (event) {
+        //return on active tracking, to avoid route manipulation
+        if (!mapEnabled()) {return};    
 
         // handler for default mode
         if (currentMode == MODE.DEFAULT) {
             setTemporaryMarker(event.latLng);
         } else if (currentMode == MODE.ROUTE || currentMode == MODE.DISTANCE) {
+            if (currentMode == MODE.ROUTE) {
+                //set tnr back, because this map changed and is than not in the database saved
+                session.map.routes[activeRouteInSession].tnr = null;
+            }
             addRouteMarker(event.latLng);
         }
     });
 
     google.maps.event.addListener(map, 'center_changed', function () {
-        if (followCurrentPosition && !noToggleOfFollowCurrentPositionButton) {
-            toggleFollowCurrentPosition();
-        } else {
-            noToggleOfFollowCurrentPositionButton = false;
+        if (mapEnabled()) {
+            if (!followCurrentPosition && getSessionOption("wl_followPosition").active) {
+                toggleFollowCurrentPosition();
+            } else {
+                followCurrentPosition = !followCurrentPosition;
+            }
         }
     });
+    //set variable to know that initialization is done
+    onInitialize = false;
 }
 
 // temporary marker context menu ----------------------------------------- //
 $(function () {
     $.contextMenu({
-        selector: '#temporaryMarkerContextMenu',
+        selector: MODE.DEFAULT.inactiveContextMenu,
         events: {
             hide: function () {
                 startTimeout();
@@ -172,13 +246,21 @@ $(function () {
         callback: function (key, options) {
         
             if (key == "marker") {
+
                 setFixedMarker(temporaryMarker.position)
+
             } else if (key == "startroute") {
-                startNewRoute(temporaryMarker.position, false);
+
+                startNewRoute(temporaryMarker.position, MODE.ROUTE, null);
+
             } else if (key == "distance") {
-                startNewRoute(temporaryMarker.position, true);
+
+                startNewRoute(temporaryMarker.position, MODE.DISTANCE, null);
+
             } else if (key == "destination") {
+            
             	startNewNavigation(currentPositionMarker.position, temporaryMarker.position);
+
             } else if (key == "delete") {
                 temporaryMarker.setMap(null);
                 temporaryMarkerInfobox.setMap(null);
@@ -198,7 +280,7 @@ $(function () {
 // fixed marker context menu ------------------------------------------------ //
 $(function () {
     $.contextMenu({
-        selector: '#fixedMarkerContextMenu',
+        selector: MODE.FIXED_MARKER.inactiveContextMenu,
         callback: function (key, options) {
             if (key == "destination") {
 
@@ -208,6 +290,8 @@ $(function () {
                 selectedMarker.reference.setMap(null);
                 selectedMarker.infobox.setMap(null);
                 fixedMarkerArray.splice(fixedMarkerArray.indexOf(selectedMarker), 1);
+                //remove marker from session
+                session.map.fixedMarker.splice(getFixedMarkerIndexByCounter(selectedMarker.counter), 1);
             }
         },
         items: {
@@ -226,6 +310,7 @@ function startTimeout() {
     temporaryMarkerTimeout = setTimeout(function () {
         temporaryMarker.setMap(null);
         temporaryMarkerInfobox.setMap(null);
+        session.map.temporaryMarker = null;
     }, 5000);
 }
 
@@ -264,6 +349,11 @@ function getMarkerWithInfobox(event) {
 }
 
 function setTemporaryMarker(position) {
+    //check if not in initialization
+    if (!onInitialize) {
+        //save temporary marker to cookie-less session
+        session.map.temporaryMarker = {lat : position.lat(), lng : position.lng()};
+    }
 
     var temporaryMarkerOptions = {
         position: position,
@@ -283,8 +373,8 @@ function setTemporaryMarker(position) {
     google.maps.event.addListener(temporaryMarker, 'click', function (event) {
         var pixel = fromLatLngToPixel(event.latLng);
         
-        if (currentMode == MODE.DEFAULT) {
-	        $('#temporaryMarkerContextMenu').contextMenu({ x: pixel.x, y: pixel.y });
+        if (currentMode != MODE.NAVIGATION) {
+	        $(MODE.DEFAULT.inactiveContextMenu).contextMenu({ x: pixel.x, y: pixel.y });
         }
         
         stopTimeout();
@@ -303,6 +393,7 @@ function setTemporaryMarker(position) {
 
     // marker drag end
     google.maps.event.addListener(temporaryMarker, 'dragend', function (event) {
+        session.map.temporaryMarker = {lat : event.latLng.lat(), lng : event.latLng.lng()};
         startTimeout();
     });
 
@@ -310,8 +401,16 @@ function setTemporaryMarker(position) {
     temporaryMarkerInfobox = drawTemporaryMarkerInfobox(position);
 }
 
-function setFixedMarker(position) {
+/*helper function to get a fixed marker from the less-cookie session by the fixedMarkerCount*/
+function getFixedMarkerIndexByCounter(count) {
+    for (x in session.map.fixedMarker) {
+        if (session.map.fixedMarker[x].fixedMarkerCount == count) {
+            return x;
+        }
+    }
+}
 
+function setFixedMarker(position) {
     temporaryMarker.setMap(null);
     temporaryMarkerInfobox.setMap(null);
     stopTimeout();
@@ -327,21 +426,30 @@ function setFixedMarker(position) {
 
     fixedMarker = new google.maps.Marker(fixedMarkerOptions);
 
+    //check if not in initialization
+    if (!onInitialize) {
+        session.map.fixedMarker.push({fixedMarkerCount : fixedMarkerCount, lat : position.lat(), lng : position.lng()});
+    }
+    
     // click on fixed marker
     google.maps.event.addListener(fixedMarker, 'click', function (event) {
         selectedMarker = getMarkerWithInfobox(event);
         var pixel = fromLatLngToPixel(event.latLng);
         
         if (currentMode != MODE.NAVIGATION) {
-	        $('#fixedMarkerContextMenu').contextMenu({ x: pixel.x, y: pixel.y });
+	        $(MODE.FIXED_MARKER.inactiveContextMenu).contextMenu({ x: pixel.x, y: pixel.y });
         }
     });
 
     // marker is dragged
     google.maps.event.addListener(fixedMarker, 'drag', function (event) {
+        
         selectedMarker = getMarkerWithInfobox(event);
         selectedMarker.infobox.setMap(null);
         selectedMarker.infobox = drawFixedMarkerInfobox(event.latLng, selectedMarker.counter);
+        var index = getFixedMarkerIndexByCounter(selectedMarker.counter);
+        session.map.fixedMarker[index].lat = event.latLng.lat();
+        session.map.fixedMarker[index].lng = event.latLng.lng(); 
     });
 
     fixedMarker.setMap(map);
@@ -361,14 +469,337 @@ function fromLatLngToPixel(latLng) {
     return pixel;
 }
 
+/*Add a map layer with a specific id. Each individual layer should have his own static id*/
+function addMapLayer (id, link) {
+    map.overlayMapTypes.setAt(id, new google.maps.ImageMapType({
+        getTileUrl: function (coord, zoom) {
+            return link + zoom + "/" + coord.x + "/" + coord.y + ".png";
+        },
+        tileSize: new google.maps.Size(256, 256),
+        name: "OpenSeaMap",
+        maxZoom: 18
+    }));
+}
+
+/*Remove a map layer with a specific id. Each individual layer should have his own static id*/
+function RemoveMapLayer (id) {
+    map.overlayMapTypes.setAt(id, null); 
+}
+
+/*function to initialise the option buttons*/
+function InitialiseMapOtionsDropdown (option) {
+    if (option.active) {
+        $("#"+option.id).hasClass ("checked");
+        $("#"+option.id).find("span").toggleClass("icon-ok");
+    }
+    loadSessionOption(option);
+}
+
+function toggleSessionOption(option) {
+    option.active = (option.active) ? false : true;
+}
+
+/*function get a specified session option by it's id*/
+function getSessionOption(optionId) {
+    for (var i in session.options) {
+        if (optionId == session.options[i].id) {
+            return session.options[i];
+        }
+    }
+    return null;
+}
+
+function loadSessionOption(option) {
+    //check if a layer should be added
+    if (option.type == SESSION_OPTION_TYPE.LAYER) {
+        //check if the layer should be added
+        if (option.active) {
+            //add layer
+            addMapLayer(option.layer.id, option.layer.link);
+        } else {
+            RemoveMapLayer(option.layer.id);
+        }
+    } else if (option.type == SESSION_OPTION_TYPE.MAP_OVERLAY) {
+        //check if the mapOverlay should be displayed
+        if (option.active) {
+            //Visible mayOverlay
+            document.getElementById("map_overlay").style.display="block";
+            //call mapOverlay for instant refresh
+            mapOverlay();
+        } else {
+            //Hide mayOverlay
+            document.getElementById("map_overlay").style.display="none";
+        }
+    } else if (option.type == SESSION_OPTION_TYPE.FOLLOW_CURRENT_POSITION) {
+        if (option.active) {
+            followCurrentPosition = true;
+            map.setCenter(currentPositionMarker.getPosition());
+        }
+    }
+}
+
 function toggleFollowCurrentPosition() {
     followCurrentPosition = !followCurrentPosition;
-    if (followCurrentPosition) {
-        document.getElementById("followCurrentPositionbutton").value = "Eigener Position nicht mehr folgen";
-        noToggleOfFollowCurrentPositionButton = true;
-        map.setCenter(currentPositionMarker.getPosition());
-    } else {
-        document.getElementById("followCurrentPositionbutton").value = "Eigener Position folgen";
+    getSessionOption("wl_followPosition").active = !getSessionOption("wl_followPosition").active;
+    $("#wl_followPosition").hasClass ("checked");
+    $("#wl_followPosition").find("span").toggleClass("icon-ok");
+}
+
+/*function to toggle buttons and choose weather layer*/
+$(document).ready(function() {
+    /* Multi select - allow multiple selections */
+    /* Allow click without closing menu */
+    /* Toggle checked state and icon */
+    $('.multicheck').click(function(e) {
+        $(this).toggleClass("checked");
+        $(this).find("span").toggleClass("icon-ok");
+        return false;
+    });
+        
+    /* wl_chooser, to activate the weather layer */ 
+    /* depending to the choosen weather layer    */
+    $('.wl_chooser').click(function(e) {
+        opt = getSessionOption(this.id);
+        toggleSessionOption(opt);
+        loadSessionOption(opt);
+        /*store session*/
+        Session.set(SESSION, session);
+        return false;
+    });
+});
+
+function convertToCelcius(kelvin) {
+    return (Math.round((kelvin - 273) * 100) / 100);
+}
+
+function mapOverlay() {
+    latLng = map.getCenter();
+    var lat = latLng.lat();
+    var lng = latLng.lng();
+    var weatherCurrent = "http://openweathermap.org/data/2.1/find/city?lat="+lat+"&lon="+lng+"&cnt=1";    
+    var txt = "";
+    
+    //save actual displayed position of the map in the cookie-less session
+    session.map.lat = lat;
+    session.map.lng = lng;
+    session.map.zoom = map.getZoom();
+    /*store session*/
+    Session.set(SESSION, session);
+    /*hide forecast, because mapOverlay will only be called on map position change and than there is a new forecast for the new position required*/
+    document.getElementById("weatherForecast_overlay").style.display = "none";
+    
+    //return if mapOverlay is inactive
+    if (!getSessionOption("wl_mapOverlay").active) return;
+    
+    
+    /*---------------------------------------*/
+    /*           Current Weather             */
+    /*---------------------------------------*/
+    $.ajax(weatherCurrent, {
+        crossDomain:true, 
+        dataType: "jsonp", 
+        success:function(data,text,xhqr){
+            if (null == data) return;
+            txt += "<div style='align=left; font-size: medium; font-weight: bold; margin-bottom: 0px;'>"+data.list[0].name+"</div> "
+            txt += "<div style='float: left; width: 140px;' >"
+                txt += "<div style='display: block; clear: left;' >"
+                    txt += "<div style='float: left;' title='Titel'>"
+                        txt += "<img height='45' width='45' style='border: medium none; width: 45px; height: 45px; background: url(&quot;http://openweathermap.org/img/w/"+data.list[0].weather[0].icon+".png&quot;) repeat scroll 0% 0% transparent;' alt='title' src='http://openweathermap.org/images/transparent.png'/>"
+                    txt += "</div>"
+                    
+                    txt += "<div style='float: left;' >"
+                        txt += "<div style='display: block; clear: left; font-size: medium; font-weight: bold; padding: 0pt 3pt;' title='Current Temperature'>"+convertToCelcius(data.list[0].main.temp)+" °C</div>"
+                        txt += "<div style='display: block; width: 85px; overflow: visible;' ></div>"
+                    txt += "</div>"
+                txt += "</div>"
+                        
+                txt += "<div style='display: block; clear: left; font-size: small;'>Clouds: "+data.list[0].clouds.all+"%</div>"
+                txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Humidity: "+data.list[0].main.humidity+"%</div>"
+                txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Wind: "+data.list[0].wind.speed+" m/s</div>"
+                txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Pressure: "+data.list[0].main.pressure+" hpa</div>"
+                txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Min Temperature: "+convertToCelcius(data.list[0].main.temp_min)+" °C</div>"
+                txt += "<div style='display: block; clear: left; color: gray; font-size: x-small;' >Max Temperature: "+convertToCelcius(data.list[0].main.temp_max)+" °C</div>"
+                txt += "<a href='no-javascript.html' title='Get weather forecast' id='getWeatherForecast'>Get weather forecast</a>"
+            txt += "</div>"
+            
+            //set the weather image for today to access in weather forecast
+            todaysWeatherImage = data.list[0].weather[0].icon;
+        
+            if (data.list[0].name.length > 16) {document.getElementById('map_overlay').style.height = "225px";}
+            else {document.getElementById('map_overlay').style.height = "205px";}
+            //all weather data retrieved, set txt to map overlay
+            document.getElementById("map_overlay").innerHTML = txt;
+            //initialise the action handler for the getWeatherForecast link
+            document.getElementById('getWeatherForecast').onclick = getWeatherForecast;;
+            //build string for weather history and forecast request
+            var weatherHistory  = "http://openweathermap.org/data/2.1/history/city/?id="+data.list[0].id+"&start="+data.list[0].dt+"&cnt=1";
+
+        }
+    });
+}
+
+Date.prototype.getFullMonth = function(){ 
+    return ((((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1));
+};
+
+Date.prototype.getFullDay = function(offset){ 
+    return ((((this.getDate()+offset) < 10)?"0":"") + (this.getDate()+offset));
+};
+
+if (typeof String.prototype.startsWith != 'function') {
+  // see below for better implementation!
+  String.prototype.startsWith = function (str){
+    return this.indexOf(str) == 0;
+  };
+}
+
+const WEEKDAY = new Array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+const MIN_TEMPERATUR_INIT = 999;
+const MAX_TEMPERATUR_INIT = -1;
+var todaysWeatherImage = "10d"
+
+function getWeatherForecast() {
+    latLng = map.getCenter();
+    var lat = latLng.lat();
+    var lng = latLng.lng();
+    var txt = "";
+    
+    var weatherForecast = "http://openweathermap.org/data/2.1/forecast/city?lat="+lat+"&lon="+lng+"&cnt=1";
+            
+    /*---------------------------------------*/
+    /*           Weather Forecast            */
+    /*---------------------------------------*/
+    $.ajax(weatherForecast, {
+        crossDomain:true, 
+        dataType: "jsonp", 
+        success:function(data,text,xhqr){
+            var weekday = new Date().getDay();
+            var minTemp;
+            var maxTemp;
+            var dayTxt;
+            
+            //loop for number of day's to forecast
+            for (var day = 1; day <= 7; day++) {
+                minTemp = MIN_TEMPERATUR_INIT;
+                maxTemp = MAX_TEMPERATUR_INIT;
+                searchDate = new Date().getFullYear()+"-"+new Date().getFullMonth()+"-"+new Date().getFullDay(day);
+                var icon = "10d";    
+                
+                for (var i in data.list) {
+                    if (data.list[i].dt_txt.startsWith(searchDate)) {
+                        if (data.list[i].main.temp_min < minTemp) {
+                            icon = data.list[i].weather[0].icon;
+                            minTemp = data.list[i].main.temp_min;
+                        }
+                        if (data.list[i].main.temp_max > maxTemp) {
+                            icon = data.list[i].weather[0].icon;
+                            maxTemp = data.list[i].main.temp_max;
+                        }
+                    }
+                }
+                
+                if (minTemp == MIN_TEMPERATUR_INIT) {
+                    minTemp = "n.a"
+                } else {
+                    minTemp = convertToCelcius(minTemp)+" °C";
+                }
+                if (maxTemp == MAX_TEMPERATUR_INIT) {
+                    maxTemp = "n.a"
+                } else {
+                    maxTemp = convertToCelcius(maxTemp)+" °C";
+                }
+                if (1 === day) {
+                    icon = todaysWeatherImage;
+                    dayTxt = "Today";
+                } else if (2 == day) {
+                    dayTxt = "Tomorrow";
+                } else {
+                    dayTxt = WEEKDAY[weekday];
+                }
+                                
+                txt += "<div class='left'>"
+                    txt += "<div style='text-align:center; font-size: small; font-weight: bold; margin-bottom: 0px;'>"+dayTxt+"</div> "
+                    txt += "<img height='45' width='45' style='text-align:center; border: medium none; width: 45px; height: 45px; background: url(&quot;http://openweathermap.org/img/w/"+icon+".png&quot;) repeat scroll 0% 0% transparent;' alt='title' src='http://openweathermap.org/images/transparent.png'/>"
+                    txt += "<div style='display: block; clear: left; color: #DAB500; font-size: x-small; text-align:center;' title='Max Temperature'>"+maxTemp+"</div>"
+                    txt += "<div style='display: block; clear: left; color: gray; font-size: x-small; text-align:center;' title='Min Temperature'>"+minTemp+"</div>"
+                txt += "</div>"
+                
+                weekday++;
+                if (weekday >= WEEKDAY.length) {
+                    weekday = 0;
+                }
+            }
+            //all weather data retrieved, set txt to map overlay
+            document.getElementById("weatherForecast_overlay").innerHTML = txt;
+            //Visible weatherForecast_overlay
+            document.getElementById("weatherForecast_overlay").style.display="block";
+            //hide the weatherForecast_overlay after some seconds
+            setTimeout(function() {document.getElementById("weatherForecast_overlay").style.display = "none";},20000);
+        }
+    });
+    return false;
+}
+
+
+
+var mapStatus = true;
+
+function disableMap(){
+    mapStatus = false;
+    //track buttons
+    document.getElementById('saveTrackButton').setAttribute("disabled","disabled");
+    document.getElementById('deleteTrackButton').setAttribute("disabled","disabled");
+    document.getElementById('stopTrackingButton').setAttribute("disabled","disabled");
+    //route buttons
+    document.getElementById('saveRouteButton').setAttribute("disabled","disabled");
+    document.getElementById('deleteRouteButton').setAttribute("disabled","disabled");
+    document.getElementById('startTrackingButton').setAttribute("disabled","disabled");
+    document.getElementById('stopRouteButton').setAttribute("disabled","disabled"); 
+    //switch map route buttons
+    document.getElementById('routeSwitchLabel').setAttribute("disabled","disabled");
+    document.getElementById('routeFastBackward').setAttribute("disabled","disabled");
+    document.getElementById('routeBackward').setAttribute("disabled","disabled");
+    document.getElementById('routeForward').setAttribute("disabled","disabled");
+    document.getElementById('routeFastForward').setAttribute("disabled","disabled");
+    //context menu's
+    setContextMenus(false);
+}
+
+function enableMap() {
+    mapStatus = true;
+    //track buttons
+    document.getElementById('saveTrackButton').removeAttribute("disabled");
+    document.getElementById('deleteTrackButton').removeAttribute("disabled");
+    document.getElementById('stopTrackingButton').removeAttribute("disabled");
+    //route buttons
+    document.getElementById('saveRouteButton').removeAttribute("disabled");
+    document.getElementById('deleteRouteButton').removeAttribute("disabled");
+    document.getElementById('startTrackingButton').removeAttribute("disabled");
+    document.getElementById('stopRouteButton').removeAttribute("disabled");    
+    //switch map route buttons
+    document.getElementById('routeSwitchLabel').removeAttribute("disabled");
+    document.getElementById('routeFastBackward').removeAttribute("disabled");
+    document.getElementById('routeBackward').removeAttribute("disabled");
+    document.getElementById('routeForward').removeAttribute("disabled");
+    document.getElementById('routeFastForward').removeAttribute("disabled");
+    //context menu's
+    setContextMenus(true);
+}
+
+function mapEnabled() {
+    return mapStatus;
+}
+
+function setContextMenus(status){
+    //set a list with the menus to deactivate. Just running through all modes would not work, because
+    //in some modes the same context menu will be used.
+    var MENUS = [MODE.DEFAULT.inactiveContextMenu, MODE.FIXED_MARKER.inactiveContextMenu, MODE.ROUTE.activeContextMenu, MODE.ROUTE.inactiveContextMenu, MODE.TRACKING.activeContextMenu, MODE.TRACKING.inactiveContextMenu];
+
+    for (var i in MENUS) {   
+        if (true == status && $(MENUS[i]).hasClass("context-menu-disabled")) {
+            $(MENUS[i]).toggleClass("context-menu-disabled"); 
+        } else if (false == status && !$(MENUS[i]).hasClass("context-menu-disabled")) {
+            $(MENUS[i]).toggleClass("context-menu-disabled"); 
+        }
     }
-    document.getElementById('followCurrentPositionContainer').style.width = document.body.offsetWidth + "px";
 }

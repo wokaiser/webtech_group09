@@ -2,7 +2,7 @@ $(function() {
 	
 	function loadEntry(boatnr) { 
 			        	
-	    jQuery.get("app_boatinfo_load.html", {'bnr': boatnr}, function(data) {
+	    jQuery.get("app_boatinfo_load.php", {'bnr': boatnr}, function(data) {
 
 	        $('#bootname').val(data['bootname']);
 	        $('#typ').val(data['typ']);
@@ -47,23 +47,22 @@ $(function() {
         entry += "<td>" + json.tiefgang + "</td>";
         entry += "<td>" + json.eigner + "</td>";
         entry += "<td style='width:30px; text-align:left;'><div class='btn-group'>";
-        entry += "<a class='btn btn-small view' id='" + bnr + "'><span><i class='icon-eye-open'></i></span></a>";
-        entry += "<a class='btn btn-small remove' id='" + bnr + "'><span><i class='icon-remove'></i></span></a>";
+        entry += "<a class='btn btn-small view boat' id='" + bnr + "'><span><i class='icon-eye-open'></i></span></a>";
+        entry += "<a class='btn btn-small remove boat' id='" + bnr + "'><span><i class='icon-remove'></i></span></a>";
         entry += "</div></td>";
         entry += "</tr>";
 
-		$('#entries').append(entry);
+		$('#entries_boat').append(entry);
 	}
 
-	$('a.view').live("click", function(event) {
+	$('a.view.boat').live("click", function(event) {
 		loadEntry($(this).attr('id'));
 	});
 
-	$('a.remove').live("click", function(event) {
+	$('a.remove.boat').live("click", function(event) {
 		var buttonID = this;
 	 	var boatnr = $(this).attr('id');
-
-		jQuery.get("app_boatinfo_delete.html", { "bnr": boatnr }, function(data) {
+		jQuery.post("app_boatinfo_delete.php", { "bnr": boatnr }, function(data) {
 		 
 		 	if (data['bnr'].match(/Error/)) {
 		    	
@@ -113,7 +112,7 @@ $(function() {
 		        "spigroesse": $('#spigroesse').val()              
 	    };
 		
-		jQuery.post("app_boatinfo_insert.html", json, function(data) { 
+		jQuery.post("app_boatinfo_insert.php", json, function(data) { 
 			
 			if (data['bnr'].match(/Error/)) {
 		    	

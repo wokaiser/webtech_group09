@@ -7,7 +7,7 @@ $(function() {
 		var waypnrQuery = query.match(/wnr=\d/);
 		var waypnr = waypnrQuery[0].replace(/wnr=/, "");
 		
-		jQuery.get("app_tripinfo_load.html", {'wnr': waypnr}, function(data) {
+		jQuery.get("app_tripinfo_load.php", {'wnr': waypnr}, function(data) {
 	   
 	        $('#name').val(data['name']);
 	        $('#lat').val(data['lat']);

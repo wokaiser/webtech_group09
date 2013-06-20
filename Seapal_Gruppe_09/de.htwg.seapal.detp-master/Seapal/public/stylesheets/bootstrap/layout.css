@@ -18,8 +18,8 @@ label.control-label {
 .navbar-inverse .nav .active > a,
 .navbar-inverse .nav .active > a:hover,
 .navbar-inverse .nav .active > a:focus {
-  color: #ffffff;
-  background-color: #666666;
+  color: #ffffff !important;
+  background-color: #666666 !important;
 }
 
 /* html */
