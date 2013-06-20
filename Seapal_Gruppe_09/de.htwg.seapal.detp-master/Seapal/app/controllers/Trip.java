@@ -138,9 +138,9 @@ public class Trip extends Controller {
                 row.append("<td>" + result.getString("tdauer") + "</td>");
                 row.append("<td>" + result.getString("motor") + "</td>");
                 row.append("<td style='width:30px; text-align:left;'><div class='btn-group'>");
-                row.append("<a class='btn btn-small view' id='" + result.getString("tnr")
+                row.append("<a class='btn btn-small view tracking' id='" + result.getString("tnr")
                   + "'><span><i class='icon-eye-open'></i></span></a>");
-                row.append("<a class='btn btn-small remove' id='" + result.getString("tnr")
+                row.append("<a class='btn btn-small remove tracking' id='" + result.getString("tnr")
                   + "'><span><i class='icon-remove'></i></span></a>");
                 row.append("<a class='btn btn-small redirect' id='" + result.getString("tnr")
                   + "' href='app_tripinfo.html?tnr=" + result.getString("tnr")

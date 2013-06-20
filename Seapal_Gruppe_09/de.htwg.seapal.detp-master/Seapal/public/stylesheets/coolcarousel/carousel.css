@@ -3,6 +3,8 @@
     position: relative;
     left: 0;
     top: 50%;
+	height: 500px;
+	margin-top: 80px;
     overflow: hidden;
 }
 
@@ -24,8 +26,8 @@
 }
 
 #bar {
-    margin-top: 90px;
-    background-color: #000#;
+    margin-top: 130px;
+    background-color: transparent;
     text-align: center;
     width: 100%;
     position: absolute;
@@ -33,15 +35,20 @@
     left: 0;
 }
 #bar * {
-    color: #000;
-    line-height: 50px;
+    color: #333;
+    line-height: 40px;
     font-size: 18px;
     font-weight: bold;
 }
+
+#bar span {
+	line-height: 52px;
+}
+
 #prev, #next {
     margin-top: 0px;
     font-size: 50px;
-    color: #000;
+    color: #333;
     text-decoration: none;
     display: block;
     width: 50px;

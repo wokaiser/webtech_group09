@@ -7,8 +7,8 @@ $(function() {
         tracknrValue = $(this).attr('id');      
         //get the trackinfoinfo json object
         $.getJSON(
-            "json_app_trackinginfo.php",
-            { tracknr: tracknrValue}, function(tracking){
+            "app_trip_load.html",
+            { tnr: tracknrValue}, function(tracking){
                 trackingLoad = tracking;
                 jQuery.get("app_trackinginfo_load.php", {'tracknr': tracknrValue}, function(data) {
                     //create a new track
