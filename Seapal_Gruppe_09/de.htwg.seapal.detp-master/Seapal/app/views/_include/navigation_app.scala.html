@@ -9,7 +9,7 @@
                 <li id="button_app_boatinfo" @if(file == "app_boatinfo") { class='active' }><a href="app_boatinfo.html">Boat Info</a></li>
 				<li id="button_app_tripinfo" @if(file == "app_trip" || file == "app_tripinfo" || file == "app_waypoint") { class='active' }><a href="app_trip.html">Routes</a></li>
                 <!--Drop down for weather layer selection-->
-                <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" @if(file == "app_map") { style='display: none;' }>Map Options<b class="caret"></b></a>
+                <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" @if(file != "app_map") { style='display: none;' }>Map Options<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <!--use checked in class for default checked items-->
                         <li><a id="wl_seamark" class="wl_chooser multicheck" href="#">Seamark
@@ -35,7 +35,7 @@
                     </ul>
                 </li>
 			</ul>
-            <div class="btn-group pull-right" @if(file == "app_boatinfo" || file == "app_map") { style="display:none" }>
+            <div class="btn-group pull-right" @if(file != "app_map") { style="display:none" }>
                 <a href="#" class="btn btn-inverse " id="routeFastBackward"><i class="icon-white icon-fast-backward" onclick="javascript: routeFastBackward(event)"></i></a>
                 <a href="#" class="btn btn-inverse " id="routeBackward"><i class="icon-white icon-backward" onclick="javascript: routeBackward(event)"></i></a>
                 <a href="#" class="btn btn-inverse " id="routeSwitchLabel">Route</a>
