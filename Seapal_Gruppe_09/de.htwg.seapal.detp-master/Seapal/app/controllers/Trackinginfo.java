@@ -114,13 +114,17 @@ public class Trackinginfo extends Controller {
     return ok(respJSON);
   }
 
+  public static Result show(int tnr, int bnr) {
+	return index(tnr, bnr);
+  }
+  
   public static Result index(int tnr, int bnr) {
 	    
 	  String data = loadEntries(tnr, bnr);
 		
 	  return ok(trackinginfo.render(header.render(),
 								header_app.render(),
-    						    navigation.render("app_map"), 
+    						    navigation.render("app_trackinginfo"), 
     						    navigation_app.render("app_trackinginfo"), 
     						    data));
   }
