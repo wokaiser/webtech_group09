@@ -25,17 +25,10 @@ public class Trip extends Controller {
     try {
 	      query = conn.createStatement();
 
-        query.execute("INSERT INTO seapal.tripinfo (titel, von, nach, skipper, crew, tstart, tende, tdauer, motor, tank) VALUES ("
+        query.execute("INSERT INTO seapal.tripinfo (titel, von, nach) VALUES ("
                 + "'" + data.get("titel") + "',"
                 + "'" + data.get("von") + "',"
-                + "'" + data.get("nach") + "',"
-                + "'" + data.get("skipper") + "',"
-                + "'" + data.get("crew") + "',"
-                + "'" + data.get("tstart") + "',"
-                + "'" + data.get("tende") + "',"
-                + "'" + data.get("tdauer") + "',"
-                + "'" + data.get("motor") + "',"
-                + " " + data.get("tank") + ");");
+                + "'" + data.get("nach") + "',");
 
          result = query.executeQuery("SHOW TABLE STATUS FROM seapal LIKE 'tripinfo'");
          if (result.next()) {
@@ -87,7 +80,7 @@ public class Trip extends Controller {
             	
 	          query = conn.createStatement();
     
-	          String sql = "SELECT * FROM seapal.tripinfo WHERE tnr = " + tnr;
+	          String sql = "SELECT * FROM seapal.tripinfo ";
 	        
 	          result = query.executeQuery(sql);
             java.sql.ResultSetMetaData rsmd = result.getMetaData();
@@ -132,11 +125,8 @@ public class Trip extends Controller {
 
                 row.append("<tr class='selectable' id='" + result.getString("tnr") + "'>");
                 row.append("<td>" + result.getString("titel") + "</td>");
-                row.append("<td>" + result.getString("skipper") + "</td>");
-                row.append("<td>" + result.getString("tstart") + "</td>");
-                row.append("<td>" + result.getString("tende") + "</td>");
-                row.append("<td>" + result.getString("tdauer") + "</td>");
-                row.append("<td>" + result.getString("motor") + "</td>");
+                row.append("<td>" + result.getString("von") + "</td>");
+                row.append("<td>" + result.getString("nach") + "</td>");
                 row.append("<td style='width:30px; text-align:left;'><div class='btn-group'>");
                 row.append("<a class='btn btn-small view tracking' id='" + result.getString("tnr")
                   + "'><span><i class='icon-eye-open'></i></span></a>");
