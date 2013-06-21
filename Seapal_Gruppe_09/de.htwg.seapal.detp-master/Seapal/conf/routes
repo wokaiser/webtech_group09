@@ -30,6 +30,8 @@ GET     /app_tripinfo.html          controllers.Tripinfo.index(tnr: Int)
 GET     /app_tripinfo_load.html     controllers.Tripinfo.load(wnr: Int)
 POST    /app_tripinfo_insert.html   controllers.Tripinfo.insert()
 GET     /app_tripinfo_delete.html   controllers.Tripinfo.delete(wnr: Int)
+GET     /app_trackinginfo/:tnr     	controllers.Trackinginfo.show(tnr: Int, bnr = 0)
+GET     /app_trackinginfo	     	controllers.Trackinginfo.show(tnr = -1, bnr = 0)
 GET     /app_waypoint.html          controllers.Waypoint.index(wnr: Int)
 
 # Map static resources from the /public folder to the /assets URL path

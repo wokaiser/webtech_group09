@@ -25,20 +25,9 @@ public class Tripinfo extends Controller {
     try {
 	      query = conn.createStatement();
 
-        query.execute("INSERT INTO seapal.wegpunkte(tnr, name, btm, dtm, lat, lng, sog, cog, manoever, vorsegel, wdate, wtime, marker) VALUES ("
-                + "'" + data.get("tnr") + "',"
-                + "'" + data.get("name") + "',"
-                + "'" + data.get("btm") + "',"
-                + "'" + data.get("dtm") + "',"
-                + "'" + data.get("lat") + "',"
-                + "'" + data.get("lng") + "',"
-                + "'" + data.get("sog") + "',"
-                + "'" + data.get("cog") + "',"
-                + "'" + data.get("manoever") + "',"
-                + "'" + data.get("vorsegel") + "',"
-                + "'" + data.get("wdate") + "',"
-                + "'" + data.get("wtime") + "',"
-                + "'" + data.get("marker") + "');");
+		query.execute("INSERT INTO seapal.wegpunkte (tnr, name, lat, lng) VALUES (" + data.get("tnr") + ","
+						+ "'" + data.get("lat") + "',"
+						+ "'" + data.get("lng") + "');");
 
          result = query.executeQuery("SHOW TABLE STATUS FROM seapal LIKE 'wegpunkte'");
          if (result.next()) {
