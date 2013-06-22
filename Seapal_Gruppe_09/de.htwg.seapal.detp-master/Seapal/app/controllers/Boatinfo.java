@@ -17,19 +17,24 @@ public class Boatinfo extends Controller {
   
     DynamicForm data = form().bindFromRequest();
     Connection conn = DB.getConnection();
-		Statement query;            
+	Statement query;            
     ResultSet result;
     ObjectNode respJSON = Json.newObject();
     int nextId = 0;
-
+	int bnr = 0;
+	
     try {
 	      query = conn.createStatement();
-
-        query.execute("INSERT INTO seapal.bootinfo(bootname, registernummer, segelzeichen, heimathafen, yachtclub, eigner, versicherung,"
+			
+		if(session().containsValue("bnr"));
+			bnr = Integer.parseInt(session().get("bnr"));
+		  
+        query.execute("INSERT INTO seapal.bootinfo(unr, bootname, registernummer, segelzeichen, heimathafen, yachtclub, eigner, versicherung,"
                 + "rufzeichen, typ, konstrukteur, laenge, breite, tiefgang, masthoehe, verdraengung, rigart,"
                 + "baujahr, motor, tankgroesse, wassertankgroesse, abwassertankgroesse, grosssegelgroesse,"
                 + "genuagroesse, spigroesse) "
-                + "VALUES('" + data.get("bootname") + "',"
+                + "VALUES(" + bnr + ","
+				+ "'" + data.get("bootname") + "',"
                 + "'" + data.get("registernummer") + "',"
                 + "'" + data.get("segelzeichen") + "',"
                 + "'" + data.get("heimathafen") + "',"
@@ -94,7 +99,7 @@ public class Boatinfo extends Controller {
   public static Result load(int bnr) {
   
     Connection conn = DB.getConnection();
-		Statement query;
+	Statement query;
     ResultSet result;
     ObjectNode respJSON = Json.newObject();
 
