@@ -1007,8 +1007,8 @@
   }
   .navbar-inverse .nav-collapse .nav > li > a:hover,
   .navbar-inverse .nav-collapse .dropdown-menu a:hover {
-    color: #FFF;
-	background-color: #111111;
+	color: #FFF;
+    background-color: #111111;
   }
   .nav-collapse.in .btn-group {
     padding: 0;
