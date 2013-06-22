@@ -184,7 +184,6 @@ a:hover {
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;
-	margin: 5px 0;
 }
 
 .img-polaroid {
@@ -589,9 +588,7 @@ a:hover {
 }
 
 p {
-  margin: 20px 0 10px 1px;
-  max-width: 620px;
-  text-align: justify;
+  margin: 0 0 10px;
 }
 
 .lead {
@@ -659,7 +656,7 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0 0 10px 0;
+  margin: 10px 0;
   font-family: inherit;
   font-weight: bold;
   line-height: 20px;
@@ -681,20 +678,19 @@ h6 small {
 h1,
 h2,
 h3 {
-  line-height: 25px;
+  line-height: 40px;
 }
 
 h1 {
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 38.5px;
 }
 
 h2 {
-  font-size: 28px;
+  font-size: 31.5px;
 }
 
 h3 {
-  font-size: 24px;
+  font-size: 24.5px;
 }
 
 h4 {
@@ -5737,9 +5733,7 @@ a.badge:hover {
 
 
 .carousel-inner {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
+  text-align: center;
 }
 
 .carousel .item {
@@ -5752,8 +5746,7 @@ a.badge:hover {
 }
 
 .carousel .item > img {
-  display: block;
-  line-height: 1;
+  display: inline-block;
 }
 
 .carousel .active,
@@ -5828,12 +5821,12 @@ a.badge:hover {
 }
 
 .carousel-caption {
-  position: absolute;
   right: 0;
   bottom: 0;
   left: 0;
-  padding: 15x;
+  padding: -50px;
   background: #333333;
+  color: #fff;
   background: rgba(0, 0, 0, 0.75);
 }
 
