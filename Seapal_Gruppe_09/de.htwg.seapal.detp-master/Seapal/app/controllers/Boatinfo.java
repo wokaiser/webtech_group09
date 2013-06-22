@@ -152,7 +152,7 @@ public class Boatinfo extends Controller {
             	
 	            query = conn.createStatement();
 	 
-	            String sql = "SELECT * " + "FROM bootinfo ";
+	            String sql = "SELECT * " + "FROM bootinfo WHERE unr = " + session("bnr");
 	        
 	            result = query.executeQuery(sql);
 	        
