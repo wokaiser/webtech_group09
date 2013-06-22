@@ -11,7 +11,6 @@ import org.codehaus.jackson.node.ObjectNode;
 import views.html.*;
 import views.html._include.*;
 
-@Security.Authenticated(Secured.class)
 public class Trackinginfo extends Controller {
   /*
   public static Result insert() {
