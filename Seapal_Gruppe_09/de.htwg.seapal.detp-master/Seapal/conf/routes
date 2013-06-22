@@ -3,7 +3,8 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Index.index()
+GET     /                           controllers.LandingPage.index()
+GET		/landingpage.html			controllers.LandingPage.index()
 GET     /index.html                 controllers.Index.index()
 GET     /contact.html               controllers.Contact.index()
 GET     /about.html                 controllers.About.index()
