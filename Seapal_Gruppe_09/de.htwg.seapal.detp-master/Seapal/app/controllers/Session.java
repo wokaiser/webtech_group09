@@ -72,7 +72,7 @@ public class Session extends Controller {
 	}
 	
 	public static Result unauthorised() {
-		return ok(unauthorized.render(header.render(), navigation.render("app_trackinginfo"), footer.render()));
+		return ok(unauthorised.render(header.render(), navigation.render("app_trackinginfo"), footer.render()));
 	}
 
 	public static Result logout() {
