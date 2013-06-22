@@ -171,7 +171,7 @@ public class Boatinfo extends Controller {
                 row.append("<a class='btn btn-small remove boat' id='" + result.getString("bnr")
                   + "'><span><i class='icon-remove'></i></span></a>");
                 row.append("</div></td>");
-
+				
                 row.append("</tr>");
             
 		            data += row.toString();
