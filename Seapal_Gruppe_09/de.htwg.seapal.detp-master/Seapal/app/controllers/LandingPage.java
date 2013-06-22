@@ -17,7 +17,7 @@ public class LandingPage extends Controller {
 		return ok(landingpage.render(header.render(),navigation.render("landingpage"), footer.render()));
 	}
 
-	/*public static Result insert() {
+	public static Result insert() {
   
     DynamicForm data = form().bindFromRequest();
     Connection conn = DB.getConnection();
@@ -34,33 +34,15 @@ public class LandingPage extends Controller {
 			bnr = Integer.parseInt(session().get("bnr"));
 		  
         query.execute("INSERT INTO seapal.benutzer(benutzername, passwort, vorname, nachname, mail, mySession, registrierung) "
-                + "VALUES(" + bnr + ","
-				+ "'" + data.get("bootname") + "',"
-                + "'" + data.get("registernummer") + "',"
-                + "'" + data.get("segelzeichen") + "',"
-                + "'" + data.get("heimathafen") + "',"
-                + "'" + data.get("yachtclub") + "',"
-                + "'" + data.get("eigner") + "',"
-                + "'" + data.get("versicherung") + "',"
-                + "'" + data.get("rufzeichen") + "',"
-                + "'" + data.get("typ") + "',"
-                + "'" + data.get("konstrukteur") + "',"
-                + "'" + data.get("laenge") + "',"
-                + "'" + data.get("breite") + "',"
-                + "'" + data.get("tiefgang") + "',"
-                + "'" + data.get("masthoehe") + "',"
-                + "'" + data.get("verdraengung") + "',"
-                + "'" + data.get("rigart") + "',"
-                + "'" + data.get("baujahr") + "',"
-                + "'" + data.get("motor") + "',"
-                + "'" + data.get("tankgroesse") + "',"
-                + "'" + data.get("wassertankgroesse") + "',"
-                + "'" + data.get("abwassertankgroesse") + "',"
-                + "'" + data.get("grosssegelgroesse") + "',"
-                + "'" + data.get("genuagroesse") + "',"
-                + "'" + data.get("spigroesse") + "');");
+				+ "'" + data.get("username") + "',"
+                + "'" + data.get("password") + "',"
+                + "'" + data.get("nachname") + "',"
+                + "'" + data.get("vorname") + "',"
+                + "'" + data.get("email") + "',"
+                + "'" + data.get("mySession") + "',"
+                + "'" + data.get("regdate") + "');");
 
-         result = query.executeQuery("SHOW TABLE STATUS FROM seapal LIKE 'bootinfo'");
+         result = query.executeQuery("SHOW TABLE STATUS FROM seapal LIKE 'benutzer'");
          if (result.next()) {
              nextId = result.getInt("Auto_increment");
          }
@@ -73,5 +55,5 @@ public class LandingPage extends Controller {
     }
 
     return ok(respJSON);
-  }*/
+  }
 }
