@@ -11,8 +11,9 @@ import org.codehaus.jackson.node.ObjectNode;
 import views.html.*;
 import views.html._include.*;
 
+@Security.Authenticated(Secured.class)
 public class Trackinginfo extends Controller {
-  
+  /*
   public static Result insert() {
   
     DynamicForm data = form().bindFromRequest();
@@ -117,11 +118,15 @@ public class Trackinginfo extends Controller {
   public static Result show(int tnr, int bnr) {
 	return index(tnr, bnr);
   }
-  
-  public static Result index(int tnr, int bnr) {
+  */
+  public static Result index() {
 	    
-	  String data = loadEntries(tnr, bnr);
-		
+	  String data = loadEntries(-1, 0);
+	 // Session session = Scope.Session.current();
+	  
+	// if(session.containsKey("bnr"))
+	//	data = loadEntries(-1, session.get("bnr"));
+	data ="";
 	  return ok(trackinginfo.render(header.render(),
 								header_app.render(),
     						    navigation.render("app_trackinginfo"), 

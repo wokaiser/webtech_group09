@@ -1,0 +1,39 @@
+@(header: Html)(navigation: Html)(footer: Html)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+    
+    	<!-- Header -->
+        @header
+        
+    </head>
+    <body>
+    
+    	<!-- Navigation -->
+    	@navigation
+    	
+	    <!-- Container -->
+		<div class="container">
+	    	<div class="container-fluid">
+		    	<div class="row-fluid">
+	    
+					<div class="span9">  
+						<div class="post">
+							<h2>Login</h2>
+	                    	<div class="entry">
+	                        	<p>Please login first</p>
+		                   </div>
+						</div>
+						<br><br>
+					</div>	
+	            </div>
+			</div>	
+		</div><!-- Container -->
+
+		<!-- Footer -->
+    	@footer
+    	
+    </body>
+</html>

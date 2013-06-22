@@ -8,8 +8,8 @@ $(function() {
 	          "user_password": $('#user_password').val() 
 	    };
 		
-		jQuery.post("user.php", json, function(data) { 		
-        
+		jQuery.post("/login", json, function(data) { 		
+
             if(data)
                 {
                 //clear cookie-less session
@@ -21,7 +21,9 @@ $(function() {
                 $("#logout").show(200);
                 $("#loginname").text($('#user_username').val());
                 } else {
-                    console.log("login fail");
+					$('#dialogTitle').text('Access denied');
+					$('#dialogMessage').text("Username / password wrong");
+					$('#messageBox').modal('show');
                 }
         
 		}, "json");
@@ -35,7 +37,7 @@ $(function() {
 	          "action": "signout"
 	    };
                 
-		jQuery.post("user.php", json, function(data) { 		
+		jQuery.post("/logout", json, function(data) { 		
         
             if(data)
                 {
@@ -45,7 +47,7 @@ $(function() {
                 $("#logout").hide(300);
                 $("#login").show(200);
                 $("#loginname").text('');
-                document.location.href='../site/index.php';
+                document.location.href='/';
                 }
         
 		}, "json");

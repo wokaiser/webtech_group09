@@ -26,5 +26,8 @@
 <script src="@routes.Assets.at("javascripts/site/scroll.js")" type="text/javascript"></script>
 <script src="@routes.Assets.at("javascripts/bootstrap/bootstrap-carousel.js")" type="text/javascript"></script>
 <script src="@routes.Assets.at("javascripts/bootstrap/bootstrap-dropdown.js")" type="text/javascript"></script>
-
+<script type="text/javascript">
+	var js_loggedin = @if(session.get("user") == null || session.get("user").isEmpty()) {false} else {true};
+</script>
+<script src="@routes.Assets.at("javascripts/site/user.js")" type="text/javascript"></script>
 

@@ -4,7 +4,7 @@ $(function() {
 		event.preventDefault();
 				
 		if (js_loggedin == true) {
-			document.location.href='../site/app_boatinfo.php';
+			document.location.href='/app_boatinfo.html';
 		} else {
 			$('#dialogTitle').text('Access denied');
 			$('#dialogMessage').text("To use this functionality you have to be signed in.");
@@ -16,7 +16,7 @@ $(function() {
 		event.preventDefault();
                 
 		if (js_loggedin == true) {
-			document.location.href='../site/app_trip.php';
+			document.location.href='/app_trip.html';
 		} else {
 			$('#dialogTitle').text('Access denied');
 			$('#dialogMessage').text("To use this functionality you have to be signed in.");
@@ -28,7 +28,7 @@ $(function() {
 		event.preventDefault();
                 
 		if (js_loggedin == true) {
-			document.location.href='../site/app_trackinginfo.php';
+			document.location.href='/app_trackinginfo';
 		} else {
 			$('#dialogTitle').text('Access denied');
 			$('#dialogMessage').text("To use this functionality you have to be signed in.");
