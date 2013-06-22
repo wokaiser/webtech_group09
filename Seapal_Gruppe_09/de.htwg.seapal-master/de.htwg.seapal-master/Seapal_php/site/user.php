@@ -13,6 +13,9 @@
         }
     elseif($_POST['action'] == 'signout')
         {
+        $sql_connection = mysql_connect(const_mysql_host, const_mysql_user, const_mysql_pw);
+        $sql = "UPDATE `benutzer` SET `mySession`='"+$_POST['mySession']+"' WHERE 'bnr'='"+$_SESSION['bnr']+"';";
+        $result = mysql_query($sql, $sql_connection);
         echo json_encode(true);
         session_destroy(); // do logout
         }
@@ -27,7 +30,7 @@
         if(!empty($username) && !empty($pw))
             {
             
-            $sql = "SELECT bnr, vorname, nachname, mail, passwort
+            $sql = "SELECT bnr, vorname, nachname, mail, mySession, passwort
                     FROM ".const_mysql_users."
                     WHERE benutzername = '" . mysql_real_escape_string($username) . "';";
                     
