@@ -1,6 +1,6 @@
 /* insert users */
-INSERT INTO seapal.benutzer (benutzername, passwort, vorname, nachname, mail, geburtsdatum, registrierung) VALUES ("philfry", "leela", "Phillip J.", "Fry", "philfry@futurama.de", DATE("1986-07-04"), DATE("2012-10-03"));
-INSERT INTO seapal.benutzer (benutzername, passwort, vorname, nachname, mail, geburtsdatum, registrierung) VALUES ("bender", "money", "Bender", "Rodriguez", "bender@futurama.de", DATE("2001-07-02"), DATE("2012-10-03"));
+INSERT INTO seapal.benutzer (benutzername, passwort, vorname, nachname, mail, mySession, registrierung) VALUES ("philfry", "leela", "Phillip J.", "Fry", "philfry@futurama.de", "", DATE("2012-10-03"));
+INSERT INTO seapal.benutzer (benutzername, passwort, vorname, nachname, mail, mySession, registrierung) VALUES ("bender", "money", "Bender", "Rodriguez", "bender@futurama.de", "", DATE("2012-10-03"));
 
 /* insert boats */
 INSERT INTO seapal.bootinfo (unr, bootname, registernummer, segelzeichen, heimathafen, yachtclub, eigner, versicherung, rufzeichen, typ, konstrukteur, laenge, breite, tiefgang, masthoehe, verdraengung, rigart, baujahr, motor, tankgroesse, wassertankgroesse, abwassertankgroesse, grosssegelgroesse, genuagroesse, spigroesse) VALUES (1, "Titanic", 101, "TI101", "New York", "New York Yacht Club", "George Boat", "Württembergische", "TI", "Schiff", "Peter Schiff", 200, 50, 7, 10, 1000, "T34", 1993, "Duotec 100", 500, 50, 30, 10, 25, 13);

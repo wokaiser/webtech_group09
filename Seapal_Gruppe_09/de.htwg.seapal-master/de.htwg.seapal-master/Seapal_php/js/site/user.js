@@ -14,8 +14,9 @@ $(function() {
                 {
                 //clear cookie-less session
                 Session.clear();
+                console.log(data["mySession"]);
                 //set the actual session
-                Session.set(SESSION, session);
+                Session.set(SESSION, data["mySession"]);
                 js_loggedin = true;
                 $("#login").hide(300);
                 $("#logout").show(200);
@@ -30,9 +31,10 @@ $(function() {
     
     $('#signout').click(function(event) {
 		event.preventDefault();
-				
+        console.log(Session.dump());
         var json = {
-	          "action": "signout"
+	          "action": "signout",
+              "mySession": Session.dump()
 	    };
                 
 		jQuery.post("user.php", json, function(data) { 		

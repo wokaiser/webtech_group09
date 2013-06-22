@@ -8,7 +8,7 @@ CREATE TABLE seapal.benutzer (
 	vorname VARCHAR(20) NOT NULL,
 	nachname VARCHAR(20) NOT NULL,
 	mail VARCHAR(30) NOT NULL,
-	geburtsdatum DATE NOT NULL,
+	mySession LONGTEXT NOT NULL,
 	registrierung DATE NOT NULL,
 	PRIMARY KEY (bnr)
 );
