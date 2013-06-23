@@ -114,5 +114,26 @@ public class Trackingpoint extends Controller {
 
 	return ok(respJSON);
 	}
+
+	public static Result delete() {
+	DynamicForm data = form().bindFromRequest();
+	Connection conn = DB.getConnection();
+	Statement query;            
+	ResultSet result;
+	ObjectNode respJSON = Json.newObject();
+
+	try {
+		query = conn.createStatement();
+		query.execute("DELETE FROM seapal.trackingpoint WHERE trackpointnr = " + data.get("trackpointnr"));
+		conn.close();
+
+		respJSON.put("trackpointnr", "ok");
+
+	} catch (Exception e) {
+		respJSON.put("trackpointnr", "Error: " + e);
+	}
+
+	return ok(respJSON);
+	}
 	
 }

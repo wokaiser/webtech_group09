@@ -3,7 +3,7 @@ $(function() {
 	$('a.remove.trackingpoint').live("click", function(event) {
 		var buttonID = this;
 	 	var id = $(this).attr('id');
-		jQuery.post("app_tracking_point_delete.php", { "trackpointnr": id }, function(data) {
+		jQuery.post("/app_tracking_point_delete.html", { "trackpointnr": id }, function(data) {
 		 
 		 	if (data['trackpointnr'].match(/Error/)) {
 		    	
