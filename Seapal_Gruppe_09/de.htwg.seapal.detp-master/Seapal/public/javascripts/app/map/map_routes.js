@@ -769,7 +769,7 @@ function saveRoute() {
         disableMap();
         //save the zoom level, at which the user looked at this route.
         session.map.routes[activeRouteInSession].lastZoom = map.getZoom();
-        jQuery.post("app_trip_insert.php", session.map.routes[activeRouteInSession], function(data) { 
+        jQuery.post("/app_trip_insert.html", session.map.routes[activeRouteInSession], function(data) { 
             if (data['tnr'].match(/Error/)) {                
                 $('#dialogTitle').text('Error');
                 $('#dialogMessage').text(data['tnr'].replace(/Error: /, ""));

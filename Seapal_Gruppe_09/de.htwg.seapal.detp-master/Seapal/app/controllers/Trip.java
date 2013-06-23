@@ -85,32 +85,36 @@ public class Trip extends Controller {
 				String sql = "SELECT * FROM seapal.trackingpoint WHERE tracknr = " + tracknr;
 				result = query.executeQuery(sql);
 
-				while (result.next()) {
-					response.append("{");
-					response.append("\"lat\":\"" + Float.toString(result.getFloat("lat")) + "\",");
-					response.append("\"lng\":\"" + Float.toString(result.getFloat("lng")) + "\",");
-					response.append("\"marker\":\"" + result.getString("marker") + "\",");
-					response.append("\"btm\":\"" + result.getString("btm") + "\",");
-					response.append("\"dtm\":\"" + result.getString("dtm") + "\",");
-					response.append("\"sog\":\"" + result.getString("sog") + "\",");
-					response.append("\"cog\":\"" + result.getString("cog") + "\",");
-					response.append("\"manoever\":\"" + result.getString("manoever") + "\",");
-					response.append("\"vorsegel\":\"" + result.getString("vorsegel") + "\",");
-					response.append("\"wdate\":\"" + result.getString("wdate") + "\",");
-					response.append("\"wtime\":\"" + result.getString("wtime") + "\",");
-					response.append("\"motor\":\"" + result.getString("motor") + "\",");
-					response.append("\"tank\":\"" + result.getString("tank") + "\",");
-					response.append("\"windstaerke\":\"" + result.getString("windstaerke") + "\",");
-					response.append("\"windrichtung\":\"" + result.getString("windrichtung") + "\",");
-					response.append("\"luftdruck\":\"" + result.getString("luftdruck") + "\",");
-					response.append("\"temperatur\":\"" + result.getString("temperatur") + "\",");
-					response.append("\"wolken\":\"" + result.getString("wolken") + "\",");
-					response.append("\"regen\":\"" + result.getString("regen") + "\",");
-					response.append("\"wellenhoehe\":\"" + result.getString("wellenhoehe") + "\",");
-					response.append("\"wellenrichtung\":\"" + result.getString("wellenrichtung") + "\"");
-					response.append("}");
-					if(!result.isLast())
-						response.append(",");
+				if(!result.next()) {
+					return load_tracknr(tracknr);
+				} else {
+					do {
+						response.append("{");
+						response.append("\"lat\":\"" + Float.toString(result.getFloat("lat")) + "\",");
+						response.append("\"lng\":\"" + Float.toString(result.getFloat("lng")) + "\",");
+						response.append("\"marker\":\"" + result.getString("marker") + "\",");
+						response.append("\"btm\":\"" + result.getString("btm") + "\",");
+						response.append("\"dtm\":\"" + result.getString("dtm") + "\",");
+						response.append("\"sog\":\"" + result.getString("sog") + "\",");
+						response.append("\"cog\":\"" + result.getString("cog") + "\",");
+						response.append("\"manoever\":\"" + result.getString("manoever") + "\",");
+						response.append("\"vorsegel\":\"" + result.getString("vorsegel") + "\",");
+						response.append("\"wdate\":\"" + result.getString("wdate") + "\",");
+						response.append("\"wtime\":\"" + result.getString("wtime") + "\",");
+						response.append("\"motor\":\"" + result.getString("motor") + "\",");
+						response.append("\"tank\":\"" + result.getString("tank") + "\",");
+						response.append("\"windstaerke\":\"" + result.getString("windstaerke") + "\",");
+						response.append("\"windrichtung\":\"" + result.getString("windrichtung") + "\",");
+						response.append("\"luftdruck\":\"" + result.getString("luftdruck") + "\",");
+						response.append("\"temperatur\":\"" + result.getString("temperatur") + "\",");
+						response.append("\"wolken\":\"" + result.getString("wolken") + "\",");
+						response.append("\"regen\":\"" + result.getString("regen") + "\",");
+						response.append("\"wellenhoehe\":\"" + result.getString("wellenhoehe") + "\",");
+						response.append("\"wellenrichtung\":\"" + result.getString("wellenrichtung") + "\"");
+						response.append("}");
+						if(!result.isLast())
+							response.append(",");
+					} while (result.next());
 				}
 				conn.close();
 			} catch (Exception e) {
@@ -123,49 +127,52 @@ public class Trip extends Controller {
 		return ok(response.toString());
 	}
   
-  /*
-  Altes Load -> vllt wird es noch gebraucht
- public static Result load() {
+
+ public static Result load_tracknr(int tnr) {
 	DynamicForm data = form().bindFromRequest();
 	Connection conn = DB.getConnection();
-	ObjectNode respJSON = Json.newObject();
-	String returnData = "";
-	String tnrAsString = data.get("tnr");
-	int tnr = 1;
-	if(tnrAsString != null && !tnrAsString.isEmpty())
-		tnr = Integer.parseInt(tnrAsString);
+	StringBuilder response = new StringBuilder("[");
 	Statement query;
     ResultSet result;
 
 		if(conn != null) {
         try {
 			query = conn.createStatement();
-			String sql = "SELECT * FROM seapal.tracking WHERE tracknr = " + tnr;
+			String sql = "SELECT * FROM seapal.tracking WHERE tnr = " + tnr;
 			result = query.executeQuery(sql);
-			if(result.next()) {
-				tnr = result.getInt("tnr");
 			
-				sql = "SELECT * FROM seapal.tripinfo WHERE tnr = " + tnr;
+			if(result.next()) {
+				tnr = result.getInt("tracknr");
+				sql = "SELECT * FROM seapal.trackingpoint WHERE tracknr = " + tnr;
 				result = query.executeQuery(sql);
 
-				while (result.next()) {
-					respJSON.put("0", Integer.toString(result.getInt("tnr")));
-					respJSON.put("1", Integer.toString(result.getInt("bnr")));
-					respJSON.put("2", result.getString("titel"));
-					respJSON.put("3", result.getString("von"));
-					respJSON.put("4", result.getString("nach"));
-					respJSON.put("5", Float.toString(result.getFloat("lastZoom")));
-					respJSON.put("6", Float.toString(result.getFloat("lastLat")));
-					respJSON.put("7", Float.toString(result.getFloat("lastLng")));
-					respJSON.put("tnr", Integer.toString(result.getInt("tnr")));
-					respJSON.put("bnr", Integer.toString(result.getInt("bnr")));
-					respJSON.put("titel", result.getString("titel"));
-					respJSON.put("von", result.getString("von"));
-					respJSON.put("nach", result.getString("nach"));
-					respJSON.put("lastZoom", result.getFloat("lastZoom"));
-					respJSON.put("lastLat", result.getFloat("lastLat"));
-					respJSON.put("lastLng", result.getFloat("lastLng"));
-				}
+					while(result.next()) {
+						response.append("{");
+						response.append("\"lat\":\"" + Float.toString(result.getFloat("lat")) + "\",");
+						response.append("\"lng\":\"" + Float.toString(result.getFloat("lng")) + "\",");
+						response.append("\"marker\":\"" + result.getString("marker") + "\",");
+						response.append("\"btm\":\"" + result.getString("btm") + "\",");
+						response.append("\"dtm\":\"" + result.getString("dtm") + "\",");
+						response.append("\"sog\":\"" + result.getString("sog") + "\",");
+						response.append("\"cog\":\"" + result.getString("cog") + "\",");
+						response.append("\"manoever\":\"" + result.getString("manoever") + "\",");
+						response.append("\"vorsegel\":\"" + result.getString("vorsegel") + "\",");
+						response.append("\"wdate\":\"" + result.getString("wdate") + "\",");
+						response.append("\"wtime\":\"" + result.getString("wtime") + "\",");
+						response.append("\"motor\":\"" + result.getString("motor") + "\",");
+						response.append("\"tank\":\"" + result.getString("tank") + "\",");
+						response.append("\"windstaerke\":\"" + result.getString("windstaerke") + "\",");
+						response.append("\"windrichtung\":\"" + result.getString("windrichtung") + "\",");
+						response.append("\"luftdruck\":\"" + result.getString("luftdruck") + "\",");
+						response.append("\"temperatur\":\"" + result.getString("temperatur") + "\",");
+						response.append("\"wolken\":\"" + result.getString("wolken") + "\",");
+						response.append("\"regen\":\"" + result.getString("regen") + "\",");
+						response.append("\"wellenhoehe\":\"" + result.getString("wellenhoehe") + "\",");
+						response.append("\"wellenrichtung\":\"" + result.getString("wellenrichtung") + "\"");
+						response.append("}");
+						if(!result.isLast())
+							response.append(",");
+					} 
 			}
 			conn.close();
 
@@ -174,9 +181,8 @@ public class Trip extends Controller {
         }
     }
 
-    return ok(respJSON);
+    return ok(response.toString());
   }
-  */
 
 	public static Result index() {
 		Connection conn = DB.getConnection();
