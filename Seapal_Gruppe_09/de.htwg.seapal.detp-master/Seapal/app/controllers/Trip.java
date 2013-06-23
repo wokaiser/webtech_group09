@@ -16,18 +16,26 @@ public class Trip extends Controller {
   public static Result insert() {
     DynamicForm data = form().bindFromRequest();
     Connection conn = DB.getConnection();
-		Statement query;            
+	Statement query;            
     ResultSet result;
     ObjectNode respJSON = Json.newObject();
     int nextId = 0;
+	int bnr = 0;
+	String bnrAsString = session().get("bnr");
+	if(bnrAsString != null)
+		bnr = Integer.parseInt(bnrAsString);
 
     try {
 	      query = conn.createStatement();
 
-        query.execute("INSERT INTO seapal.tripinfo (titel, von, nach) VALUES ("
+        query.execute("INSERT INTO seapal.tripinfo (bnr, titel, von, nach, lastZoom, lastLat, lastLng) VALUES ("
+				+ bnr + ","
                 + "'" + data.get("titel") + "',"
                 + "'" + data.get("von") + "',"
-                + "'" + data.get("nach") + "',");
+				+ "'" + data.get("nach") + "',"
+				+ "'" + data.get("lastZoom") + "',"
+				+ "'" + data.get("lastLat") + "',"
+                + "'" + data.get("lastLng") + "');");
 
          result = query.executeQuery("SHOW TABLE STATUS FROM seapal LIKE 'tripinfo'");
          if (result.next()) {

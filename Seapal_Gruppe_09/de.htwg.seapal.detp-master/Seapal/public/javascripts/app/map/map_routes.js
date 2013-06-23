@@ -769,7 +769,13 @@ function saveRoute() {
         disableMap();
         //save the zoom level, at which the user looked at this route.
         session.map.routes[activeRouteInSession].lastZoom = map.getZoom();
-        jQuery.post("/app_trip_insert.html", session.map.routes[activeRouteInSession], function(data) { 
+        jQuery.post("/app_trip_insert.html", {
+						"titel":session.map.routes[activeRouteInSession].titel,
+						"von":session.map.routes[activeRouteInSession].von,
+						"nach":session.map.routes[activeRouteInSession].nach,
+						"lastZoom":session.map.routes[activeRouteInSession].lastZoom,
+						"lastLat":session.map.routes[activeRouteInSession].lastLat,
+						"lastLng":session.map.routes[activeRouteInSession].lastLng}, function(data) { 
             if (data['tnr'].match(/Error/)) {                
                 $('#dialogTitle').text('Error');
                 $('#dialogMessage').text(data['tnr'].replace(/Error: /, ""));
@@ -780,7 +786,7 @@ function saveRoute() {
                 session.map.routes[activeRouteInSession].tnr = data['tnr'];
                 session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tnr = data['tnr'];
                 //rekursive call to insert all markers of the route to the database
-                jQuery.post("app_tripinfo_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], tripRoutePost, "json");
+                jQuery.post("/app_tripinfo_insert.html", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], tripRoutePost, "json");
             }                
         }, "json");
     }
@@ -798,7 +804,7 @@ function tripRoutePost(data) {
         if (activeRouteMarkerInSession < session.map.routes[activeRouteInSession].marker.length)
         {
             session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tnr = session.map.routes[activeRouteInSession].marker[0].tnr;
-            jQuery.post("app_tripinfo_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], tripRoutePost, "json");
+            jQuery.post("/app_tripinfo_insert.html", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], tripRoutePost, "json");
         } else {
             $('#dialogTitle').text('Success');
             $('#dialogMessage').text("Eintrag wurde erfolgreich gespeichert.");

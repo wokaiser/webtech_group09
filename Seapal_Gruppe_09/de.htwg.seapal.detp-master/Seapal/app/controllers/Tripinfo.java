@@ -13,36 +13,34 @@ import views.html._include.*;
 
 public class Tripinfo extends Controller {
   
-  public static Result insert() {
-  
-    DynamicForm data = form().bindFromRequest();
-    Connection conn = DB.getConnection();
+	public static Result insert() {
+		DynamicForm data = form().bindFromRequest();
+		Connection conn = DB.getConnection();
 		Statement query;            
-    ResultSet result;
-    ObjectNode respJSON = Json.newObject();
-    int nextId = 0;
+		ResultSet result;
+		ObjectNode respJSON = Json.newObject();
+		int nextId = 0;
 
-    try {
-	      query = conn.createStatement();
-
-		query.execute("INSERT INTO seapal.wegpunkte (tnr, name, lat, lng) VALUES (" + data.get("tnr") + ","
+		try {
+			query = conn.createStatement();
+			query.execute("INSERT INTO seapal.wegpunkte (tnr, name, lat, lng) VALUES (" + data.get("tnr") + ","
+						+ "'" + data.get("name") + "',"
 						+ "'" + data.get("lat") + "',"
 						+ "'" + data.get("lng") + "');");
+			result = query.executeQuery("SHOW TABLE STATUS FROM seapal LIKE 'wegpunkte'");
+			
+			if (result.next()) {
+				nextId = result.getInt("Auto_increment");
+			}
+			conn.close();
 
-         result = query.executeQuery("SHOW TABLE STATUS FROM seapal LIKE 'wegpunkte'");
-         if (result.next()) {
-             nextId = result.getInt("Auto_increment");
-         }
-         conn.close();
+			respJSON.put("wnr", "" + (nextId - 1));
 
-         respJSON.put("wnr", "" + (nextId - 1));
-
-    } catch (Exception e) {
-        respJSON.put("wnr", "Error: " + e);
-    }
-
-    return ok(respJSON);
-  }
+		} catch (Exception e) {
+				respJSON.put("wnr", "Error: " + e);
+		}
+		return ok(respJSON);
+	}
   
   public static Result delete(int wnr) {
 
