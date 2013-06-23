@@ -49,8 +49,8 @@ $(function() {
                 $("#logout").hide(300);
                 $("#login").show(200);
                 $("#loginname").text('');
-                //if we are on the app_map, we should reload the site to view the session change.
-                if (/app_map/.test(window.location.href)) {window.location.reload();}
+                document.location.href='../site/index.php';
+                
                 }
         
 		}, "json");

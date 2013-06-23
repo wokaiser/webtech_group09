@@ -8,7 +8,7 @@ CREATE TABLE seapal.benutzer (
 	vorname VARCHAR(20) NOT NULL,
 	nachname VARCHAR(20) NOT NULL,
 	mail VARCHAR(30) NOT NULL,
-	geburtsdatum DATE NOT NULL,
+	mySession LONGTEXT NOT NULL,
 	registrierung DATE NOT NULL,
 	PRIMARY KEY (bnr)
 );
@@ -16,6 +16,7 @@ CREATE TABLE seapal.benutzer (
 
 /* table for bootinformations */
 CREATE TABLE seapal.bootinfo (
+	unr INT NOT NULL,
 	bnr INT NOT NULL AUTO_INCREMENT,
 	bootname VARCHAR(30) NOT NULL,
 	registernummer INT NOT NULL,
@@ -41,41 +42,77 @@ CREATE TABLE seapal.bootinfo (
 	grosssegelgroesse FLOAT DEFAULT NULL,
 	genuagroesse FLOAT DEFAULT NULL,
 	spigroesse FLOAT DEFAULT NULL,
-	PRIMARY KEY (bnr)
+	PRIMARY KEY (bnr),
+	FOREIGN KEY (unr) REFERENCES benutzer (bnr) ON DELETE CASCADE
 );
 
 /* table for tripinformations */
 CREATE TABLE seapal.tripinfo (
 	tnr INT NOT NULL AUTO_INCREMENT,
+	bnr INT NOT NULL,
 	titel VARCHAR(30) NOT NULL,
 	von VARCHAR(30) NOT NULL,
 	nach VARCHAR(30) NOT NULL,
-	skipper VARCHAR(30) NOT NULL,
-	crew VARCHAR(100) DEFAULT NULL,
-	tstart DATE NOT NULL,
-	tende DATE NOT NULL,
-	tdauer FLOAT NOT NULL,
-	motor FLOAT DEFAULT NULL,
-	tank BOOLEAN DEFAULT FALSE,
-	PRIMARY KEY (tnr)
+	lastZoom INT NOT NULL,
+    lastLat REAL NOT NULL,
+    lastLng REAL NOT NULL,
+	PRIMARY KEY (tnr),
+	FOREIGN KEY (bnr) REFERENCES benutzer (bnr) ON DELETE CASCADE
 );
 
 /* table for waypoints */
 CREATE TABLE seapal.wegpunkte (
 	wnr INT NOT NULL AUTO_INCREMENT,
 	tnr INT NOT NULL,
-	name VARCHAR(30) NOT NULL,
-	btm VARCHAR(30) NOT NULL,
-	dtm VARCHAR(30) NOT NULL,
-	lat VARCHAR(30) NOT NULL,
-	lng VARCHAR(30) NOT NULL,
-	sog VARCHAR(30) NOT NULL,
-	cog VARCHAR(30) NOT NULL,
+	name VARCHAR(30) NOT NULL,	
+	lat REAL NOT NULL,
+	lng REAL NOT NULL,	
+	PRIMARY KEY (wnr),
+	FOREIGN KEY (tnr) REFERENCES tripinfo (tnr) ON DELETE CASCADE
+);
+
+/* table for tracking */
+CREATE TABLE seapal.tracking (
+	tracknr INT NOT NULL AUTO_INCREMENT,
+	tnr INT NOT NULL,
+	trackTitel VARCHAR(30) NOT NULL,
+	skipper VARCHAR(30) DEFAULT NULL,
+	crew VARCHAR(100) DEFAULT NULL,
+	tstart VARCHAR(30) DEFAULT NULL,
+	tende VARCHAR(30) DEFAULT NULL,
+	tdauer FLOAT DEFAULT NULL,
+	lastZoom INT NOT NULL,
+    lastLat REAL NOT NULL,
+    lastLng REAL NOT NULL,
+	PRIMARY KEY (tracknr),
+	FOREIGN KEY (tnr) REFERENCES tripinfo (tnr) ON DELETE CASCADE
+);
+
+/* tables for trackingpoints and weather */
+CREATE TABLE seapal.trackingPoint (
+	trackpointnr INT NOT NULL AUTO_INCREMENT,
+	tracknr INT NOT NULL,
+	lat REAL DEFAULT NULL,
+	lng REAL DEFAULT NULL,
+	marker VARCHAR(30) DEFAULT NULL,
+	btm VARCHAR(30) DEFAULT NULL, /* bearing to marker: degree */
+	dtm VARCHAR(30) DEFAULT NULL, /* destination to marker: meters */
+	sog VARCHAR(30) DEFAULT NULL, /* speed over ground: knots */
+	cog VARCHAR(30) DEFAULT NULL,
 	manoever VARCHAR(30) DEFAULT NULL,
 	vorsegel VARCHAR(30) DEFAULT NULL,
 	wdate VARCHAR(30) DEFAULT NULL,
 	wtime VARCHAR(30) DEFAULT NULL,
-	marker VARCHAR(30) DEFAULT NULL,
-	PRIMARY KEY (wnr),
-	FOREIGN KEY (tnr) REFERENCES tripinfo (tnr) ON DELETE CASCADE
+	motor VARCHAR(30) DEFAULT NULL,
+	tank VARCHAR(30) DEFAULT NULL,
+	windstaerke VARCHAR(30) DEFAULT NULL,
+	windrichtung VARCHAR(30) DEFAULT NULL,
+	luftdruck VARCHAR(30) DEFAULT NULL,
+	temperatur VARCHAR(30) DEFAULT NULL,
+	wolken VARCHAR(30) DEFAULT NULL,
+	regen VARCHAR(30) DEFAULT NULL,
+	wellenhoehe VARCHAR(30) DEFAULT NULL,
+	wellenrichtung VARCHAR(30) DEFAULT NULL,
+	PRIMARY KEY (trackpointnr),
+	FOREIGN KEY (tracknr) REFERENCES tracking (tracknr) ON DELETE CASCADE
 );
