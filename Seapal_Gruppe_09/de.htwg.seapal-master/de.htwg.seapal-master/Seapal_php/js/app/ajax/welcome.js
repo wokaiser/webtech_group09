@@ -17,7 +17,7 @@ $(function() {
             return false;
         }
         else if ( value.length < len) {
-            document.getElementById("txt_"+id).innerHTML = name+" should have minimum "+len+" characters."
+            document.getElementById("txt_"+id).innerHTML = name+" should have at least "+len+" characters."
             document.getElementById(id).style.display = "block";
             return false;
         } else {

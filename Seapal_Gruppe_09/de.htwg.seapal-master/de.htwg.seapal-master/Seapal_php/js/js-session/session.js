@@ -20,6 +20,11 @@
  *
  * // dump session data
  * Session.dump();
+ *
+ * // replace the complete window.top.name content.
+ * // This function should be used very carefully.
+ * Session.load(content);
+ *
  */
 
  if (JSON && JSON.stringify && JSON.parse) var Session = Session || (function() {
@@ -57,7 +62,14 @@
 		clear: function() { store = {}; },
 
 		// dump session data
-		dump: function() { return JSON.stringify(store); }
+		dump: function() { return JSON.stringify(store); },
+        
+        //load content string to session data
+        load: function(content){
+            win = window.top || window;
+            win.name = content;
+            store = (win.name ? JSON.parse(win.name) : {});
+        }
 
 	};
 
