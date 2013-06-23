@@ -168,7 +168,7 @@ public class Trackinginfo extends Controller {
 					+ "'><span><i class='icon-eye-open'></i></span></a>");
 					row.append("<a class='btn btn-small remove tracking' id='" + result.getString("tracknr")
 					+ "'><span><i class='icon-remove'></i></span></a>");
-					row.append("<a href='/app_tracking_point?tracknr = . " + result.getString("tracknr") + "' class='btn btn-small redirect' id='" + result.getString("tracknr") + "'><span><i class='icon-chevron-right'></i></span></a>");
+					row.append("<a href='/app_tracking_point?tracknr=" + result.getString("tracknr") + "' class='btn btn-small redirect' id='" + result.getString("tracknr") + "'><span><i class='icon-chevron-right'></i></span></a>");
 					row.append("</div></td>");
 					row.append("</tr>");
 

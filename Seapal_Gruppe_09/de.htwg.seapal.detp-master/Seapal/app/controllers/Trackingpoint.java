@@ -13,6 +13,59 @@ import views.html._include.*;
 
 public class Trackingpoint extends Controller {
   
+	public static Result index(int tracknr) {  
+		Connection conn = DB.getConnection();
+		String responseData = "";
+
+		if(conn != null) {
+			Statement query;
+			ResultSet result;
+			StringBuilder row;
+
+			try {
+				query = conn.createStatement();
+				String sql = "SELECT * " + "FROM seapal.trackingpoint WHERE tracknr = " + tracknr;
+				result = query.executeQuery(sql);
+
+				while (result.next()) {
+					row = new StringBuilder();
+					
+					row.append("<tr class='selectable' id='" + result.getString("trackpointnr") + "'>");
+					row.append("<td>" + result.getString("marker") + "</td>");
+					row.append("<td>" + result.getString("btm") + "</td>");
+					row.append("<td>" + result.getString("dtm") + "</td>");
+					row.append("<td>" + result.getString("sog") + "</td>");
+					row.append("<td>" + result.getString("cog") + "</td>");
+					row.append("<td>" + result.getString("manoever") + "</td>");
+					row.append("<td>" + result.getString("vorsegel") + "</td>");
+					row.append("<td>" + result.getString("wdate") + "</td>");
+					row.append("<td>" + result.getString("wtime") + "</td>");
+					row.append("<td>" + result.getString("motor") + "</td>");
+					row.append("<td>" + result.getString("tank") + "</td>");
+					row.append("<td>" + result.getString("windstaerke") + "</td>");
+					row.append("<td>" + result.getString("windrichtung") + "</td>");
+					row.append("<td>" + result.getString("luftdruck") + "</td>");
+					row.append("<td>" + result.getString("temperatur") + "</td>");
+					row.append("<td>" + result.getString("wolken") + "</td>");
+					row.append("<td>" + result.getString("regen") + "</td>");
+					row.append("<td>" + result.getString("wellenrichtung") + "</td>");
+					row.append("<td>" + result.getString("wellenhoehe") + "</td>");
+					row.append("<td style='width:30px; text-align:left;'><div class='btn-group'>");
+					row.append("<a class='btn btn-small remove trackingpoint' id='" + result.getString("trackpointnr")
+						+ "'><span><i class='icon-remove'></i></span></a>");
+					row.append("</div></td>");
+					row.append("</tr>");
+					
+					responseData += row.toString();
+				}
+
+			} catch (Exception e) {
+			e.printStackTrace();
+			}
+		}
+	return ok(trackingpoint.render(header.render(), header_app.render(), navigation.render("app_trackinginfo"), navigation_app.render("app_trackinginfo"), responseData));
+	}
+  
 	public static Result insert() {
 	DynamicForm data = form().bindFromRequest();
 	Connection conn = DB.getConnection();
