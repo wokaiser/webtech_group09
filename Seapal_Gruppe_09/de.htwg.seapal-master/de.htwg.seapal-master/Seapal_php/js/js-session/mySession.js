@@ -50,6 +50,8 @@ function initMySession() {
                                   type    : SESSION_OPTION_TYPE.FOLLOW_CURRENT_POSITION,
                                   active  : false}]
         };
+    
+        Session.set(SESSION, session);
     }
 }
 

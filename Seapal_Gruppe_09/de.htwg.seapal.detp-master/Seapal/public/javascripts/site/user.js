@@ -15,7 +15,11 @@ $(function() {
                 //clear cookie-less session
                 Session.clear();
                 //set the actual session
-                Session.set(SESSION, session);
+                Session.load(data.mySession);
+                //init mySession
+                initMySession();
+                //if we are on the app_map, we should reload the site to view the session change.
+                if (/app_map/.test(window.location.href)) {window.location.reload();}
                 js_loggedin = true;
                 $("#login").hide(300);
                 $("#logout").show(200);
@@ -34,7 +38,8 @@ $(function() {
 		event.preventDefault();
 				
         var json = {
-	          "action": "signout"
+	          "action": "signout",
+              "mySession": Session.dump()
 	    };
                 
 		jQuery.post("/logout", json, function(data) { 		

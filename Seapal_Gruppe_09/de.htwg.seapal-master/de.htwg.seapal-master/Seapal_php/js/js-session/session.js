@@ -33,8 +33,11 @@
 	var win = window.top || window;
 
 	// session store
-	var store = (win.name ? JSON.parse(win.name) : {});
-
+    try{
+        var store = (win.name ? JSON.parse(win.name) : {});
+    } catch (e) {
+        var store = {};
+    }
 	// save store on page unload
 	function Save() {
 		win.name = JSON.stringify(store);
@@ -66,11 +69,13 @@
         
         //load content string to session data
         load: function(content){
-            win = window.top || window;
-            win.name = content;
-            store = (win.name ? JSON.parse(win.name) : {});
+            // session store
+            try{
+                store = (content ? JSON.parse(content) : {});
+                win.name = JSON.stringify(store);
+            } catch (e) {
+                store = {};
+            }
         }
-
-	};
-
+   };
  })();
