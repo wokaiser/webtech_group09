@@ -46,6 +46,7 @@ $(function() {
         
             if(data)
                 {
+                $("#loginname").text("");
                 //clear cookie-less session
                 Session.clear();
                 js_loggedin = false;
