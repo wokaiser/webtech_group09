@@ -67,32 +67,30 @@ public class Trip extends Controller {
     return ok(respJSON);
   }
   
-  public static Result load(int tnr) {
-  
-    Connection conn = DB.getConnection();
-		Statement query;
+  public static Result load() {
+	DynamicForm data = form().bindFromRequest();
+	Connection conn = DB.getConnection();
+	ObjectNode respJSON = Json.newObject();
+	String returnData = "";
+	String tnrAsString = data.get("tnr");
+	int tnr = 1;
+	if(tnrAsString != null && !tnrAsString.isEmpty())
+		tnr = Integer.parseInt(tnrAsString);
+	Statement query;
     ResultSet result;
-    ObjectNode respJSON = Json.newObject();
 
-		if(conn != null)
-		{
+		if(conn != null) {
         try {
-            	
-	          query = conn.createStatement();
-    
-	          String sql = "SELECT * FROM seapal.tripinfo ";
-	        
-	          result = query.executeQuery(sql);
-            java.sql.ResultSetMetaData rsmd = result.getMetaData();
-            int numColumns = rsmd.getColumnCount();
+			query = conn.createStatement();
+			String sql = "SELECT * FROM seapal.tripinfo WHERE tnr = " + tnr;
+			result = query.executeQuery(sql);
 
-            while (result.next()) {
-                for (int i = 1; i < numColumns + 1; i++) {
-                    String columnName = rsmd.getColumnName(i);
-                    respJSON.put(columnName, result.getString(i));
-                }
-            }
-            conn.close();
+			while (result.next()) {
+				respJSON.put("lastZoom", result.getFloat("lastZoom"));
+				respJSON.put("lastLat", result.getFloat("lastLat"));
+				respJSON.put("lastLng", result.getFloat("lastLng"));
+			}
+			conn.close();
 
         } catch (Exception e) {
 	    	   e.printStackTrace();

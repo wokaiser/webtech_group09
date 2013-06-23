@@ -100,10 +100,15 @@ public class Tripinfo extends Controller {
     return ok(respJSON);
   }
 
-  public static Result index(int tnr) {
-    Connection conn = DB.getConnection();
-		
-		String data = "";
+  public static Result index() {
+		DynamicForm data = form().bindFromRequest();
+		Connection conn = DB.getConnection();
+		ObjectNode respJSON = Json.newObject();
+		String returnData = "";
+		String tnrAsString = data.get("tnr");
+		int tnr = 1;
+		if(tnrAsString != null && !tnrAsString.isEmpty())
+			tnr = Integer.parseInt(tnrAsString);
     
 		if(conn != null)
 		{
@@ -111,46 +116,22 @@ public class Tripinfo extends Controller {
             ResultSet result;
             
             try {
-            	
 	            query = conn.createStatement();
-	 
 	            String sql = "SELECT * " + "FROM wegpunkte WHERE tnr = " + tnr;
-	        
 	            result = query.executeQuery(sql);
 	        
 	            while (result.next()) {
-              
-	        		  StringBuilder row = new StringBuilder();
-
-                row.append("<tr class='selectable' id='" + result.getString("wnr") + "'>");
-                row.append("<td>" + result.getString("name") + "</td>");
-                row.append("<td>" + result.getString("lat") + "</td>");
-                row.append("<td>" + result.getString("lng") + "</td>");
-                row.append("<td>" + result.getString("btm") + "</td>");
-                row.append("<td>" + result.getString("dtm") + "</td>");
-                row.append("<td>" + result.getString("manoever") + "</td>");
-                row.append("<td style='width:30px; text-align:left;'><div class='btn-group'>");
-                row.append("<a class='btn btn-small view' id='" + result.getString("wnr")
-                  + "'><span><i class='icon-eye-open'></i></span></a>");
-                row.append("<a class='btn btn-small remove' id='" + result.getString("wnr")
-                  + "'><span><i class='icon-remove'></i></span></a>");
-                row.append("<a class='btn btn-small redirect' id='" + result.getString("wnr")
-                  + "' href='app_waypoint.html?wnr=" + result.getString("wnr")
-                  + "'><span><i class='icon-chevron-right'></i></span></a>");
-                    
-               
-                row.append("</div></td>");
-
-                row.append("</tr>");
-            
-		            data += row.toString();
+					respJSON.put("name", result.getString("name"));
+					respJSON.put("lat", result.getFloat("lat"));
+					respJSON.put("lng", result.getFloat("lng"));
 			    }
+				conn.close();
                
 	       } catch (Exception e) {
 	    	   e.printStackTrace();
 	       }
     }
-    return ok(tripinfo.render(header.render(), navigation.render("app_map"), navigation_app.render("app_tripinfo"), data));
+    return ok(respJSON);
   }
   
 }

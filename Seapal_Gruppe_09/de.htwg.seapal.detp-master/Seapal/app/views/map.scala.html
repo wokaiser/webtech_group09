@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="de">
     <head>
     
     	<!-- Header -->
@@ -80,19 +80,20 @@
 	                <div id="tracking_distance">Track lenght: <span id="tracking_number"></span> m</div>
 	            </div>
 	        </div>
-			
-		    <!-- Current Position -->
-		    <div id="followCurrentPositionContainer" style="display: none;">
-		        <div id="followCurrentPosition_button" class="well">
-		            <input type="button" class="btn" value="Eigener Position folgen" id="followCurrentPositionbutton" onclick="javascript: toggleFollowCurrentPosition()" />
-		        </div>
-		    </div>
-		    
+			    
 		    <!-- Map -->
 	        <div id="appWrapper">
-	            <div id="map_canvas"></div>
-                <div id="map_overlay" style="display: none;"></div>
-                <div id="weatherForecast_overlay" style="display: none;"></div>
+	            <div id="map_canvas">
+                
+                </div>
+                
+                <div id="map_overlay" style="display: none;">
+
+                </div>
+                
+                <div id="weatherForecast_overlay" style="display: none;">
+
+                </div>
             </div>
 		
 		    <!-- Context Menus -->
@@ -102,9 +103,7 @@
 	        <div id="routeContextMenu_inactive" class="routeContextMenu_inactive"></div>
 	        <div id="trackingContextMenu_active" class="trackingContextMenu_active"></div>
 	        <div id="trackingContextMenu_inactive" class="trackingContextMenu_inactive"></div>
-			<div id="chat" align="center">
-		        <div id="chat-area" style="height:200px; width:200px; background-color: white; overflow: auto;"></div>
-			</div>
+			
 		</div><!-- Container -->
 		
 		<!-- Menu Modal -->

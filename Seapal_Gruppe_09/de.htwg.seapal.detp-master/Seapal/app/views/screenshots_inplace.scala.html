@@ -1,0 +1,43 @@
+@(header: Html)(navigation: Html)(footer: Html)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+    
+    	<!-- Header -->
+        @header
+        
+		<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/coolcarousel/carousel.css")">
+		<script src="@routes.Assets.at("javascripts/coolcarousel/jquery.carouFredSel-6.0.4-packed.js")" type="text/javascript" ></script>
+		<script src="@routes.Assets.at("javascripts/coolcarousel/carousel.js")" type="text/javascript" ></script>
+		
+    </head>
+    <body>
+    
+    	<!-- Navigation -->
+    	@navigation
+
+		<!-- Content -->
+		<div id="wrapper">
+			<div id="carousel">
+				<span class="empty"></span> <!-- trick the carousel to start 1 item to the right -->
+				<img src="@routes.Assets.at("images/screenshots/SeaPal-Longtouch.jpg")" alt="A Longtouch brings up bearing and distance to that point from the current position." width="580" height="435"/>
+                <img src="@routes.Assets.at("images/screenshots/SeaPal-InPlace-Tools.jpg")" alt="Another touch brings up a menu for in-place tools." width="580" height="435"/>
+                <img src="@routes.Assets.at("images/screenshots/SeaPal-Mark.jpg")" alt="This allows quick creation of Marks, for example." width="580" height="435">
+				<img src="@routes.Assets.at("images/screenshots/SeaPal-InPlace-Tools.jpg")" alt="Marks again have a context menu." width="580" height="435">
+                <img src="@routes.Assets.at("images/screenshots/SeaPal-Target.jpg")" alt="Marks can be made the target, bearing and distance are displayed at the top." width="580" height="435">
+                <span class="empty"></span> <!-- trick the carousel to end 1 item to the left -->
+			</div>
+		</div>
+		<div id="bar">
+			<a id="prev" href="#">&laquo;</a>
+			<a id="next" href="#">&raquo;</a>
+			<span id="title"></span>
+		</div>	
+    	
+		<!-- Footer -->
+		@footer
+		
+    </body>
+</html>

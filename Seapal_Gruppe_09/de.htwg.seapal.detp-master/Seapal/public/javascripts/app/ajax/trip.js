@@ -2,15 +2,16 @@ $(function() {
     var routeLoad = null;
 	var tnrValue = null;
     
-	$('a.view').live("click", function(event) {  
+	$('a.view').live("click", function(event) { 
         routeLoad = null;
         tnrValue = $(this).attr('id');
         //get the tripinfo json object
         $.getJSON(
-            "json_app_tripinfo.php",
+            "/app_tripinfo.html",
             { tnr: tnrValue}, function(route){
                 routeLoad = route;
-                jQuery.get("app_trip_load.php", {'tnr': tnrValue}, function(data) {
+                jQuery.get("/app_trip_load.html", {'tnr': tnrValue}, function(data) {
+	
                     //create a new route
                     newRoute = getNewRoute();
                     //set the marker to the route

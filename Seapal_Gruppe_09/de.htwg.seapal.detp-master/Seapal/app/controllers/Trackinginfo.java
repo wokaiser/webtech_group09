@@ -118,26 +118,27 @@ public class Trackinginfo extends Controller {
 	return index(tnr, bnr);
   }
   */
-  public static Result index() {
-	    
-	  String data = loadEntries(-1, 0);
-	 // Session session = Scope.Session.current();
-	  
-	// if(session.containsKey("bnr"))
-	//	data = loadEntries(-1, session.get("bnr"));
-	data ="";
-	  return ok(trackinginfo.render(header.render(),
+	public static Result index() {
+			
+		String data = loadEntries();
+		
+		return ok(trackinginfo.render(header.render(),
 								header_app.render(),
     						    navigation.render("app_trackinginfo"), 
     						    navigation_app.render("app_trackinginfo"), 
     						    data));
-  }
+	}
 
-	public static String loadEntries(int tnr, int bnr) {
-	
+	public static String loadEntries() {
+		DynamicForm data = form().bindFromRequest();
 		Connection conn = DB.getConnection();
 		
-		String data = "";
+		String returnData = "";		
+		String tnrAsString = data.get("tnr");
+		int tnr = -1;
+		if(tnrAsString != null && !tnrAsString.isEmpty())
+			tnr = Integer.parseInt(tnrAsString);
+		int bnr = 0;
 		String sql = "";
 	
 		if(conn != null)
@@ -146,9 +147,12 @@ public class Trackinginfo extends Controller {
             ResultSet result;
             
             try {
-            	
-	            query = conn.createStatement();
-	 
+            
+			query = conn.createStatement();
+			
+			 if(session().containsValue("bnr"))
+				 bnr = Integer.parseInt(session().get("bnr"));
+		 
 			if(tnr == -1) {
 				sql = "SELECT b.* FROM seapal.tripinfo a JOIN seapal.tracking b on a.tnr = b.tnr WHERE a.bnr = " + bnr;
 			}
@@ -179,7 +183,7 @@ public class Trackinginfo extends Controller {
 
                 row.append("</tr>");
             
-		            data += row.toString();
+		            returnData += row.toString();
 			    }
                
 	       } catch (Exception e) {
@@ -187,7 +191,7 @@ public class Trackinginfo extends Controller {
 	       }
         }
             
-        return data;
+        return returnData;
 	}
 
   
