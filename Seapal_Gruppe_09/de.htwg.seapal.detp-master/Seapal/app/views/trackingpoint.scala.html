@@ -1,0 +1,105 @@
+@(header: Html)(header_app: Html)(navigation: Html)(navigation_app: Html)(data: String)
+<!DOCTYPE html>
+
+<html lang="de">
+	<head>
+	
+    	<!-- Header -->
+        @header
+	    
+    	<!-- Header App -->
+        @header_app
+		
+	</head>
+	<body>
+	    
+	    <!-- Navigation -->
+    	@navigation
+    	
+    	<!-- Container -->	
+    	<div class="container-fluid">
+	    		
+    		<!-- App Navigation -->
+    		@navigation_app
+    	
+    		<!-- Content -->
+    		<div id="appWrapper" align="center">
+	            <div class="appTableDiv" align="center">
+	                <table class="appTable table table-hover smallFontTable" cellspacing="0px" cellpadding="5px">
+	                    <thead>
+	                        <tr>
+	                            <th>#</th>
+	                            <th>BTM</th>
+	                            <th>DTM</th>
+	                            <th>SOG</th>
+	                            <th>COG</th>
+	                            <th>Man&ouml;ver</th>
+	                            <th>Vorsegel</th>
+	                            <th>Datum</th>
+	                            <th>Uhrzeit</th>
+	                            <th>Motor</th>
+	                            <th>Tank</th>
+	                            <th>Windst.</th>
+	                            <th>Windri.</th>
+	                            <th>Luftdruck</th>
+	                            <th>Temp.</th>
+	                            <th>Wolken</th>
+	                            <th>Regen</th>
+	                            <th>Wellenri.</th>
+	                            <th>Wellenh.</th>
+	                            <th></th>
+	                        </tr>
+	                    </thead>
+		                <tbody id="entries_tracking">
+						@Html(data)
+	                    </tbody>
+	                </table>
+	                <br /><br />
+	            </div>
+    		</div><!-- Content -->
+	          
+	    </div><!-- Container -->
+	    
+	    <!-- Menu Modal -->
+		<div class="modal hide fade" id="messageBox">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 id="dialogTitle"></h3>
+			</div>
+			<div class="modal-body">
+				<p id="dialogMessage"></p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn" data-dismiss="modal"><i class="icon-ok"></i> ok</a>
+			</div>
+		</div>
+        
+        <div class="messageBox infoMessageBox" id="infoMessageBox" style="display: none;">
+            <div class="infoMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="infoMessageBoxText">Some info msg.</div>
+        </div>
+        
+        <div class="messageBox successMessageBox" id="successMessageBox" style="display: none;">
+            <div class="successMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="successMessageBoxText">Some success msg.</div>
+        </div>
+        
+        <div class="messageBox warningMessageBox" id="warningMessageBox" style="display: none;">
+            <div class="warningMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="warningMessageBoxText">Some warning msg.</div>
+        </div>
+        
+        <div class="messageBox errorMessageBox" id="errorMessageBox" style="display: none;">
+            <div class="errorMessageBoxPicture span4"></div>
+            <div class="defaultMessageBoxText span8" id="errorMessageBoxText">Some error msg.</div>
+        </div>
+	   
+		<!-- Additional Scripts -->
+		<script src="@routes.Assets.at("javascripts/bootstrap/bootstrap-transition.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/bootstrap/bootstrap-dropdown.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/bootstrap/bootstrap-button.js")" type="text/javascript"></script>
+		<script src="@routes.Assets.at("javascripts/bootstrap/bootstrap-modal.js")" type="text/javascript"></script>
+		
+		<script src="@routes.Assets.at("javascripts/messageBox/messageBox.js")" type="text/javascript"></script>	
+	</body>
+</html>
