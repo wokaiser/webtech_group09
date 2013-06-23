@@ -11,7 +11,7 @@ $(function() {
             { tnr: tnrValue}, function(route){
                 routeLoad = route;
                 jQuery.get("/app_trip_load.html", {'tnr': tnrValue}, function(data) {
-	
+
                     //create a new route
                     newRoute = getNewRoute();
                     //set the marker to the route
@@ -23,13 +23,14 @@ $(function() {
                         for (var i in TRIP_INFO_LOAD) {
                             newRoute[TRIP_INFO_LOAD[i]] = data[TRIP_INFO_LOAD[i]];
                         }
+
                         //push the new Route to the routes array
                         session.map.routes.push(newRoute);
                         //the route will now be available in the map, display a message
                         displayMessageBox("successMessageBox", "The route will now be displayed in the map.", "18em", "-9em");
                     } else {
                         //the route is already in the map, display info message
-                        displayMessageBox("infoMessageBox", "The route will be already displayed in the map.", "20em", "-10em");
+                        displayMessageBox("infoMessageBox", "The route is already being displayed in the map.", "20em", "-10em");
                     }
             
                 }, "json");

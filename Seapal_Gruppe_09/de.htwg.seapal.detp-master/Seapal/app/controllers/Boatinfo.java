@@ -26,7 +26,7 @@ public class Boatinfo extends Controller {
     try {
 	      query = conn.createStatement();
 			
-		if(session().containsValue("bnr"));
+		if(session().containsKey("bnr"));
 			bnr = Integer.parseInt(session().get("bnr"));
 		  
         query.execute("INSERT INTO seapal.bootinfo(unr, bootname, registernummer, segelzeichen, heimathafen, yachtclub, eigner, versicherung,"

@@ -103,8 +103,7 @@ public class Tripinfo extends Controller {
   public static Result index() {
 		DynamicForm data = form().bindFromRequest();
 		Connection conn = DB.getConnection();
-		ObjectNode respJSON = Json.newObject();
-		String returnData = "";
+		StringBuilder response = new StringBuilder("[");
 		String tnrAsString = data.get("tnr");
 		int tnr = 1;
 		if(tnrAsString != null && !tnrAsString.isEmpty())
@@ -121,9 +120,13 @@ public class Tripinfo extends Controller {
 	            result = query.executeQuery(sql);
 	        
 	            while (result.next()) {
-					respJSON.put("name", result.getString("name"));
-					respJSON.put("lat", result.getFloat("lat"));
-					respJSON.put("lng", result.getFloat("lng"));
+					response.append("{");
+					response.append("\"name\":\"" + result.getString("name") + "\",");
+					response.append("\"lat\":" + Float.toString(result.getFloat("lat")) + ",");
+					response.append("\"lng\":" + Float.toString(result.getFloat("lng")));
+					response.append("}");
+					if(!result.isLast())
+						response.append(",");
 			    }
 				conn.close();
                
@@ -131,7 +134,9 @@ public class Tripinfo extends Controller {
 	    	   e.printStackTrace();
 	       }
     }
-    return ok(respJSON);
+	response.append("]");
+	response().setContentType("text/html; charset=utf-8");
+    return ok(response.toString());
   }
   
 }

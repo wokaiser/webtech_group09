@@ -14,7 +14,6 @@ import views.html._include.*;
 public class Trip extends Controller {
   
   public static Result insert() {
-  
     DynamicForm data = form().bindFromRequest();
     Connection conn = DB.getConnection();
 		Statement query;            
@@ -86,6 +85,19 @@ public class Trip extends Controller {
 			result = query.executeQuery(sql);
 
 			while (result.next()) {
+				respJSON.put("0", Integer.toString(result.getInt("tnr")));
+				respJSON.put("1", Integer.toString(result.getInt("bnr")));
+				respJSON.put("2", result.getString("titel"));
+				respJSON.put("3", result.getString("von"));
+				respJSON.put("4", result.getString("nach"));
+				respJSON.put("5", Float.toString(result.getFloat("lastZoom")));
+				respJSON.put("6", Float.toString(result.getFloat("lastLat")));
+				respJSON.put("7", Float.toString(result.getFloat("lastLng")));
+				respJSON.put("tnr", Integer.toString(result.getInt("tnr")));
+				respJSON.put("bnr", Integer.toString(result.getInt("bnr")));
+				respJSON.put("titel", result.getString("titel"));
+				respJSON.put("von", result.getString("von"));
+				respJSON.put("nach", result.getString("nach"));
 				respJSON.put("lastZoom", result.getFloat("lastZoom"));
 				respJSON.put("lastLat", result.getFloat("lastLat"));
 				respJSON.put("lastLng", result.getFloat("lastLng"));
@@ -96,6 +108,7 @@ public class Trip extends Controller {
 	    	   e.printStackTrace();
         }
     }
+
     return ok(respJSON);
   }
 

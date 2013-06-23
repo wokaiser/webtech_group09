@@ -25,14 +25,10 @@ public class LandingPage extends Controller {
     ResultSet result;
     ObjectNode respJSON = Json.newObject();
     int nextId = 0;
-	int bnr = 0;
 	
     try {
 	      query = conn.createStatement();
-			
-		if(session().containsValue("bnr"));
-			bnr = Integer.parseInt(session().get("bnr"));
-		  
+
         query.execute("INSERT INTO seapal.benutzer(benutzername, passwort, vorname, nachname, mail, mySession, registrierung) "
 				+ "'" + data.get("username") + "',"
                 + "'" + data.get("password") + "',"

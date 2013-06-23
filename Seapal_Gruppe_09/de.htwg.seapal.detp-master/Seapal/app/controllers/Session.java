@@ -62,7 +62,7 @@ public class Session extends Controller {
 					
 					if(pwCorrect) {
 						session("user", data.get("user_username"));
-						session("bnr", bnr);
+						session("bnr", "" + bnr);
 						respJSON.put("u", data.get("user_username"));
 						return ok(respJSON);
 					}
