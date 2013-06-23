@@ -30,12 +30,7 @@
                     </li>
 			        @if(file == "about") { <li class="active"> } else { <li> } <a href='about.html'>About</a></li>
 			        @if(file == "contact") { <li class="active"> } else { <li> } <a href='contact.html'>Contact</a></li>
-                    
-                    <li id='logout' style=@if(session.get("user") == null || session.get("user").isEmpty()) {'display:none'} else {'display:block'}>
-                      <a id='signout' class='btn-logout' href=''>Sign out</a>
-                    </li>
-                    <li><a id='loginname' style=@if(session.get("user") != null && !session.get("user").isEmpty()) {'display:block'} else {'display:none'}>@session.get("user")</a></li>
-                    
+                                        
                     <li id='login' class='dropdown' style=@if(session.get("user") != null && !session.get("user").isEmpty()) {'display:none'} else {'display:block'}>
                       <a class='dropdown-toggle btn-login' href='#' data-toggle='dropdown'>Sign In <strong class='caret'></strong></a>
                       <div class='dropdown-menu' style='padding: 15px; padding-bottom: 0px; color:#fff;'>
@@ -48,6 +43,11 @@
                           </form>
                       </div>
                     </li>                   
+                   
+                    <li id='logout' style=@if(session.get("user") == null || session.get("user").isEmpty()) {'display:none'} else {'display:block'}>
+                      <a id='signout' class='btn-logout' href=''>Sign out</a>
+                    </li>
+                    <li><a id='loginname' style='display:block'></a></li>
                    
 		        </ul>
 		    </div>
