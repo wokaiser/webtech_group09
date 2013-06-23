@@ -188,7 +188,9 @@ public class Trip extends Controller {
 	    	   e.printStackTrace();
         }
     }
-
+	
+	response.append("]");
+	response().setContentType("application/json");
     return ok(response.toString());
   }
 

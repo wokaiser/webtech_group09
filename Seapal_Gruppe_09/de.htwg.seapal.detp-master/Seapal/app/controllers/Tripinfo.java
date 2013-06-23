@@ -133,7 +133,7 @@ public class Tripinfo extends Controller {
 	       }
     }
 	response.append("]");
-	response().setContentType("text/html; charset=utf-8");
+	response().setContentType("application/json");
     return ok(response.toString());
   }
   
