@@ -207,7 +207,7 @@ public class Trip extends Controller {
 					row.append("<a class='btn btn-small remove tracking' id='" + result.getString("tnr")
 						+ "'><span><i class='icon-remove'></i></span></a>");
 					row.append("<a class='btn btn-small redirect' id='" + result.getString("tnr")
-						+ "' href='app_tripinfo.html?tnr=" + result.getString("tnr")
+						+ "' href='app_trackinginfo?tnr=" + result.getString("tnr")
 						+ "'><span><i class='icon-chevron-right'></i></span></a>");
 					row.append("</div></td>");
 					row.append("</tr>");
