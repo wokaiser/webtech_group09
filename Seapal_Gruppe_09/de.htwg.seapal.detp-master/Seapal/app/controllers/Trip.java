@@ -93,36 +93,32 @@ public class Trip extends Controller {
 				String sql = "SELECT * FROM seapal.trackingpoint WHERE tracknr = " + tracknr;
 				result = query.executeQuery(sql);
 
-				if(!result.next()) {
-					return load_tracknr(tracknr);
-				} else {
-					do {
-						response.append("{");
-						response.append("\"lat\":\"" + Float.toString(result.getFloat("lat")) + "\",");
-						response.append("\"lng\":\"" + Float.toString(result.getFloat("lng")) + "\",");
-						response.append("\"marker\":\"" + result.getString("marker") + "\",");
-						response.append("\"btm\":\"" + result.getString("btm") + "\",");
-						response.append("\"dtm\":\"" + result.getString("dtm") + "\",");
-						response.append("\"sog\":\"" + result.getString("sog") + "\",");
-						response.append("\"cog\":\"" + result.getString("cog") + "\",");
-						response.append("\"manoever\":\"" + result.getString("manoever") + "\",");
-						response.append("\"vorsegel\":\"" + result.getString("vorsegel") + "\",");
-						response.append("\"wdate\":\"" + result.getString("wdate") + "\",");
-						response.append("\"wtime\":\"" + result.getString("wtime") + "\",");
-						response.append("\"motor\":\"" + result.getString("motor") + "\",");
-						response.append("\"tank\":\"" + result.getString("tank") + "\",");
-						response.append("\"windstaerke\":\"" + result.getString("windstaerke") + "\",");
-						response.append("\"windrichtung\":\"" + result.getString("windrichtung") + "\",");
-						response.append("\"luftdruck\":\"" + result.getString("luftdruck") + "\",");
-						response.append("\"temperatur\":\"" + result.getString("temperatur") + "\",");
-						response.append("\"wolken\":\"" + result.getString("wolken") + "\",");
-						response.append("\"regen\":\"" + result.getString("regen") + "\",");
-						response.append("\"wellenhoehe\":\"" + result.getString("wellenhoehe") + "\",");
-						response.append("\"wellenrichtung\":\"" + result.getString("wellenrichtung") + "\"");
-						response.append("}");
-						if(!result.isLast())
-							response.append(",");
-					} while (result.next());
+				while (result.next()) {
+					response.append("{");
+					response.append("\"lat\":\"" + Float.toString(result.getFloat("lat")) + "\",");
+					response.append("\"lng\":\"" + Float.toString(result.getFloat("lng")) + "\",");
+					response.append("\"marker\":\"" + result.getString("marker") + "\",");
+					response.append("\"btm\":\"" + result.getString("btm") + "\",");
+					response.append("\"dtm\":\"" + result.getString("dtm") + "\",");
+					response.append("\"sog\":\"" + result.getString("sog") + "\",");
+					response.append("\"cog\":\"" + result.getString("cog") + "\",");
+					response.append("\"manoever\":\"" + result.getString("manoever") + "\",");
+					response.append("\"vorsegel\":\"" + result.getString("vorsegel") + "\",");
+					response.append("\"wdate\":\"" + result.getString("wdate") + "\",");
+					response.append("\"wtime\":\"" + result.getString("wtime") + "\",");
+					response.append("\"motor\":\"" + result.getString("motor") + "\",");
+					response.append("\"tank\":\"" + result.getString("tank") + "\",");
+					response.append("\"windstaerke\":\"" + result.getString("windstaerke") + "\",");
+					response.append("\"windrichtung\":\"" + result.getString("windrichtung") + "\",");
+					response.append("\"luftdruck\":\"" + result.getString("luftdruck") + "\",");
+					response.append("\"temperatur\":\"" + result.getString("temperatur") + "\",");
+					response.append("\"wolken\":\"" + result.getString("wolken") + "\",");
+					response.append("\"regen\":\"" + result.getString("regen") + "\",");
+					response.append("\"wellenhoehe\":\"" + result.getString("wellenhoehe") + "\",");
+					response.append("\"wellenrichtung\":\"" + result.getString("wellenrichtung") + "\"");
+					response.append("}");
+					if(!result.isLast())
+						response.append(",");
 				}
 				conn.close();
 			} catch (Exception e) {
@@ -136,12 +132,16 @@ public class Trip extends Controller {
 	}
   
 
- public static Result load_tracknr(int tnr) {
+ public static Result load_tracknr() {
 	DynamicForm data = form().bindFromRequest();
 	Connection conn = DB.getConnection();
-	StringBuilder response = new StringBuilder("[");
+	StringBuilder response = new StringBuilder("");
 	Statement query;
     ResultSet result;
+	String tnrAsString = data.get("tnr");
+	int tnr = 1;
+	if(tnrAsString != null && !tnrAsString.isEmpty())
+		tnr = Integer.parseInt(tnrAsString);
 
 		if(conn != null) {
         try {
@@ -151,35 +151,19 @@ public class Trip extends Controller {
 			
 			if(result.next()) {
 				tnr = result.getInt("tracknr");
-				sql = "SELECT * FROM seapal.trackingpoint WHERE tracknr = " + tnr;
+				sql = "SELECT * FROM seapal.tripinfo WHERE tnr = " + tnr;
 				result = query.executeQuery(sql);
 
-					while(result.next()) {
+					if(result.next()) {
 						response.append("{");
-						response.append("\"lat\":\"" + Float.toString(result.getFloat("lat")) + "\",");
-						response.append("\"lng\":\"" + Float.toString(result.getFloat("lng")) + "\",");
-						response.append("\"marker\":\"" + result.getString("marker") + "\",");
-						response.append("\"btm\":\"" + result.getString("btm") + "\",");
-						response.append("\"dtm\":\"" + result.getString("dtm") + "\",");
-						response.append("\"sog\":\"" + result.getString("sog") + "\",");
-						response.append("\"cog\":\"" + result.getString("cog") + "\",");
-						response.append("\"manoever\":\"" + result.getString("manoever") + "\",");
-						response.append("\"vorsegel\":\"" + result.getString("vorsegel") + "\",");
-						response.append("\"wdate\":\"" + result.getString("wdate") + "\",");
-						response.append("\"wtime\":\"" + result.getString("wtime") + "\",");
-						response.append("\"motor\":\"" + result.getString("motor") + "\",");
-						response.append("\"tank\":\"" + result.getString("tank") + "\",");
-						response.append("\"windstaerke\":\"" + result.getString("windstaerke") + "\",");
-						response.append("\"windrichtung\":\"" + result.getString("windrichtung") + "\",");
-						response.append("\"luftdruck\":\"" + result.getString("luftdruck") + "\",");
-						response.append("\"temperatur\":\"" + result.getString("temperatur") + "\",");
-						response.append("\"wolken\":\"" + result.getString("wolken") + "\",");
-						response.append("\"regen\":\"" + result.getString("regen") + "\",");
-						response.append("\"wellenhoehe\":\"" + result.getString("wellenhoehe") + "\",");
-						response.append("\"wellenrichtung\":\"" + result.getString("wellenrichtung") + "\"");
+						response.append("\"bnr\":\"" + Integer.toString(result.getInt("bnr")) + "\",");
+						response.append("\"titel\":\"" + result.getString("titel") + "\",");
+						response.append("\"von\":\"" + result.getString("von") + "\",");
+						response.append("\"nach\":\"" + result.getString("nach") + "\",");
+						response.append("\"lastZoom\":\"" + Integer.toString(result.getInt("lastZoom")) + "\",");
+						response.append("\"lastLat\":\"" + Float.toString(result.getFloat("lastLat")) + "\",");
+						response.append("\"lastLng\":\"" + Float.toString(result.getFloat("lastLng")) + "\"");
 						response.append("}");
-						if(!result.isLast())
-							response.append(",");
 					} 
 			}
 			conn.close();
@@ -188,8 +172,7 @@ public class Trip extends Controller {
 	    	   e.printStackTrace();
         }
     }
-	
-	response.append("]");
+
 	response().setContentType("application/json");
     return ok(response.toString());
   }
