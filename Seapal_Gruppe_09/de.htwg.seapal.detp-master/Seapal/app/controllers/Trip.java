@@ -138,6 +138,7 @@ public class Trip extends Controller {
 	StringBuilder response = new StringBuilder("");
 	Statement query;
     ResultSet result;
+	String sql;
 	String tnrAsString = data.get("tnr");
 	int tnr = 1;
 	if(tnrAsString != null && !tnrAsString.isEmpty())
@@ -145,17 +146,27 @@ public class Trip extends Controller {
 
 		if(conn != null) {
         try {
-			query = conn.createStatement();
+	/*		query = conn.createStatement();
 			String sql = "SELECT * FROM seapal.tracking WHERE tnr = " + tnr;
 			result = query.executeQuery(sql);
 			
 			if(result.next()) {
-				tnr = result.getInt("tracknr");
+				tnr = result.getInt("tracknr");*/
+				query = conn.createStatement();
 				sql = "SELECT * FROM seapal.tripinfo WHERE tnr = " + tnr;
 				result = query.executeQuery(sql);
 
 					if(result.next()) {
 						response.append("{");
+						response.append("\"0\":\"" + Integer.toString(result.getInt("tnr")) + "\",");
+						response.append("\"1\":\"" + Integer.toString(result.getInt("bnr")) + "\",");
+						response.append("\"2\":\"" + result.getString("titel") + "\",");
+						response.append("\"3\":\"" + result.getString("von") + "\",");
+						response.append("\"4\":\"" + result.getString("nach") + "\",");
+						response.append("\"5\":\"" + Integer.toString(result.getInt("lastZoom")) + "\",");
+						response.append("\"6\":\"" + Float.toString(result.getFloat("lastLat")) + "\",");
+						response.append("\"7\":\"" + Float.toString(result.getFloat("lastLng")) + "\",");
+						response.append("\"tnr\":\"" + Integer.toString(result.getInt("tnr")) + "\",");
 						response.append("\"bnr\":\"" + Integer.toString(result.getInt("bnr")) + "\",");
 						response.append("\"titel\":\"" + result.getString("titel") + "\",");
 						response.append("\"von\":\"" + result.getString("von") + "\",");
@@ -165,7 +176,7 @@ public class Trip extends Controller {
 						response.append("\"lastLng\":\"" + Float.toString(result.getFloat("lastLng")) + "\"");
 						response.append("}");
 					} 
-			}
+		//	}
 			conn.close();
 
         } catch (Exception e) {
