@@ -52,79 +52,65 @@ public class Trackinginfo extends Controller {
 		} catch (Exception e) {
 			respJSON.put("tracknr", "Error: " + e);
 		}
+		return ok(respJSON);
+	}
+  
+  
+	public static Result delete() {
+		DynamicForm data = form().bindFromRequest();
+		Connection conn = DB.getConnection();
+		Statement query;            
+		ResultSet result;
+		ObjectNode respJSON = Json.newObject();
+
+		try {
+			query = conn.createStatement();
+			query.execute("DELETE FROM seapal.tracking WHERE tracknr = " + data.get("tracknr"));
+
+			conn.close();
+			respJSON.put("tracknr", "ok");
+
+		} catch (Exception e) {
+			respJSON.put("tracknr", "Error: " + e);
+		}
 
 		return ok(respJSON);
 	}
   
-  /*
-  public static Result delete(int tracknr) {
+	public static Result load() {
+		DynamicForm data = form().bindFromRequest();
+		Connection conn = DB.getConnection();
+		Statement query;            
+		ResultSet result;
+		ObjectNode respJSON = Json.newObject();
+		int nextId = 0;
 
-    Connection conn = DB.getConnection();
-	Statement query;            
-    ResultSet result;
-    ObjectNode respJSON = Json.newObject();
-  
-    try {
-	    query = conn.createStatement();
-        query.execute("DELETE FROM seapal.tracking WHERE tracknr = " + tracknr);
-
-        conn.close();
-
-        respJSON.put("tracknr", "ok");
-
-    } catch (Exception e) {
-        respJSON.put("tracknr", "Error: " + e);
-    }
-  
-    return ok(respJSON);
-  }
-  
-  public static Result load(int tnr, int bnr) {
-  
-    Connection conn = DB.getConnection();
-		Statement query;
-	String sql = "";
-    ResultSet result;
-    ObjectNode respJSON = Json.newObject();
-
-		if(conn != null)
-		{
-        try {
-            	
-	          query = conn.createStatement();
-	 
-			if(tnr == -1) {
-				sql = "SELECT b.* FROM seapal.tripinfo a JOIN seapal.tracking b on a.tnr = b.tnr WHERE a.bnr = " + bnr;
-			}
-	        else {
-				sql = "SELECT * FROM seapal.tracking WHERE tnr = " + tnr;
-			}
-			  
-	        result = query.executeQuery(sql);
-            java.sql.ResultSetMetaData rsmd = result.getMetaData();
-            int numColumns = rsmd.getColumnCount();
-
-            while (result.next()) {
-                for (int i = 1; i < numColumns + 1; i++) {
-                    String columnName = rsmd.getColumnName(i);
-                    respJSON.put(columnName, result.getString(i));
-                }
-            }
-            conn.close();
-
-        } catch (Exception e) {
-	    	   e.printStackTrace();
-        }
-    }
-    return ok(respJSON);
-  }
-
-  public static Result show(int tnr, int bnr) {
-	return index(tnr, bnr);
-  }
-  */
-	public static Result index() {
+		try {
+			query = conn.createStatement();
 			
+			query.execute("SELECT * FROM seapal.tracking WHERE  tracknr = " + data.get("tracknr"));
+
+			result = query.executeQuery("SHOW TABLE STATUS FROM seapal LIKE 'tracking'");
+			while (result.next()) {
+				respJSON.put("tracknr", Integer.toString(result.getInt("tracknr")));
+				respJSON.put("tnr", Integer.toString(result.getInt("tnr")));
+				respJSON.put("trackTitel", result.getString("trackTitel"));
+				respJSON.put("skipper", result.getString("skipper"));
+				respJSON.put("crew", result.getString("crew"));
+				respJSON.put("tstart", result.getString("tstart"));
+				respJSON.put("tende", result.getString("tende"));
+				respJSON.put("tdauer", result.getString("tdauer"));
+				respJSON.put("lastZoom", result.getFloat("lastZoom"));
+				respJSON.put("lastLat", result.getFloat("lastLat"));
+				respJSON.put("lastLng", result.getFloat("lastLng"));
+			}
+			conn.close();
+
+		} catch (Exception e) {	}
+	return ok(respJSON);
+	}
+  
+	public static Result index() {
 		String data = loadEntries();
 		
 		return ok(trackinginfo.render(header.render(),
@@ -140,6 +126,7 @@ public class Trackinginfo extends Controller {
 		String returnData = "";	
 		String sql = "";
 		String tnrAsString = data.get("tnr");
+		StringBuilder row;
 		int tnr = -1;
 		int bnr = 0;
 		
@@ -168,9 +155,9 @@ public class Trackinginfo extends Controller {
 				result = query.executeQuery(sql);
 
 				while (result.next()) {
-					StringBuilder row = new StringBuilder();
+					row = new StringBuilder();
 
-					row.append("<tr class='selectable' id='" + result.getString("bnr") + "'>");
+					row.append("<tr class='selectable'>");
 					row.append("<td>" + result.getString("trackTitel") + "</td>");
 					row.append("<td>" + result.getString("skipper") + "</td>");
 					row.append("<td>" + result.getString("crew") + "</td>");
@@ -187,6 +174,7 @@ public class Trackinginfo extends Controller {
 					row.append("</tr>");
 
 					returnData += row.toString();
+					conn.close();
 				}
 			} catch (Exception e) {
 			   e.printStackTrace();

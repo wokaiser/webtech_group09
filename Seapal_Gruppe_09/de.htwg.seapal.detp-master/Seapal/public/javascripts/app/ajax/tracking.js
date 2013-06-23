@@ -10,7 +10,7 @@ $(function() {
             "app_trip_load.html",
             { tnr: tracknrValue}, function(tracking){
                 trackingLoad = tracking;
-                jQuery.get("app_trackinginfo_load.php", {'tracknr': tracknrValue}, function(data) {
+                jQuery.get("/app_trackinginfo_load.html", {'tracknr': tracknrValue}, function(data) {
                     //create a new track
                     newTracking = getNewTracking();
                     //set the trackingpoints to the track
@@ -56,7 +56,7 @@ $(function() {
 	$('a.remove.tracking').live("click", function(event) {
 		var buttonID = this;
 	 	var id = $(this).attr('id');
-		jQuery.post("app_trackinginfo_delete.php", { "tracknr": id }, function(data) {
+		jQuery.post("/app_trackinginfo_delete.html", { "tracknr": id }, function(data) {
 		 
 		 	if (data['tracknr'].match(/Error/)) {
 		    	
