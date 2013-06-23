@@ -10,10 +10,6 @@ function trackingActive() {
     return activeTracking;
 }
 
-function startTracking() {
-    event.preventDefault();
-} 
-
 function ResetCounter() {
     actCount = 0;
     trCount = 0;
@@ -241,6 +237,7 @@ function SendRequest( message ) {
 }
 
 $('#startTrackingButton').live("click", function(event) {
+	event.preventDefault();
     ResetCounter();
     
     //check if the route, which should be tracked is saved to the database
