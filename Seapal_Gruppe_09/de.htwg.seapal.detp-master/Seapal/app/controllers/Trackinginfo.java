@@ -86,11 +86,10 @@ public class Trackinginfo extends Controller {
 		int nextId = 0;
 
 		try {
-			query = conn.createStatement();
-			
-			query.execute("SELECT * FROM seapal.tracking WHERE  tracknr = " + data.get("tracknr"));
+			query = conn.createStatement();		
+			String sql = "SELECT * FROM seapal.tracking WHERE  tracknr = " + data.get("tracknr");		
+			result = query.executeQuery(sql);
 
-			result = query.executeQuery("SHOW TABLE STATUS FROM seapal LIKE 'tracking'");
 			while (result.next()) {
 				respJSON.put("tracknr", Integer.toString(result.getInt("tracknr")));
 				respJSON.put("tnr", Integer.toString(result.getInt("tnr")));
@@ -174,6 +173,7 @@ public class Trackinginfo extends Controller {
 					row.append("</tr>");
 
 					returnData += row.toString();
+
 					conn.close();
 				}
 			} catch (Exception e) {
