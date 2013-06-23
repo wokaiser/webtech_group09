@@ -10,14 +10,19 @@ $(function() {
         return pattern.test(emailAddress);
     };
     
-    function checkInputLength(value, name, id, len) {
-        if ( value.length == 0 && len == null) {
+    function checkInputLength(value, name, id, minLen, maxLen) {
+        if ( value.length == 0 && minLen == null) {
             document.getElementById("txt_"+id).innerHTML = "Input required";
             document.getElementById(id).style.display = "block";
             return false;
         }
-        else if ( value.length < len) {
-            document.getElementById("txt_"+id).innerHTML = name+" should have at least "+len+" characters."
+        else if ( value.length < minLen) {
+            document.getElementById("txt_"+id).innerHTML = name+" should have at least "+minLen+" characters."
+            document.getElementById(id).style.display = "block";
+            return false;
+        } 
+        else if ( value.length > maxLen) {
+            document.getElementById("txt_"+id).innerHTML = name+" should have at most "+maxLen+" characters."
             document.getElementById(id).style.display = "block";
             return false;
         } else {
@@ -38,7 +43,7 @@ $(function() {
     }
        
     $("#new_account_user").keyup(function(){
-        if (checkInputLength($(this).val(), "Username", "error_new_account_user", 6)) {
+        if (checkInputLength($(this).val(), "Username", "error_new_account_user", 6, 10)) {
             //check if the user already exist
             $.getJSON(
                 "json_user_check.php",
@@ -48,7 +53,6 @@ $(function() {
                         document.getElementById("error_new_account_user").style.display = "block";
                         return false;
                     } else {
-                        document.getElementById("error_new_account_user").style.display = "none";
                         return true;
                     }
                 }
@@ -57,11 +61,11 @@ $(function() {
     });
     
      $("#new_account_vorname").keyup(function(){
-        checkInputLength($(this).val(), "Fist name", "error_new_account_vorname", null);
+        checkInputLength($(this).val(), "Fist name", "error_new_account_vorname", null, 10);
     });
     
     $("#new_account_nachname").keyup(function(){
-        checkInputLength($(this).val(), "Last name", "error_new_account_nachname", null);
+        checkInputLength($(this).val(), "Last name", "error_new_account_nachname", null, 10);
     });
     
     $("#new_account_email").keyup(function(){
@@ -69,7 +73,7 @@ $(function() {
     });
     
     $("#new_account_pw").keyup(function(){
-        checkInputLength($(this).val(), "Password", "error_new_account_pw", 5);
+        checkInputLength($(this).val(), "Password", "error_new_account_pw", 5, 20);
     });
 
 	$('#new_account_signup').click(function(event) {
@@ -89,10 +93,10 @@ $(function() {
 		};
 		today = yyyy + '-' + mm + '-' + dd;
 
-        valid = checkInputLength($('#new_account_user').val(), "Username", "error_new_account_user", 6)
-             && checkInputLength($('#new_account_vorname').val(), "Fist name", "error_new_account_vorname", null)
-             && checkInputLength($('#new_account_nachname').val(), "Last name", "error_new_account_nachname", null)
-             && checkInputLength($('#new_account_pw').val(), "Password", "error_new_account_pw", 5)
+        valid = checkInputLength($('#new_account_user').val(), "Username", "error_new_account_user", 6, 10)
+             && checkInputLength($('#new_account_vorname').val(), "Fist name", "error_new_account_vorname", null, 10)
+             && checkInputLength($('#new_account_nachname').val(), "Last name", "error_new_account_nachname", null, 10)
+             && checkInputLength($('#new_account_pw').val(), "Password", "error_new_account_pw", 5, 20)
              && checkAccountEmail($('#new_account_email').val());
         
 		if(!valid) {
