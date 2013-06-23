@@ -163,7 +163,7 @@ public class Trip extends Controller {
 						response.append("\"2\":\"" + result.getString("titel") + "\",");
 						response.append("\"3\":\"" + result.getString("von") + "\",");
 						response.append("\"4\":\"" + result.getString("nach") + "\",");
-						response.append("\"5\":\"" + Integer.toString(result.getInt("lastZoom")) + "\",");
+						response.append("\"5\":\"" + result.getInt("lastZoom") + "\",");
 						response.append("\"6\":\"" + Float.toString(result.getFloat("lastLat")) + "\",");
 						response.append("\"7\":\"" + Float.toString(result.getFloat("lastLng")) + "\",");
 						response.append("\"tnr\":\"" + Integer.toString(result.getInt("tnr")) + "\",");
@@ -171,9 +171,9 @@ public class Trip extends Controller {
 						response.append("\"titel\":\"" + result.getString("titel") + "\",");
 						response.append("\"von\":\"" + result.getString("von") + "\",");
 						response.append("\"nach\":\"" + result.getString("nach") + "\",");
-						response.append("\"lastZoom\":\"" + Integer.toString(result.getInt("lastZoom")) + "\",");
-						response.append("\"lastLat\":\"" + Float.toString(result.getFloat("lastLat")) + "\",");
-						response.append("\"lastLng\":\"" + Float.toString(result.getFloat("lastLng")) + "\"");
+						response.append("\"lastZoom\":" + result.getInt("lastZoom") + ",");
+						response.append("\"lastLat\":" + result.getFloat("lastLat") + ",");
+						response.append("\"lastLng\":" + result.getFloat("lastLng") + "");
 						response.append("}");
 					} 
 		//	}
