@@ -112,51 +112,48 @@ public class Trip extends Controller {
     return ok(respJSON);
   }
 
-  public static Result index() {
-    Connection conn = DB.getConnection();
-		
-		String data = "";
-    
-		if(conn != null)
-		{
-            Statement query;
-            ResultSet result;
-            
-            try {
-            	
-	            query = conn.createStatement();
-	 
-	            String sql = "SELECT * " + "FROM seapal.tripinfo ";
-	        
-	            result = query.executeQuery(sql);
-	        
-	            while (result.next()) {
-              
-	        		  StringBuilder row = new StringBuilder();
+	public static Result index() {
+		Connection conn = DB.getConnection();
+		DynamicForm data = form().bindFromRequest();
+		String responseData = "";
+		int bnr = Integer.parseInt(session().get("bnr"));
 
-                row.append("<tr class='selectable' id='" + result.getString("tnr") + "'>");
-                row.append("<td>" + result.getString("titel") + "</td>");
-                row.append("<td>" + result.getString("von") + "</td>");
-                row.append("<td>" + result.getString("nach") + "</td>");
-                row.append("<td style='width:30px; text-align:left;'><div class='btn-group'>");
-                row.append("<a class='btn btn-small view tracking' id='" + result.getString("tnr")
-                  + "'><span><i class='icon-eye-open'></i></span></a>");
-                row.append("<a class='btn btn-small remove tracking' id='" + result.getString("tnr")
-                  + "'><span><i class='icon-remove'></i></span></a>");
-                row.append("<a class='btn btn-small redirect' id='" + result.getString("tnr")
-                  + "' href='app_tripinfo.html?tnr=" + result.getString("tnr")
-                  + "'><span><i class='icon-chevron-right'></i></span></a>");
-                row.append("</div></td>");
-                row.append("</tr>");
-            
-		            data += row.toString();
-			    }
-               
-	       } catch (Exception e) {
-	    	   e.printStackTrace();
-	       }
-    }
-    return ok(trip.render(header.render(), navigation.render("app_map"), navigation_app.render("app_trip"), data));
-  }
-  
+		if(conn != null) {
+			Statement query;
+			ResultSet result;
+
+			
+			try {
+				query = conn.createStatement();
+				String sql = "SELECT * " + "FROM seapal.tripinfo WHERE bnr = " + bnr;
+				result = query.executeQuery(sql);
+
+				while (result.next()) {
+					StringBuilder row = new StringBuilder();
+
+					row.append("<tr class='selectable' id='" + result.getString("tnr") + "'>");
+					row.append("<td>" + result.getString("titel") + "</td>");
+					row.append("<td>" + result.getString("von") + "</td>");
+					row.append("<td>" + result.getString("nach") + "</td>");
+					row.append("<td style='width:30px; text-align:left;'><div class='btn-group'>");
+					row.append("<a class='btn btn-small view tracking' id='" + result.getString("tnr")
+						+ "'><span><i class='icon-eye-open'></i></span></a>");
+					row.append("<a class='btn btn-small remove tracking' id='" + result.getString("tnr")
+						+ "'><span><i class='icon-remove'></i></span></a>");
+					row.append("<a class='btn btn-small redirect' id='" + result.getString("tnr")
+						+ "' href='app_tripinfo.html?tnr=" + result.getString("tnr")
+						+ "'><span><i class='icon-chevron-right'></i></span></a>");
+					row.append("</div></td>");
+					row.append("</tr>");
+
+					responseData += row.toString();
+				}
+
+			} catch (Exception e) {
+			e.printStackTrace();
+			}
+		}
+	return ok(trip.render(header.render(), navigation.render("app_map"), navigation_app.render("app_trip"), responseData));
+	}
+
 }
