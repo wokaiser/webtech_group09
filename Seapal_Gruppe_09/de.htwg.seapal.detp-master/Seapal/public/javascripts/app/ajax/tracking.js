@@ -25,10 +25,10 @@ $(function() {
                         //push the new track to the trackings array
                         session.map.routes.push(newTracking);
                         //the track will now be available in the map, display a message
-                        displayMessageBox("successMessageBox", "The track will now be displayed in the map.", "18em", "-9em");
+                        displayMessageBox("successMessageBox", "Track "+tracknrValue+" will now be displayed in the map.", "18em", "-9em");
                     } else {
                         //the track is already in the map, display info message
-                        displayMessageBox("infoMessageBox", "The track will be already displayed in the map.", "20em", "-10em");
+                        displayMessageBox("infoMessageBox", "Track "+tracknrValue+" will be already displayed in the map.", "20em", "-10em");
                     }
             
                 }, "json");

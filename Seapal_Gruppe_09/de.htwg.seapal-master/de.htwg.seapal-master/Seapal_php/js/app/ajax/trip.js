@@ -2,15 +2,16 @@ $(function() {
     var routeLoad = null;
 	var tnrValue = null;
     
-	$('a.view').live("click", function(event) {  
+	$('a.view').live("click", function(event) { 
         routeLoad = null;
         tnrValue = $(this).attr('id');
         //get the tripinfo json object
         $.getJSON(
-            "json_app_tripinfo.php",
+            "/app_tripinfo.html",
             { tnr: tnrValue}, function(route){
                 routeLoad = route;
-                jQuery.get("app_trip_load.php", {'tnr': tnrValue}, function(data) {
+                jQuery.get("/app_trip_load.html", {'tnr': tnrValue}, function(data) {
+
                     //create a new route
                     newRoute = getNewRoute();
                     //set the marker to the route
@@ -22,13 +23,14 @@ $(function() {
                         for (var i in TRIP_INFO_LOAD) {
                             newRoute[TRIP_INFO_LOAD[i]] = data[TRIP_INFO_LOAD[i]];
                         }
+
                         //push the new Route to the routes array
                         session.map.routes.push(newRoute);
                         //the route will now be available in the map, display a message
-                        displayMessageBox("successMessageBox", "The route will now be displayed in the map.", "18em", "-9em");
+                        displayMessageBox("successMessageBox", "Route "+tnrValue+" will now be displayed in the map.", "19em", "-9.5em");
                     } else {
                         //the route is already in the map, display info message
-                        displayMessageBox("infoMessageBox", "The route will be already displayed in the map.", "20em", "-10em");
+                        displayMessageBox("infoMessageBox", "Route "+tnrValue+" will be already displayed in the map.", "20em", "-10em");
                     }
             
                 }, "json");

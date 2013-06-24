@@ -24,7 +24,7 @@ INSERT INTO seapal.wegpunkte (tnr, name, lat, lng) VALUES (2, "Marker 4", 47.660
 INSERT INTO seapal.wegpunkte (tnr, name, lat, lng) VALUES (2, "Marker 5", 47.66, 9.17916667);
 
 /* insert tracking */
-INSERT INTO seapal.tracking (tnr, trackTitel, skipper, crew, tstart, tende, tdauer, lastZoom, lastLat, lastLng) VALUES (1, "Nemos Fahrt", "Cpt. Nemo", "Tick Trick Track", DATE("2012-07-02"), DATE("2012-07-02"), 160, 12, 47.66, 9.17916667);
+INSERT INTO seapal.tracking (tnr, trackTitel, skipper, crew, tstart, tende, tdauer, lastZoom, lastLat, lastLng) VALUES (1, "Nemos Fahrt", "Cpt. Nemo", "Tick Trick Track", "2012-07-02", "2012-07-02", "1:12:30", 12, 47.66, 9.17916667);
 
 /* insert into tracking points */
 INSERT INTO seapal.trackingPoint (tracknr, marker, lat, lng, btm, dtm, sog, cog, manoever, vorsegel, wdate, wtime, motor, tank, windstaerke, windrichtung, luftdruck, temperatur, wolken, regen, wellenhoehe, wellenrichtung) VALUES

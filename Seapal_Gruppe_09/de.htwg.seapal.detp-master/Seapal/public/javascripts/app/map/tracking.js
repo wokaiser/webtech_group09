@@ -71,6 +71,19 @@ function addTrackingPoint(lat, lng) {
             session.map.routes[activeRouteInSession].marker[actCount].regen = "See clouds";
             session.map.routes[activeRouteInSession].marker[actCount].wellenrichtung = "121 °";
             session.map.routes[activeRouteInSession].marker[actCount].wellenhoehe = "1 m";
+            //calculate the duration of the tracking
+            var endOfTrackingTime = new Date().getTime() / 1000;
+            var timeleft = Math.floor(endOfTrackingTime - startOfTrackingTime);
+            var hour = Math.floor( timeleft / 3600 );
+            var minute = Math.floor( (timeleft%3600) / 60 );
+            var second = Math.floor( timeleft%60 );
+            session.map.routes[activeRouteInSession].tdauer = hour+":"+minute+":"+second;
+            
+            //save end of tracking date
+            session.map.routes[activeRouteInSession].tende = new Date().today();
+            
+            document.getElementById("tdauer").value = session.map.routes[activeRouteInSession]["tdauer"];
+            document.getElementById("tende").value = session.map.routes[activeRouteInSession]["tende"];
             actCount++;
         }
     });    
@@ -143,18 +156,7 @@ function trackRoutePost(data) {
     }
 }
 
-function trackingFinished() {
-    //save end of tracking date
-    session.map.routes[activeRouteInSession].tende = new Date().today();
-
-    //calculate the duration of the tracking
-    var endOfTrackingTime = new Date().getTime() / 1000;
-    var timeleft = Math.floor(endOfTrackingTime - startOfTrackingTime);
-    var hour = Math.floor( timeleft / 3600 );
-    var minute = Math.floor( (timeleft%3600) / 60 );
-    var second = Math.floor( timeleft%60 );
-    session.map.routes[activeRouteInSession].tdauer = hour+":"+minute+":"+second;
-    
+function trackingFinished() {   
     //load the trip info from the session to the input boxes.
     for (var i in TRACKING_INFO) {
         document.getElementById(TRACKING_INFO[i]).value = session.map.routes[activeRouteInSession][TRACKING_INFO[i]];
@@ -250,7 +252,7 @@ $('#startTrackingButton').live("click", function(event) {
     //disable map interaction
     disableMap();
     //the track is already in the map, display info message
-    displayMessageBox("infoMessageBox", "Tracking starts now. Context menus temporarily disabled.", "28em", "-14em");
+    displayMessageBox("infoMessageBox", "Tracking starts now. Context menus are temporary disabled.", "28em", "-14em");
     activeRoute = session.map.routes[activeRouteInSession];
     //get start time of tracking
     startOfTrackingTime = new Date().getTime() / 1000;

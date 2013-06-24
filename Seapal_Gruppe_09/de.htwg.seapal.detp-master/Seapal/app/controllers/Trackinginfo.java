@@ -23,12 +23,6 @@ public class Trackinginfo extends Controller {
 
 		try {
 			query = conn.createStatement();
-			String duration = data.get("tdauer");
-			String[] durationParts = duration.split(":");
-			int hours = Integer.parseInt(durationParts[0]);  
-			int minutes = Integer.parseInt(durationParts[1]);  
-			int seconds = Integer.parseInt(durationParts[2]);  
-			int durationSeconds = (seconds + (60 * minutes) + (3600 * hours));  
 			
 			query.execute("INSERT INTO seapal.tracking (tnr, trackTitel, skipper, crew, tstart, tende, tdauer, lastZoom, lastLat, lastLng) VALUES (" + data.get("tnr") + ","
 			+ "'" + data.get("trackTitel") + "',"
@@ -36,7 +30,7 @@ public class Trackinginfo extends Controller {
 			+ "'" + data.get("crew") + "',"
 			+ "'" + data.get("tstart") + "',"
 			+ "'" + data.get("tende") + "',"
-			+ "'" + durationSeconds + "',"
+			+ "'" + data.get("tdauer") + "',"
 			+ "'" + data.get("lastZoom") + "',"
 			+ "'" + data.get("lastLat") + "',"
 			+ "'" + data.get("lastLng") + "');");
@@ -157,6 +151,7 @@ public class Trackinginfo extends Controller {
 					row = new StringBuilder();
 
 					row.append("<tr class='selectable'>");
+                    row.append("<td>" + result.getString("tracknr") + "</td>");
 					row.append("<td>" + result.getString("trackTitel") + "</td>");
 					row.append("<td>" + result.getString("skipper") + "</td>");
 					row.append("<td>" + result.getString("crew") + "</td>");

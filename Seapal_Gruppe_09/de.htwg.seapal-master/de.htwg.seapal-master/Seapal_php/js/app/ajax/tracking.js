@@ -7,10 +7,10 @@ $(function() {
         tracknrValue = $(this).attr('id');      
         //get the trackinfoinfo json object
         $.getJSON(
-            "json_app_trackinginfo.php",
-            { tracknr: tracknrValue}, function(tracking){
+            "/app_track_load.html",
+            { tnr: tracknrValue}, function(tracking){
                 trackingLoad = tracking;
-                jQuery.get("app_trackinginfo_load.php", {'tracknr': tracknrValue}, function(data) {
+                jQuery.get("/app_trackinginfo_load.html", {'tracknr': tracknrValue}, function(data) {
                     //create a new track
                     newTracking = getNewTracking();
                     //set the trackingpoints to the track
@@ -25,10 +25,10 @@ $(function() {
                         //push the new track to the trackings array
                         session.map.routes.push(newTracking);
                         //the track will now be available in the map, display a message
-                        displayMessageBox("successMessageBox", "The track will now be displayed in the map.", "18em", "-9em");
+                        displayMessageBox("successMessageBox", "Track "+tracknrValue+" will now be displayed in the map.", "18em", "-9em");
                     } else {
                         //the track is already in the map, display info message
-                        displayMessageBox("infoMessageBox", "The track will be already displayed in the map.", "20em", "-10em");
+                        displayMessageBox("infoMessageBox", "Track "+tracknrValue+" will be already displayed in the map.", "20em", "-10em");
                     }
             
                 }, "json");
@@ -56,7 +56,7 @@ $(function() {
 	$('a.remove.tracking').live("click", function(event) {
 		var buttonID = this;
 	 	var id = $(this).attr('id');
-		jQuery.post("app_trackinginfo_delete.php", { "tracknr": id }, function(data) {
+		jQuery.post("/app_trackinginfo_delete.html", { "tracknr": id }, function(data) {
 		 
 		 	if (data['tracknr'].match(/Error/)) {
 		    	

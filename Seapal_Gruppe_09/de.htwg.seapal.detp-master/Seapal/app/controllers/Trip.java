@@ -208,7 +208,8 @@ public class Trip extends Controller {
 					StringBuilder row = new StringBuilder();
 
 					row.append("<tr class='selectable' id='" + result.getString("tnr") + "'>");
-					row.append("<td>" + result.getString("titel") + "</td>");
+					row.append("<td>" + result.getString("tnr") + "</td>");
+                    row.append("<td>" + result.getString("titel") + "</td>");
 					row.append("<td>" + result.getString("von") + "</td>");
 					row.append("<td>" + result.getString("nach") + "</td>");
 					row.append("<td style='width:30px; text-align:left;'><div class='btn-group'>");

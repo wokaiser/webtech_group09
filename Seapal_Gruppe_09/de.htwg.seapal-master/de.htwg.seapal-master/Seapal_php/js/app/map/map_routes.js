@@ -387,7 +387,7 @@ function addRouteMarker(position, index) {
             session.map.routes[activeRouteInSession].marker.splice(index, 0, newMarker);
         }
     }
-    updateRouteMenuEntries();
+    if (!onInitialize) { updateRouteMenuEntries(); }
     updateRouteDistance();
 }
 
@@ -461,37 +461,31 @@ function updateRouteDistance() {
 function updateRouteMenuEntries() {
     //update route menu entries just in route mode
     if (currentMode != MODE.ROUTE) return;
-    //Get near locations
-    var startPosition = new google.maps.LatLng(session.map.routes[activeRouteInSession].marker[0].lat, session.map.routes[activeRouteInSession].marker[0].lng);
-    var startPositionString = "";
 
     //get the start positon
-    geocoder.geocode({'latLng': startPosition}, function(results, status) {
+    geocoder.geocode({'latLng': new google.maps.LatLng(session.map.routes[activeRouteInSession].marker[0].lat, session.map.routes[activeRouteInSession].marker[0].lng)}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
             startPositionString = getLocationString(results);
             if (startPositionString != "") {
                 $('#von').val(startPositionString);
                 session.map.routes[activeRouteInSession].von = startPositionString;
-            }            
-        }
-
-        //if more than one marker is set, the city of the last marker should be searched
-        if (session.map.routes[activeRouteInSession].marker.length > 1) {
-            var stopPosition = new google.maps.LatLng(session.map.routes[activeRouteInSession].marker[session.map.routes[activeRouteInSession].marker.length-1].lat, session.map.routes[activeRouteInSession].marker[session.map.routes[activeRouteInSession].marker.length-1].lng);
-            var stopPositionString = "";
-            
-            //get the stop position
-            geocoder.geocode({'latLng': stopPosition}, function(results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    stopPositionString = getLocationString(results);
-                    if (stopPositionString != "") {
-                        $('#nach').val(stopPositionString);
-                        session.map.routes[activeRouteInSession].nach = stopPositionString;
-                    }
-                }
-            });
+            }         
         }
     });
+    
+    //if more than one marker is set, the city of the last marker should be searched
+    if (session.map.routes[activeRouteInSession].marker.length > 1) {
+        //get the stop position
+        geocoder.geocode({'latLng': new google.maps.LatLng(session.map.routes[activeRouteInSession].marker[session.map.routes[activeRouteInSession].marker.length-1].lat, session.map.routes[activeRouteInSession].marker[session.map.routes[activeRouteInSession].marker.length-1].lng)}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var stopPositionString = getLocationString(results);
+                if (stopPositionString != "") {
+                    $('#nach').val(stopPositionString);
+                    session.map.routes[activeRouteInSession].nach = stopPositionString;
+                }
+            }
+        });
+    }
 }
 
 //draw trackingInfobox
@@ -769,7 +763,13 @@ function saveRoute() {
         disableMap();
         //save the zoom level, at which the user looked at this route.
         session.map.routes[activeRouteInSession].lastZoom = map.getZoom();
-        jQuery.post("app_trip_insert.php", session.map.routes[activeRouteInSession], function(data) { 
+        jQuery.post("/app_trip_insert.html", {
+						"titel":session.map.routes[activeRouteInSession].titel,
+						"von":session.map.routes[activeRouteInSession].von,
+						"nach":session.map.routes[activeRouteInSession].nach,
+						"lastZoom":session.map.routes[activeRouteInSession].lastZoom,
+						"lastLat":session.map.routes[activeRouteInSession].lastLat,
+						"lastLng":session.map.routes[activeRouteInSession].lastLng}, function(data) { 
             if (data['tnr'].match(/Error/)) {                
                 $('#dialogTitle').text('Error');
                 $('#dialogMessage').text(data['tnr'].replace(/Error: /, ""));
@@ -780,7 +780,7 @@ function saveRoute() {
                 session.map.routes[activeRouteInSession].tnr = data['tnr'];
                 session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tnr = data['tnr'];
                 //rekursive call to insert all markers of the route to the database
-                jQuery.post("app_tripinfo_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], tripRoutePost, "json");
+                jQuery.post("/app_tripinfo_insert.html", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], tripRoutePost, "json");
             }                
         }, "json");
     }
@@ -798,7 +798,7 @@ function tripRoutePost(data) {
         if (activeRouteMarkerInSession < session.map.routes[activeRouteInSession].marker.length)
         {
             session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tnr = session.map.routes[activeRouteInSession].marker[0].tnr;
-            jQuery.post("app_tripinfo_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], tripRoutePost, "json");
+            jQuery.post("/app_tripinfo_insert.html", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], tripRoutePost, "json");
         } else {
             $('#dialogTitle').text('Success');
             $('#dialogMessage').text("Eintrag wurde erfolgreich gespeichert.");
@@ -812,21 +812,18 @@ function tripRoutePost(data) {
 function getLocationString(location) {
     var locationString = "";
     locationString += parseLocation(location, "locality");
-    if (locationString != "") {
-        locationString += " ("
-        locationString += parseLocation(location, "country");
-        locationString += ")"
-    } else {
-        locationString += parseLocation(location, "country");
-    }
+    if (locationString == "") { locationString += parseLocation(location, "postal_code"); }
+    if (locationString == "") { locationString += parseLocation(location, "country"); }
     return locationString;
 }
 
 function parseLocation(location, type) {
-    // iterate through the results to the city
-    for (var i in location[0].address_components) {
-        if (location[0].address_components[i].types[0] == type) {
-            return location[0].address_components[i].long_name;
+    //iterate through all location objects
+    for (var l in location) {
+        for (var a in location[l].types) {
+            if (location[l].types[a] == type) {
+                return location[l].formatted_address;
+            }
         }
     }
     return "";
@@ -868,7 +865,7 @@ function getRouteByMarker(marker) {
 /*function to get info of a trip from the html to the cookie-less session variable*/
 $(document).ready(function() {
     /* Check for on change event for one of the trip info input boxes*/
-    $('.routeInfoInput').change(function(e) {
+    $('.routeInfoInput').keyup(function(e) {
         //if the titel was changed, a new route info box should be drawn.
         if ("titel" == this.id) {
             //remove the old marker info box and draw a new at the coordinates of the first route marker
@@ -881,7 +878,7 @@ $(document).ready(function() {
     });
     
     /* Check for on change event for one of the track info input boxes*/
-    $('.trackInfoInput').change(function(e) {
+    $('.trackInfoInput').keyup(function(e) {
         //if the titel was changed, a new route info box should be drawn.
         if ("trackTitel" == this.id) {
             //remove the old marker info box and draw a new at the coordinates of the first route marker

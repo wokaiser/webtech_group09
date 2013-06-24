@@ -10,9 +10,14 @@ function trackingActive() {
     return activeTracking;
 }
 
-function startTracking() {
-    event.preventDefault();
-} 
+function ResetCounter() {
+    actCount = 0;
+    trCount = 0;
+}
+
+function convertToCelcius(kelvin) {
+    return (Math.round((kelvin - 273) * 100) / 100);
+}
 
 function startNewTracking() {
     startNewRoute(new google.maps.LatLng(activeRoute.marker[0].lat, activeRoute.marker[0].lng), MODE.TRACKING, activeRoute.titel);
@@ -66,6 +71,19 @@ function addTrackingPoint(lat, lng) {
             session.map.routes[activeRouteInSession].marker[actCount].regen = "See clouds";
             session.map.routes[activeRouteInSession].marker[actCount].wellenrichtung = "121 °";
             session.map.routes[activeRouteInSession].marker[actCount].wellenhoehe = "1 m";
+            //calculate the duration of the tracking
+            var endOfTrackingTime = new Date().getTime() / 1000;
+            var timeleft = Math.floor(endOfTrackingTime - startOfTrackingTime);
+            var hour = Math.floor( timeleft / 3600 );
+            var minute = Math.floor( (timeleft%3600) / 60 );
+            var second = Math.floor( timeleft%60 );
+            session.map.routes[activeRouteInSession].tdauer = hour+":"+minute+":"+second;
+            
+            //save end of tracking date
+            session.map.routes[activeRouteInSession].tende = new Date().today();
+            
+            document.getElementById("tdauer").value = session.map.routes[activeRouteInSession]["tdauer"];
+            document.getElementById("tende").value = session.map.routes[activeRouteInSession]["tende"];
             actCount++;
         }
     });    
@@ -88,7 +106,19 @@ function saveTrackingRoute() {
         $('#messageBox').modal('show');
     } else {
         disableMap();
-        jQuery.post("app_trackinginfo_insert.php", session.map.routes[activeRouteInSession], function(data) {            
+        jQuery.post("/app_trackinginfo_insert.html", 
+			{
+				"tnr" : session.map.routes[activeRouteInSession].tnr,
+				"trackTitel" : session.map.routes[activeRouteInSession].trackTitel,
+				"skipper" : session.map.routes[activeRouteInSession].skipper,
+				"crew" : session.map.routes[activeRouteInSession].crew,
+				"tstart" : session.map.routes[activeRouteInSession].tstart,
+				"tende" : session.map.routes[activeRouteInSession].tende,
+				"tdauer" : session.map.routes[activeRouteInSession].tdauer,
+				"lastZoom" : session.map.routes[activeRouteInSession].lastZoom,
+				"lastLat" : session.map.routes[activeRouteInSession].lastLat,
+				"lastLng" : session.map.routes[activeRouteInSession].lastLng
+			}, function(data) {            
             if (data['tracknr'].match(/Error/)) {                
                 $('#dialogTitle').text('Error');
                 $('#dialogMessage').text(data['tracknr'].replace(/Error: /, ""));
@@ -98,7 +128,7 @@ function saveTrackingRoute() {
                 activeRouteMarkerInSession = 0;
                 session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tracknr = data['tracknr'];
                 //rekursive call to insert all markers of the route to the database
-                jQuery.post("app_tracking_point_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], trackRoutePost, "json");
+                jQuery.post("/app_tracking_point_insert.html", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], trackRoutePost, "json");
             }                
         }, "json");
     }
@@ -116,7 +146,7 @@ function trackRoutePost(data) {
         if (activeRouteMarkerInSession < session.map.routes[activeRouteInSession].marker.length)
         {
             session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession].tracknr = session.map.routes[activeRouteInSession].marker[0].tracknr;
-            jQuery.post("app_tracking_point_insert.php", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], trackRoutePost, "json");
+            jQuery.post("/app_tracking_point_insert.html", session.map.routes[activeRouteInSession].marker[activeRouteMarkerInSession], trackRoutePost, "json");
         } else {
             $('#dialogTitle').text('Success');
             $('#dialogMessage').text("Track successfully saved.");
@@ -126,18 +156,7 @@ function trackRoutePost(data) {
     }
 }
 
-function trackingFinished() {
-    //save end of tracking date
-    session.map.routes[activeRouteInSession].tende = new Date().today();
-
-    //calculate the duration of the tracking
-    var endOfTrackingTime = new Date().getTime() / 1000;
-    var timeleft = Math.floor(endOfTrackingTime - startOfTrackingTime);
-    var hour = Math.floor( timeleft / 3600 );
-    var minute = Math.floor( (timeleft%3600) / 60 );
-    var second = Math.floor( timeleft%60 );
-    session.map.routes[activeRouteInSession].tdauer = hour+":"+minute+":"+second;
-    
+function trackingFinished() {   
     //load the trip info from the session to the input boxes.
     for (var i in TRACKING_INFO) {
         document.getElementById(TRACKING_INFO[i]).value = session.map.routes[activeRouteInSession][TRACKING_INFO[i]];
@@ -159,7 +178,6 @@ Date.prototype.timeNow = function(){
 
 /* ------------------------------------- ship movement simulation ------------------------------------- */
 $(function() {
-    console.log('Connecting...');
     Server = new FancyWebSocket('ws://localhost:9300');
     
     // maybe useful
@@ -169,17 +187,17 @@ $(function() {
 
     //Let the user know we're connected
     Server.bind('open', function() {
-        console.log( "Connected" );
+        //console.log( "Connected" );
     });
 
     //OH NO! Disconnection occurred.
     Server.bind('close', function() {
-        console.log( "Disconnected" );
+        //console.log( "Disconnected" );
     });
 
     //Log any messages sent from server
     Server.bind('message', function( message ) {
-        console.log("Received from server: " + message);
+        //console.log("Received from server: " + message);
         if (message != "done") {
             UpdateShipMarkerPosition( message );
         } else {
@@ -221,19 +239,20 @@ function SendRequest( message ) {
 }
 
 $('#startTrackingButton').live("click", function(event) {
+	event.preventDefault();
     ResetCounter();
     
     //check if the route, which should be tracked is saved to the database
     if (null == session.map.routes[activeRouteInSession].tnr) {
         $('#dialogTitle').text('Error');
-        $('#dialogMessage').text("You should save your route, before you can start tracking.");
+        $('#dialogMessage').text("You should save your route before you start tracking.");
         $('#messageBox').modal('show'); 
         return;
     }
     //disable map interaction
     disableMap();
     //the track is already in the map, display info message
-    displayMessageBox("infoMessageBox", "Tracking start now and context menu's are temporary disabled.", "28em", "-14em");
+    displayMessageBox("infoMessageBox", "Tracking starts now. Context menus are temporary disabled.", "28em", "-14em");
     activeRoute = session.map.routes[activeRouteInSession];
     //get start time of tracking
     startOfTrackingTime = new Date().getTime() / 1000;
@@ -242,12 +261,3 @@ $('#startTrackingButton').live("click", function(event) {
 
     SendRequest(JSON.stringify(activeRoute.marker));    
 });
-
-function ResetCounter() {
-    actCount = 0;
-    trCount = 0;
-}
-
-function convertToCelcius(kelvin) {
-    return (Math.round((kelvin - 273) * 100) / 100);
-}
