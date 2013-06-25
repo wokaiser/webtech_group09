@@ -267,12 +267,12 @@ $(function () {
             }
         },
         items: {
-            "marker": { name: "Markierung setzen", icon: "marker" },
-            "startroute": { name: "Neue Route setzen", icon: "startroute" },
-            "distance": { name: "Distanz messen", icon: "distance" },
-            "destination": { name: "Zum Ziel machen", icon: "destination" },
+            "marker": { name: "Set marker", icon: "marker" },
+            "startroute": { name: "Start new route", icon: "startroute" },
+            "distance": { name: "Measure distance", icon: "distance" },
+            "destination": { name: "Set as target", icon: "destination" },
             "sep1": "---------",
-            "delete": { name: "L&ouml;schen", icon: "delete" }
+            "delete": { name: "Delete", icon: "delete" }
         }
     });
 });
@@ -295,9 +295,9 @@ $(function () {
             }
         },
         items: {
-            "destination": { name: "Zum Ziel machen", icon: "destination" },
+            "destination": { name: "Set as target", icon: "destination" },
             "sep1": "---------",
-            "delete": { name: "L&ouml;schen", icon: "delete" }
+            "delete": { name: "Delete", icon: "delete" }
         }
     });
 });

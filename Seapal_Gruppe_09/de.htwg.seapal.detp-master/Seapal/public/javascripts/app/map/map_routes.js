@@ -95,8 +95,8 @@ $(function () {
                 items: {
                     title           : {name: "<b>Marker "+(activeRouteMarkerInSession+1)+"</b>",  icon: "marker"},
                     separator1: "-----",
-                    "deleteMarker"  : { name : "Wegpunkt l&ouml;schen", icon: "deleteMarker", callback: deleteMarkerCallback},
-                    "addMarker"     : { name : "Wegpunkt hinzuf&uuml;gen", icon: "addMarker", callback: addMarkerCallback},
+                    "deleteMarker"  : { name : "Delete waypoint", icon: "deleteMarker", callback: deleteMarkerCallback},
+                    "addMarker"     : { name : "Add waypoint", icon: "addMarker", callback: addMarkerCallback},
                 }
             };
         }
