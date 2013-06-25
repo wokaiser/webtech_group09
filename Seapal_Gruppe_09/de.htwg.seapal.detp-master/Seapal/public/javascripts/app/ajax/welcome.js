@@ -1,7 +1,7 @@
 $(function() {
 
     function initInput(id) {
-        document.getElementById(id).innerHTML = ""
+        document.getElementById(id).value = ""
         document.getElementById("error_"+id).style.display = "none";
     }
     
