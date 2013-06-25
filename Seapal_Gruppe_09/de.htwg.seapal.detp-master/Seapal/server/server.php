@@ -5,6 +5,7 @@ set_time_limit(0);
 // include the web sockets server script (the server is started at the far bottom of this file)
 require 'class.PHPWebSocket.php';
 
+echo("Server started");
 
 // when a client sends data to the server
 function wsOnMessage($clientID, $message, $messageLength, $binary) {

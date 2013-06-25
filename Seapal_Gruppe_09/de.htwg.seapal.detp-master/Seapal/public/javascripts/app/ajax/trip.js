@@ -62,22 +62,22 @@ $(function() {
 	$('a.remove').live("click", function(event) {
 		var buttonID = this;
 	 	var tripnr = $(this).attr('id');
-		jQuery.post("app_trip_delete.php", { "tnr": tripnr }, function(data) { 
-		
-			if (data['tnr'].match(/Error/)) {
-		    	
-		    	$('#dialogTitle').text('Error');
-		    	$('#dialogMessage').text(data['tnr'].replace(/Error: /, ""));
-		    	
-	    	} else {
-		    	
-		    	$(buttonID).parents('tr').remove();  
-	    
-		    	$('#dialogTitle').text('Succes');
-		    	$('#dialogMessage').text("Eintrag wurde erfolgreich gelöscht.");
-	    	}
-			
-			$('#messageBox').modal('show');
-		}, "json");		
+        jQuery.get("/app_trip_delete.html", { "tnr": tripnr }, function(data) {
+         
+            if (data['tnr'].match(/Error/)) {
+                
+                $('#dialogTitle').text('Error');
+                $('#dialogMessage').text(data['tnr'].replace(/Error: /, ""));
+                
+            } else {
+                
+                $(buttonID).parents('tr').remove();  
+        
+                $('#dialogTitle').text('Succes');
+                $('#dialogMessage').text("Eintrag wurde erfolgreich gelöscht.");
+            }
+            
+            $('#messageBox').modal('show');
+        }, "json");	
 	});
 });
