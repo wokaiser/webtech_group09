@@ -46,9 +46,9 @@ $(function() {
         if (checkInputLength($(this).val(), "Username", "error_new_account_user", 6, 10)) {
             //check if the user already exist
             $.getJSON(
-                "json_user_check.php",
+                "json_user_check.html",
                 { username: $(this).val()}, function(data){
-                    if (0 != data.length) {
+                    if ('Exists' == data.status) {
                         document.getElementById("txt_error_new_account_user").innerHTML = "Username already exist. Please choose another username."
                         document.getElementById("error_new_account_user").style.display = "block";
                         return false;
@@ -108,9 +108,10 @@ $(function() {
         
         //check if the user already exist
         $.getJSON(
-            "json_user_check.php",
+            "json_user_check.html",
             { username: $('#new_account_user').val()}, function(data){
-                if (0 != data.length) {
+                console.log(data);
+                if ('Exists' == data.status) {
                     document.getElementById("txt_error_new_account_user").innerHTML = "Username already exist. Please choose another username."
                     document.getElementById("error_new_account_user").style.display = "block";
                     $('#dialogTitle').text('Error');
@@ -130,7 +131,7 @@ $(function() {
                         "regdate" : today
                     };	   
                     
-                    jQuery.post("welcome_insert.php", json, function(data) { 
+                    jQuery.post("welcome_insert.html", json, function(data) { 
                     
                         if (data['bnr'].match(/Error/)) {
                             

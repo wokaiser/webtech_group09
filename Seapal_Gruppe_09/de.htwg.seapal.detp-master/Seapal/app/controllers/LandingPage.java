@@ -17,6 +17,38 @@ public class LandingPage extends Controller {
 		return ok(landingpage.render(header.render(),navigation.render("landingpage"), footer.render()));
 	}
 
+    public static Result checkUsername(String username) {
+        Connection conn = DB.getConnection();
+        Statement query;
+        ResultSet result;
+        ObjectNode respJSON = Json.newObject();
+
+        if(conn != null) {
+            try {                    
+                query = conn.createStatement();
+         
+                String sql = "SELECT * FROM seapal.benutzer WHERE benutzername ='" + username + "';";
+                
+                result = query.executeQuery(sql);
+
+                if(!result.next()) {
+                    respJSON.put("status", "None");
+                } else {
+                    respJSON.put("status", "Exists");
+                }
+                
+                conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                respJSON.put("status", "Exists");
+            }
+        } else {
+            respJSON.put("status", "Exists");
+        }
+
+        return ok(respJSON);
+    }
+
 	public static Result insert() {
   
     DynamicForm data = form().bindFromRequest();
@@ -27,9 +59,9 @@ public class LandingPage extends Controller {
     int nextId = 0;
 	
     try {
-	      query = conn.createStatement();
+	    query = conn.createStatement();
 
-        query.execute("INSERT INTO seapal.benutzer(benutzername, passwort, vorname, nachname, mail, mySession, registrierung) "
+        query.execute("INSERT INTO seapal.benutzer (benutzername, passwort, vorname, nachname, mail, mySession, registrierung) VALUES ("
 				+ "'" + data.get("username") + "',"
                 + "'" + data.get("password") + "',"
                 + "'" + data.get("nachname") + "',"
