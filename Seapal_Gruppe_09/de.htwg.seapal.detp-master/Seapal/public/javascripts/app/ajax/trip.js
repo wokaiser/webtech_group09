@@ -1,10 +1,13 @@
 $(function() {
     var routeLoad = null;
 	var tnrValue = null;
+    var numberInView = 0;
     
-	$('a.view').live("click", function(event) { 
+	$('a.view').live("click", function(event) {
         routeLoad = null;
-        tnrValue = $(this).attr('id');
+        numbers = $(this).attr('id').split(":");
+        numberInView = numbers[0];
+        tnrValue = numbers[1];
         //get the tripinfo json object
         $.getJSON(
             "/app_tripinfo.html",
@@ -27,10 +30,10 @@ $(function() {
                         //push the new Route to the routes array
                         session.map.routes.push(newRoute);
                         //the route will now be available in the map, display a message
-                        displayMessageBox("successMessageBox", "Route "+tnrValue+" will now be displayed in the map.", "19em", "-9.5em");
+                        displayMessageBox("successMessageBox", "Route "+numberInView+" will now be displayed in the map.", "19em", "-9.5em");
                     } else {
                         //the route is already in the map, display info message
-                        displayMessageBox("infoMessageBox", "Route "+tnrValue+" will be already displayed in the map.", "20em", "-10em");
+                        displayMessageBox("infoMessageBox", "Route "+numberInView+" will be already displayed in the map.", "20em", "-10em");
                     }
             
                 }, "json");

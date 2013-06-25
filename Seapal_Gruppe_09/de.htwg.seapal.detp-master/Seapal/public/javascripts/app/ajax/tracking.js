@@ -1,10 +1,13 @@
 $(function() {
     var trackingLoad = null;
 	var tracknrValue = null;
+    var numberInView = 0;
     
 	$('a.view.tracking').live("click", function(event) {
         trackingLoad = null;
-        tracknrValue = $(this).attr('id');      
+        numbers = $(this).attr('id').split(":");
+        numberInView = numbers[0];
+        tracknrValue = numbers[1];        
         //get the trackinfoinfo json object
         $.getJSON(
             "/app_track_load.html",
@@ -25,10 +28,10 @@ $(function() {
                         //push the new track to the trackings array
                         session.map.routes.push(newTracking);
                         //the track will now be available in the map, display a message
-                        displayMessageBox("successMessageBox", "Track "+tracknrValue+" will now be displayed in the map.", "18em", "-9em");
+                        displayMessageBox("successMessageBox", "Track "+numberInView+" will now be displayed in the map.", "18em", "-9em");
                     } else {
                         //the track is already in the map, display info message
-                        displayMessageBox("infoMessageBox", "Track "+tracknrValue+" will be already displayed in the map.", "20em", "-10em");
+                        displayMessageBox("infoMessageBox", "Track "+numberInView+" will be already displayed in the map.", "20em", "-10em");
                     }
             
                 }, "json");

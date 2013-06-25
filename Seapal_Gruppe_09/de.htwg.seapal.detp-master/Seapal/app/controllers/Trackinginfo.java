@@ -122,7 +122,8 @@ public class Trackinginfo extends Controller {
 		StringBuilder row;
 		int tnr = -1;
 		int bnr = 0;
-		
+        int numberInView = 1;
+                
 		if(tnrAsString != null && !tnrAsString.isEmpty())
 			tnr = Integer.parseInt(tnrAsString);
 		
@@ -151,7 +152,7 @@ public class Trackinginfo extends Controller {
 					row = new StringBuilder();
 
 					row.append("<tr class='selectable'>");
-                    row.append("<td>" + result.getString("tracknr") + "</td>");
+                    row.append("<td>" + numberInView + "</td>");
 					row.append("<td>" + result.getString("trackTitel") + "</td>");
 					row.append("<td>" + result.getString("skipper") + "</td>");
 					row.append("<td>" + result.getString("crew") + "</td>");
@@ -159,7 +160,7 @@ public class Trackinginfo extends Controller {
 					row.append("<td>" + result.getString("tende") + "</td>");
 					row.append("<td>" + result.getString("tdauer") + "</td>");
 					row.append("<td style='width:30px; text-align:left;'><div class='btn-group'>");
-					row.append("<a class='btn btn-small view tracking' id='" + result.getString("tracknr")
+					row.append("<a class='btn btn-small view tracking' id='" + numberInView + ":" + result.getString("tracknr")
 					+ "'><span><i class='icon-eye-open'></i></span></a>");
 					row.append("<a class='btn btn-small remove tracking' id='" + result.getString("tracknr")
 					+ "'><span><i class='icon-remove'></i></span></a>");
@@ -168,7 +169,7 @@ public class Trackinginfo extends Controller {
 					row.append("</tr>");
 
 					returnData += row.toString();
-
+                    numberInView++;
 					conn.close();
 				}
 			} catch (Exception e) {

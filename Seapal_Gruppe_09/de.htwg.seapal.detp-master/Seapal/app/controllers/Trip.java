@@ -193,7 +193,7 @@ public class Trip extends Controller {
 		DynamicForm data = form().bindFromRequest();
 		String responseData = "";
 		int bnr = Integer.parseInt(session().get("bnr"));
-
+        int numberInView = 1;
 		if(conn != null) {
 			Statement query;
 			ResultSet result;
@@ -208,12 +208,12 @@ public class Trip extends Controller {
 					StringBuilder row = new StringBuilder();
 
 					row.append("<tr class='selectable' id='" + result.getString("tnr") + "'>");
-					row.append("<td>" + result.getString("tnr") + "</td>");
+					row.append("<td>" + numberInView + "</td>");
                     row.append("<td>" + result.getString("titel") + "</td>");
 					row.append("<td>" + result.getString("von") + "</td>");
 					row.append("<td>" + result.getString("nach") + "</td>");
 					row.append("<td style='width:30px; text-align:left;'><div class='btn-group'>");
-					row.append("<a class='btn btn-small view tracking' id='" + result.getString("tnr")
+					row.append("<a class='btn btn-small view tracking' id='" + numberInView + ":" + result.getString("tnr")
 						+ "'><span><i class='icon-eye-open'></i></span></a>");
 					row.append("<a class='btn btn-small remove tracking' id='" + result.getString("tnr")
 						+ "'><span><i class='icon-remove'></i></span></a>");
@@ -224,6 +224,7 @@ public class Trip extends Controller {
 					row.append("</tr>");
 
 					responseData += row.toString();
+                    numberInView++;
 				}
 
 			} catch (Exception e) {
